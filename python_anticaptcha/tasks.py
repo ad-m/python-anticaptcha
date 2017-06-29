@@ -73,7 +73,7 @@ class ImageToTextTask(object):
 
     def serialize(self):
         return {'type': self.type,
-                'body': base64.b64encode(self.fp.read()),
+                'body': base64.b64encode(self.fp.read()).decode('utf-8'),
                 'phrase': self.phrase,
                 'case': self.case,
                 'numeric': self.numeric,
