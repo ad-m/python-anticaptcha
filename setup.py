@@ -8,7 +8,7 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
-version = '0.0.3'
+version = '0.0.4'
 
 if sys.argv[-1] == 'publish':
     try:
@@ -47,6 +47,7 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
     ],
+    use_2to3=True,
     keywords='recaptcha captcha development',
     packages=['python_anticaptcha'],
     install_requires=['requests'],
