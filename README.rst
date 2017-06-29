@@ -8,7 +8,7 @@ Getting Started
 
 Install as standard for Python packages using:
 
-``pip install python-annticaptcha``
+``pip install python-anticaptcha``
 
 Usage
 -----
