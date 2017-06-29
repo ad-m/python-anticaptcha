@@ -47,8 +47,7 @@ class AnticaptchaClient(object):
     CREATE_TASK_URL = "/createTask"
     TASK_RESULT_URL = "/getTaskResult"
     BALANCE_URL = "/getBalance"
-    SOFT_ID = 0  # TODO: Update to provide motivation for constant maintenance of the application.
-    # This does not increase the cost of using the library.
+    SOFT_ID = 847
     language_pool = "en"
 
     def __init__(self, client_key, language_pool="en", host="api.anti-captcha.com", use_ssl=True):
