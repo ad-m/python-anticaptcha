@@ -8,7 +8,7 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
-version = '0.0.2'
+version = '0.0.3'
 
 if sys.argv[-1] == 'publish':
     try:
@@ -29,7 +29,7 @@ if sys.argv[-1] == 'tag':
 
 setup(
     name='python-anticaptcha',
-    version='0.0.1',
+    version=version,
     description='Client library for solve captchas with Anticaptcha.com support.',
     long_description=long_description,
     url='https://github.com/ad-m/python-anticaptcha',
