@@ -1,7 +1,7 @@
 python-anticaptcha
 ==================
 
-Client library for solve captchas with Anticaptcha.com support.
+Client library for solve captchas with Anticaptcha.com support. The library supports both Python 2.7 and Python 3.
 
 Getting Started
 ---------------
