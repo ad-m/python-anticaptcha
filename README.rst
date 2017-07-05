@@ -1,6 +1,14 @@
 python-anticaptcha
 ==================
 
+.. image:: https://www.quantifiedcode.com/api/v1/project/7cd53291667641eeb92063ad3f61f40e/badge.svg
+  :target: https://www.quantifiedcode.com/app/project/7cd53291667641eeb92063ad3f61f40e
+  :alt: Code issues
+  
+.. image:: https://img.shields.io/pypi/v/nine.svg
+  :target: https://pypi.org/project/python-anticaptcha/
+  :alt: Python package
+ 
 Client library for solve captchas with Anticaptcha.com support. The library supports both Python 2.7 and Python 3.
 
 Getting Started
