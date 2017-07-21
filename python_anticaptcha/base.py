@@ -8,7 +8,7 @@ except ImportError:
 from .exceptions import AnticatpchaException
 
 SLEEP_EVERY_CHECK_FINISHED = 3
-MAXIMUM_JOIN_TIME = 60
+MAXIMUM_JOIN_TIME = 60*5
 
 
 class Job(object):
