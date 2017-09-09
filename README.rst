@@ -14,9 +14,9 @@ Client library for solve captchas with Anticaptcha.com support. The library supp
 Getting Started
 ---------------
 
-Install as standard for Python packages using:
+Install as standard for Python packages using::
 
-``pip install python-anticaptcha``
+    pip install python-anticaptcha
 
 Usage
 -----
@@ -38,6 +38,8 @@ Example snippet for Recaptcha:
     job = client.createTask(task)
     job.join()
     print job.get_solution_response()
+
+The full integration example is available in file ``examples/recaptcha.py``.
 
 Example snippet for text captcha:
 
