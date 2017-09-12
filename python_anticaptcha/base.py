@@ -57,7 +57,16 @@ class AnticaptchaClient(object):
                                                    host=host)
         self.session = requests.Session()
 
+    @property
+    def client_ip(self):
+        if not hasattr(self, '_client_ip'):
+            self._client_ip = self.session.get('http://httpbin.org/ip').json()['origin']
+        return self._client_ip
+
     def _check_response(self, response):
+        if response.get('errorId', False) == 11:
+            response['errorDescription'] = "{}. Your missing IP address is {}.".format(response['errorDescription'],
+                                                                                      self.client_ip)
         if response.get('errorId', False):
             raise AnticatpchaException(response['errorId'],
                                        response['errorCode'],
