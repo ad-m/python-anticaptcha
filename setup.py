@@ -21,11 +21,6 @@ if sys.argv[-1] == 'publish':
     print("  git push --tags")
     sys.exit()
 
-if sys.argv[-1] == 'tag':
-    print("Tagging the version on github:")
-    system("git tag -a {0!s} -m 'version {1!s}'".format(version, version))
-    system("git push --tags")
-    sys.exit()
 
 setup(
     name='python-anticaptcha',
