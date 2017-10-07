@@ -50,5 +50,5 @@ setup(
     use_2to3=True,
     keywords='recaptcha captcha development',
     packages=['python_anticaptcha'],
-    install_requires=['requests'],
+    install_requires=['requests', 'six'],
 )

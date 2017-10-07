@@ -1,10 +1,7 @@
 import requests
 import time
 
-try:
-    from urllib.parse import urljoin
-except ImportError:
-    from urlparse import urljoin
+from six.moves.urllib_parse import urljoin
 from .exceptions import AnticatpchaException
 
 SLEEP_EVERY_CHECK_FINISHED = 3
@@ -27,10 +24,13 @@ class Job(object):
         self._update()
         return self._last_result['status'] == 'ready'
 
-    def get_solution_response(self):  # TODO: Support different captcha solutions
+    def get_solution_response(self):  # Recaptcha
         return self._last_result['solution']['gRecaptchaResponse']
 
-    def get_captcha_text(self):
+    def get_token_response(self):  # Funcaptcha
+        return self._last_result['solution']['token']
+
+    def get_captcha_text(self):  # Image
         return self._last_result['solution']['text']
 
     def join(self, maximum_time=None):
@@ -65,7 +65,7 @@ class AnticaptchaClient(object):
 
     def _check_response(self, response):
         if response.get('errorId', False) == 11:
-            response['errorDescription'] = "{}. Your missing IP address is {}.".format(response['errorDescription'],
+            response['errorDescription'] = "{} Your missing IP address is {}.".format(response['errorDescription'],
                                                                                       self.client_ip)
         if response.get('errorId', False):
             raise AnticatpchaException(response['errorId'],

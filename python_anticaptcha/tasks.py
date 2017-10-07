@@ -1,6 +1,27 @@
 import base64
 
-class NoCaptchaTaskProxylessTask(object):
+
+class BaseTask(object):
+    def serialize(self, **result):
+        return result
+
+
+class ProxyMixin(BaseTask):
+    def __init__(self, *args, **kwargs):
+        self.proxy = kwargs.pop('proxy')
+        self.userAgent = kwargs.pop('user_agent')
+        self.cookies = kwargs.pop('cookies', '')
+
+    def serialize(self, **result):
+        result = super(ProxyMixin, self).serialize(**result)
+        result.update(self.proxy.serialize())
+        result['userAgent'] = self.userAgent
+        if self.cookies:
+            result['cookies'] = self.userAgent
+        return result
+
+
+class NoCaptchaTaskProxylessTask(BaseTask):
     type = "NoCaptchaTaskProxyless"
     websiteURL = None
     websiteKey = None
@@ -12,44 +33,32 @@ class NoCaptchaTaskProxylessTask(object):
         self.websiteSToken = website_s_token
 
     def serialize(self):
-        result = {'type': self.type,
-                  'websiteURL': self.websiteURL,
-                  'websiteKey': self.websiteKey,
-                  'websiteSToken': self.websiteSToken or []}
+        return {'type': self.type,
+                'websiteURL': self.websiteURL,
+                'websiteKey': self.websiteKey,
+                'websiteSToken': self.websiteSToken or []}
+
+
+class FunCaptchaTask(ProxyMixin):
+    type = "FunCaptchaTask"
+    websiteURL = None
+    websiteKey = None
+
+    def __init__(self, website_url, website_key, *args, **kwargs):
+        self.websiteURL = website_url
+        self.websiteKey = website_key
+        super(FunCaptchaTask, self).__init__(*args, **kwargs)
+
+    def serialize(self, **result):
+        result = super(FunCaptchaTask, self).serialize(**result)
+        result.update({'type': self.type,
+                       'websiteURL': self.websiteURL,
+                       'websitePublicKey': self.websiteKey})
         return result
 
 
-class NoCaptchaTask(NoCaptchaTaskProxylessTask):
+class NoCaptchaTask(ProxyMixin, NoCaptchaTaskProxylessTask):
     type = "NoCaptchaTask"
-    proxyType = None
-    proxyAddress = None
-    proxyPort = None
-    proxyLogin = None
-    proxyPassword = None
-    userAgent = None
-    cookies = None
-
-    def __init__(self, website_url, website_key, proxy_type, proxy_address, proxy_port, user_agent,
-                 proxy_login=None, proxy_password=None, cookies=None):
-        super(NoCaptchaTask, self).__init__(website_url, website_key)
-        self.proxyType = proxy_type
-        self.proxyAddress = proxy_address
-        self.proxyPort = proxy_port
-        self.proxyLogin = proxy_login
-        self.proxyPassword = proxy_password
-        self.userAgent = user_agent
-        self.cookies = cookies
-
-    def serialize(self):
-        result = super(NoCaptchaTask, self).serialize()
-        result.update({'proxyType': self.proxyType,
-                       'proxyAddress': self.proxyAddress,
-                       'proxyPort': self.proxyPort,
-                       'proxyLogin': self.proxyLogin,
-                       'proxyPassword': self.proxyPassword,
-                       'userAgent': self.userAgent,
-                       'cookies': self.cookies})
-        return result
 
 
 class ImageToTextTask(object):

@@ -25,6 +25,7 @@ def get_token(form_html):
 def form_submit(token):
     return requests.post(url, data={'g-recaptcha-response':token}).text
 
+
 if __name__ == '__main__':
     html = get_form_html()
     token = get_token(html)
