@@ -1,10 +1,9 @@
 python-anticaptcha
 ==================
 
-.. image:: https://www.quantifiedcode.com/api/v1/project/7cd53291667641eeb92063ad3f61f40e/badge.svg
-  :target: https://www.quantifiedcode.com/app/project/7cd53291667641eeb92063ad3f61f40e
-  :alt: Code issues
-  
+.. image:: https://travis-ci.org/ad-m/python-anticaptcha.svg?branch=master
+  :target: https://travis-ci.org/ad-m/python-anticaptcha
+
 .. image:: https://img.shields.io/pypi/v/python-anticaptcha.svg
   :target: https://pypi.org/project/python-anticaptcha/
   :alt: Python package
@@ -103,7 +102,7 @@ License
 This project is licensed under the MIT License - see the `LICENSE.md`_
 file for details
 
-.. _Anticaptcha.com: http://getcaptchasolution.com/ewfhjk64ll
+.. _Anticaptcha.com: http://getcaptchasolution.com/i1hvnzdymd
 .. _SemVer: http://semver.org/
 .. _tags on this repository: https://github.com/ad-m/python-anticaptcha/tags
 .. _ad-m: https://github.com/ad-m
