@@ -1,0 +1,19 @@
+language: python
+
+python:
+- '2.7'
+- '3.3'
+- '3.4'
+- pypy
+- pypy3
+
+install:
+- pip install .
+
+script:
+- travis_retry python examples/recaptcha.py
+- travis_retry python examples/text.py
+
+env:
+  global:
+    secure: JkMKTC0sA9/DITHUGjl4EZhpGsvkE2hYIQkmPSF1/d7Nyo4xUo8MzCtNnymXZk1J+yqUtH2A+ufhYNPhmUguvnEminHc2RIlhxedOCa26Fpt1/3v91e8DWOD+FWzKMeajuNshK5yqUSo6w7Ya5yyxbIIZOy+/MytaCVKT//1oJzFiWOteYMQzjlVylfGxsa9kcoAl2rxjrF4pW+VL40qsGOrzLk5MVdJUiImFKoar8XUoYtrACObD3eYV6W9Kj+/ko03MrhzXJ8/R0RZQzyxbQoc22yKHGZWDjB5n5E1xaRr2/EV/5Gp0u/8oSuEMWQn4iXwFNzSe/kTXQKM+/+eYrEoC09cmIhIqbwjb9mXr/8BkGehQNeXKO9kOq6Jib+v3XWozYfD26P11p2QpcW8TJxwGR8Xr0ndiy9Qg8BEW5S6r8Orvd118LOxlESIshTIAjo7whBJjilpiasJV/5wm6myjnjP43+8qjm9fKBVGI/T8xzMtLkeWGqj8alDP11aCvtpWkUo364wvhifMK9cItBFrjtGyX1JrtfHNdQ+EsoNEFn8POWe/Eilva42uoeshOXuPvWNLY+ugInnfeHpnhO9+VgdkrvtF3s6z5d3FMS5tBIswWgiaN0ZK8CzPCkGzGEWS00ciRhHy8jGU/7fODzkc8aV+tq3aLsLcZD1rEs=
