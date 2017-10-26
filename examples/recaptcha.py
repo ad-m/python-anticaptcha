@@ -30,4 +30,4 @@ if __name__ == '__main__':
     html = get_form_html()
     token = get_token(html)
     form_submit = form_submit(token)
-    print(form_submit)
+    assert 'Verification Success... Hooray!' in form_submit
