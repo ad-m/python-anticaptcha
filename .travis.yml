@@ -11,8 +11,8 @@ install:
 - pip install .
 
 script:
-- python examples/recaptcha.py
-- python examples/text.py
+- travis_retry python examples/recaptcha.py
+- travis_retry python examples/text.py
 
 env:
   global:
