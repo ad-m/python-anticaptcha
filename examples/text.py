@@ -13,5 +13,9 @@ def process(path):
     return job.get_captcha_text()
 
 
+def assert_equal(value, expected):
+    assert value == expected, "Result is {}. Expected is {}.".format(value, expected)
+
+
 if __name__ == '__main__':
-    assert process('examples/captcha_ms.jpeg') == '56nn2'
+    assert_equal(process('examples/captcha_ms.jpeg'), '56nn2')
