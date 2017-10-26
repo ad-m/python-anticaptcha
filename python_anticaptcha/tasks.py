@@ -33,10 +33,12 @@ class NoCaptchaTaskProxylessTask(BaseTask):
         self.websiteSToken = website_s_token
 
     def serialize(self):
-        return {'type': self.type,
+        data = {'type': self.type,
                 'websiteURL': self.websiteURL,
-                'websiteKey': self.websiteKey,
-                'websiteSToken': self.websiteSToken or []}
+                'websiteKey': self.websiteKey}
+        if self.websiteSToken is not None:
+            data['websiteSToken'] = self.websiteSToken
+        return data
 
 
 class FunCaptchaTask(ProxyMixin):
