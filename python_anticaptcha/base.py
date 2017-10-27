@@ -35,11 +35,12 @@ class Job(object):
 
     def join(self, maximum_time=None):
         elapsed_time = 0
+        maximum_time = maximum_time or MAXIMUM_JOIN_TIME
         while not self.check_is_ready():
             time.sleep(SLEEP_EVERY_CHECK_FINISHED)
             elapsed_time += SLEEP_EVERY_CHECK_FINISHED
-            if elapsed_time is not None and elapsed_time > MAXIMUM_JOIN_TIME:
-                raise AnticatpchaException(None, 250, "The maximum execution time of the task has been reached.")
+            if elapsed_time is not None and elapsed_time > maximum_time:
+                raise AnticatpchaException(None, 250, "The execution time exceeded a maximum time of {} seconds. It takes {} seconds.".format(maximum_time, elapsed_time))
 
 
 class AnticaptchaClient(object):

@@ -11,6 +11,7 @@ class ProxyMixin(BaseTask):
         self.proxy = kwargs.pop('proxy')
         self.userAgent = kwargs.pop('user_agent')
         self.cookies = kwargs.pop('cookies', '')
+        super(ProxyMixin, self).__init__(*args, **kwargs)
 
     def serialize(self, **result):
         result = super(ProxyMixin, self).serialize(**result)

@@ -1,7 +1,8 @@
+import re
 import requests
 from os import environ
-import re
-from python_anticaptcha import AnticaptchaClient, NoCaptchaTaskProxylessTask
+
+from python_anticaptcha import AnticaptchaClient, Proxy, NoCaptchaTaskProxylessTask
 
 api_key = environ['KEY']
 site_key_pattern = 'data-sitekey="(.+?)"'
@@ -16,14 +17,15 @@ def get_form_html():
 
 def get_token(form_html):
     site_key = re.search(site_key_pattern, form_html).group(1)
-    task = NoCaptchaTaskProxylessTask(url, site_key)
+    task = NoCaptchaTaskProxylessTask(website_url=url,
+                                      website_key=site_key)
     job = client.createTask(task)
     job.join()
     return job.get_solution_response()
 
 
 def form_submit(token):
-    return requests.post(url, data={'g-recaptcha-response':token}).text
+    return requests.post(url, data={'g-recaptcha-response': token}).text
 
 
 if __name__ == '__main__':

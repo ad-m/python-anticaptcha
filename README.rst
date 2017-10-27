@@ -82,6 +82,29 @@ Example snippet for funcaptcha:
     job.join()
     print job.get_token_response()
 
+Setup proxy
+###
+
+The library is not responsible for managing the proxy server. However, we point to
+the possibility of simply launching such a server by:
+
+.. code:: bash
+
+    pip install mitmproxy
+    mitmweb -p 9190 -b 0.0.0.0 --ignore '.' --socks
+
+Next to in your application use something like:
+
+.. code:: python
+
+    proxy = Proxy.parse_url("socks5://123.123.123.123:9190")
+
+We recommend entering IP-based access control for incoming addresses to proxy. Required IP address is:
+
+.. code::
+
+    69.65.41.21
+    209.212.146.168
 
 Versioning
 ----------
