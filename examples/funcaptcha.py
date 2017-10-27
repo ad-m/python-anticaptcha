@@ -1,6 +1,8 @@
 import requests
 from os import environ
 import re
+from random import choice
+
 from python_anticaptcha import AnticaptchaClient, FunCaptchaTask, Proxy
 
 api_key = environ['KEY']
@@ -12,7 +14,8 @@ session = requests.Session()
 UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 ' \
      '(KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
 session.headers = {'User-Agent': UA}
-proxy = Proxy.parse_url(environ['PROXY_URL'])
+proxy_url = choice(environ['PROXY_URL'].split(','))
+proxy = Proxy.parse_url(proxy_url)
 
 
 def get_form_html():
