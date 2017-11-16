@@ -15,7 +15,7 @@ if sys.argv[-1] == 'publish':
         import wheel
     except ImportError:
         raise ImportError("Fix: pip install wheel")
-    system('python setup.py sdist bdist_wheel upload')
+    system('python setup.py sdist bdist_wheel --universal upload')
     print("You probably want to also tag the version now:")
     print("  git tag -a {0!s} -m 'version {1!s}'".format(version, version))
     print("  git push --tags")
