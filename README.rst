@@ -7,6 +7,9 @@ python-anticaptcha
 .. image:: https://img.shields.io/pypi/v/python-anticaptcha.svg
   :target: https://pypi.org/project/python-anticaptcha/
   :alt: Python package
+
+.. image:: https://img.shields.io/pypi/pyversions/python-anticaptcha.svg
+  :alt: Python compatibility
  
 Client library for solve captchas with Anticaptcha.com support. The library supports both Python 2.7 and Python 3.
 
