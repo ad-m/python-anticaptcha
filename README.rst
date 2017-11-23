@@ -86,7 +86,7 @@ Example snippet for funcaptcha:
     print job.get_token_response()
 
 Setup proxy
-###
+###########
 
 The library is not responsible for managing the proxy server. However, we point to
 the possibility of simply launching such a server by:
