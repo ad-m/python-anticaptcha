@@ -11,12 +11,16 @@ python-anticaptcha
 .. image:: https://img.shields.io/pypi/pyversions/python-anticaptcha.svg
   :alt: Python compatibility
  
-Client library for solve captchas with Anticaptcha.com support. The library supports both Python 2.7 and Python 3.
+Client library for solve captchas with `Anticaptcha.com`_ support. The library supports both Python 2.7 and Python 3.
+
+The library is cyclically and automatically tested for proper operation. We are constantly making the best efforts for its effective operation.
+
+In case of any problems with integration - `create an issue`_ or contact privately.
 
 Getting Started
 ---------------
 
-Install as standard for Python packages using::
+Install as standard Python package using::
 
     pip install python-anticaptcha
 
@@ -91,7 +95,7 @@ Setup proxy
 The library is not responsible for managing the proxy server. However, we point to
 the possibility of simply launching such a server by:
 
-.. code:: bash
+.. code::
 
     pip install mitmproxy
     mitmweb -p 9190 -b 0.0.0.0 --ignore '.' --socks
@@ -102,7 +106,7 @@ Next to in your application use something like:
 
     proxy = Proxy.parse_url("socks5://123.123.123.123:9190")
 
-We recommend entering IP-based access control for incoming addresses to proxy. Required IP address is:
+We recommend entering IP-based access control for incoming addresses to proxy. IP address required by `Anticaptcha.com`_ is:
 
 .. code::
 
@@ -129,6 +133,7 @@ This project is licensed under the MIT License - see the `LICENSE.md`_
 file for details
 
 .. _Anticaptcha.com: http://getcaptchasolution.com/i1hvnzdymd
+.. _create an issue: https://github.com/ad-m/python-anticaptcha/issues/new
 .. _SemVer: http://semver.org/
 .. _tags on this repository: https://github.com/ad-m/python-anticaptcha/tags
 .. _ad-m: https://github.com/ad-m
