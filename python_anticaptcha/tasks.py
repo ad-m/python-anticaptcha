@@ -18,7 +18,7 @@ class ProxyMixin(BaseTask):
         result.update(self.proxy.serialize())
         result['userAgent'] = self.userAgent
         if self.cookies:
-            result['cookies'] = self.userAgent
+            result['cookies'] = self.cookies
         return result
 
 
