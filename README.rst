@@ -8,6 +8,10 @@ python-anticaptcha
   :target: https://pypi.org/project/python-anticaptcha/
   :alt: Python package
 
+.. image:: https://badges.gitter.im/bcb/jsonrpcserver.svg
+   :target: https://gitter.im/python-anticaptcha/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=share-link
+   :alt: Join the chat at https://gitter.im/python-anticaptcha/Lobby
+
 .. image:: https://img.shields.io/pypi/pyversions/python-anticaptcha.svg
   :alt: Python compatibility
  
