@@ -93,6 +93,20 @@ Example snippet for funcaptcha:
     job.join()
     print job.get_token_response()
 
+Report Incorrect Image
+############
+
+Example snippet for reporting an incorrect image task:
+
+.. code:: python
+
+    from python_anticaptcha import AnticaptchaClient, ImageToTextTask
+
+    api_key = '174faff8fbc769e94a5862391ecfd010'
+    client = AnticaptchaClient(api_key)
+    success = client.reportIncorrectImage(15400000)
+    print success
+
 Setup proxy
 ###########
 
