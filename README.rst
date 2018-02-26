@@ -103,9 +103,13 @@ Example snippet for reporting an incorrect image task:
     from python_anticaptcha import AnticaptchaClient, ImageToTextTask
 
     api_key = '174faff8fbc769e94a5862391ecfd010'
+    captcha_fp = open('examples/captcha_ms.jpeg', 'rb')
     client = AnticaptchaClient(api_key)
-    success = client.reportIncorrectImage(15400000)
-    print success
+    task = ImageToTextTask(captcha_fp)
+    job = client.createTask(task)
+    job.join()
+    print job.get_captcha_text()
+    job.report_incorrect()
 
 Setup proxy
 ###########
