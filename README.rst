@@ -14,27 +14,43 @@ python-anticaptcha
 
 .. image:: https://img.shields.io/pypi/pyversions/python-anticaptcha.svg
   :alt: Python compatibility
- 
-Client library for solve captchas with `Anticaptcha.com`_ support. The library supports both Python 2.7 and Python 3.
+
+.. introduction-start
+
+Client library for solve captchas with `Anticaptcha.com support`_.
+The library supports both Python 2.7 and Python 3.
 
 The library is cyclically and automatically tested for proper operation. We are constantly making the best efforts for its effective operation.
 
 In case of any problems with integration - `create an issue`_ or contact privately.
 
+.. _Anticaptcha.com support:  http://getcaptchasolution.com/i1hvnzdymd
+.. _create an issue: https://github.com/ad-m/python-anticaptcha/issues/new
+
+.. introduction-end
+
+
 Getting Started
 ---------------
+
+.. getting-started-start
 
 Install as standard Python package using::
 
     pip install python-anticaptcha
 
+.. getting-started-end
+
+
 Usage
 -----
 
+.. usage-start
+
 To use this library do you need `Anticaptcha.com`_ API key.
 
-Recaptcha
-#########
+Solve recaptcha
+###############
 
 Example snippet for Recaptcha:
 
@@ -54,8 +70,8 @@ Example snippet for Recaptcha:
 
 The full integration example is available in file ``examples/recaptcha.py``.
 
-Text captcha
-############
+Solve text captcha
+##################
 
 Example snippet for text captcha:
 
@@ -71,8 +87,8 @@ Example snippet for text captcha:
     job.join()
     print job.get_captcha_text()
 
-Funcaptcha
-##########
+Solve funcaptcha
+################
 
 Example snippet for funcaptcha:
 
@@ -93,8 +109,8 @@ Example snippet for funcaptcha:
     job.join()
     print job.get_token_response()
 
-Report Incorrect Image
-############
+Report incorrect image
+######################
 
 Example snippet for reporting an incorrect image task:
 
@@ -128,12 +144,17 @@ Next to in your application use something like:
 
     proxy = Proxy.parse_url("socks5://123.123.123.123:9190")
 
-We recommend entering IP-based access control for incoming addresses to proxy. IP address required by `Anticaptcha.com`_ is:
+We recommend entering IP-based access control for incoming addresses to proxy. IP address required by
+`Anticaptcha.com`_ is:
 
 .. code::
 
     69.65.41.21
     209.212.146.168
+
+.. _Anticaptcha.com: http://getcaptchasolution.com/i1hvnzdymd
+
+.. usage-end
 
 Versioning
 ----------
@@ -154,8 +175,6 @@ License
 This project is licensed under the MIT License - see the `LICENSE.md`_
 file for details
 
-.. _Anticaptcha.com: http://getcaptchasolution.com/i1hvnzdymd
-.. _create an issue: https://github.com/ad-m/python-anticaptcha/issues/new
 .. _SemVer: http://semver.org/
 .. _tags on this repository: https://github.com/ad-m/python-anticaptcha/tags
 .. _ad-m: https://github.com/ad-m
