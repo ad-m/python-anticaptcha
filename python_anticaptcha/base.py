@@ -33,6 +33,9 @@ class Job(object):
     def get_captcha_text(self):  # Image
         return self._last_result['solution']['text']
 
+    def report_incorrect(self):
+        return self.client.reportIncorrectImage(self.task_id)
+
     def join(self, maximum_time=None):
         elapsed_time = 0
         maximum_time = maximum_time or MAXIMUM_JOIN_TIME
