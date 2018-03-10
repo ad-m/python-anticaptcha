@@ -127,6 +127,14 @@ Example snippet for reporting an incorrect image task:
     print job.get_captcha_text()
     job.report_incorrect()
 
+Custom tasks
+############
+
+There is support for your own (captcha) forms. It allows you to analyze any data in various ways, eg. classify offensive
+image, count elements on the image, etc. The scope of the data, the form to describe them, you specify yourself.
+
+For details, go to the documentation.
+
 Setup proxy
 ###########
 
