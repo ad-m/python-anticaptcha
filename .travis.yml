@@ -6,9 +6,10 @@ python:
 - pypy
 - pypy3
 install:
-- pip install .[test]
+- pip install .[test] sphinx
 script:
 - nosetests tests -v --processes=4
+- sphinx-build -W sources /dev/shm/sphinx
 env:
   global:
     secure: sgamcAoKAiuSSKvkIECtXeT04DGjLkaaxr44j1Bp1CMg6xk3Xv/JVLGOdDKublT/nEvBWfbTzO9BT+YchfHcY44DPwCcFQfTb79N9SMst7/OUaYrank05+XDJF4L19s461TSMkWnjNLSBhQ2vkasRgxhcYilPm4V93Ux4qss9UdvXHIs/a2lmS7oSeHKrASNPerACAfMV5CMvngk/9+hYZAnPztai+GaoJvQAwBAloUcZ1WfvFyXZh9WWa4hQXcUD0zkKCCvqYuSEHRfF8EyKtP/DrnPJUkDabH8CK4HlF+JlSdSy1ymsaAGEsRiIemRZuAMoSaNE3sFSvKPCOdkKQLPGQaKIS5Nj9piB/JY427vCsAdsAm6kY1mrVneOMxp8BjoCOQ3jRVV7itVL17z+FD+XtK/P2B++Ebb8doMNnmKVLNq+4dcaaa4Q4BFF6a1/nukCfIAW0dzCJ2ap/GlIFbP8+zl83xDa0kPeTgR1RFOp5exGoqMiGlj2PSFqAXFUb2Aje3Iim9zH5ThOqvFNhMdEs/gDEslaaYwfzp4TR958eItQW+WXU62pe1SAOvnm//bkxQHI6l8tpiVAkeZh9Rn+asgDiBIPV95SytOvcvipJEcyDBhqcT8FNb3q/1GWm5xSU4IKhQKM00UaHbmcblb2Kb5aRYsmuHl5DcRIj4=
