@@ -6,7 +6,7 @@ python:
 - pypy
 - pypy3
 install:
-- pip install .[test] sphinx
+- pip install .[tests] sphinx
 script:
 - nosetests tests -v --processes=4
 - sphinx-build -W sources /dev/shm/sphinx
