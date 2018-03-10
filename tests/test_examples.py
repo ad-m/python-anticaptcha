@@ -20,7 +20,7 @@ class CustomDotTestCase(TestCase):
 class CustomModerationTestCase(TestCase):
     def test_process_bulk_iter(self):
         from examples import custom_moderation
-        self.assertSequenceEqual(custom_moderation.process_bulk_iter(custom_moderation.URLS),
+        self.assertSequenceEqual(list(custom_moderation.process_bulk_iter(custom_moderation.URLS)),
                                  zip(custom_moderation.URLS, custom_moderation.RESULTS))
 
     def test_process_bulk(self):
