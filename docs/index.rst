@@ -15,6 +15,7 @@ Welcome to python-anticaptcha's documentation!
    :caption: Contents:
 
    usage
+   fields
    api
 
 

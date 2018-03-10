@@ -8,7 +8,7 @@ python-anticaptcha
   :target: https://pypi.org/project/python-anticaptcha/
   :alt: Python package
 
-.. image:: https://badges.gitter.im/bcb/jsonrpcserver.svg
+.. image:: https://badges.gitter.im/python-anticaptcha/Lobby.svg
    :target: https://gitter.im/python-anticaptcha/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=share-link
    :alt: Join the chat at https://gitter.im/python-anticaptcha/Lobby
 
@@ -22,10 +22,11 @@ The library supports both Python 2.7 and Python 3.
 
 The library is cyclically and automatically tested for proper operation. We are constantly making the best efforts for its effective operation.
 
-In case of any problems with integration - `create an issue`_ or contact privately.
+In case of any problems with integration - `create an issue`_, use `Gitter`_ or contact privately.
 
 .. _Anticaptcha.com support:  http://getcaptchasolution.com/i1hvnzdymd
 .. _create an issue: https://github.com/ad-m/python-anticaptcha/issues/new
+.. _Gitter: https://gitter.im/python-anticaptcha/Lobby
 
 .. introduction-end
 

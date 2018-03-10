@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from python_anticaptcha.inputs import SimpleText, Image, WebLink, Textarea, Checkbox, Select, Radio, ImageUpload, \
+from python_anticaptcha.fields import SimpleText, Image, WebLink, Textarea, Checkbox, Select, Radio, ImageUpload, \
     TextInput
 
 

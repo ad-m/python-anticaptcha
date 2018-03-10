@@ -1,14 +1,14 @@
+from collections import OrderedDict
 from os import environ
 
 from python_anticaptcha import AnticaptchaClient
-from python_anticaptcha.inputs import TextInput, Select, Radio
+from python_anticaptcha.fields import TextInput, Select, Radio
 from python_anticaptcha.tasks import CustomCaptchaTask
 
 api_key = environ['KEY']
 
 URL = "https://s.jawne.info.pl/dot_img"
 EXPECTED_RESULT = ('7', 'red')
-
 
 CHOICES = [('red', "Red"),
            ('blue', "Blue"),
@@ -31,10 +31,14 @@ CHOICES_GENRE = [('M', 'Male'),
                  ('F', 'Female'),
                  ('O', 'Other')]
 
-form = {'dot_count': TextInput(label="Dot count", labelHint="Enter the number of dots."),
-        'dot_color': Select(label="Dot color", labelHint="Select the color of dots.", choices=CHOICES),
-        'country': Select(label="Your country", labelHint="Select your country of origin", choices=CHOICES_COUNTRY),
-        'genre': Radio(label="Your genre", labelHint="Select your genre", choices=CHOICES_GENRE)}
+form = OrderedDict()
+form['dot_count'] = TextInput(label="Dot count", labelHint="Enter the number of dots.")
+form['dot_color'] = Select(label="Dot color", labelHint="Select the color of dots.", choices=CHOICES)
+form['country'] = Select(label="Your country", labelHint="Select your country of origin", choices=CHOICES_COUNTRY)
+form['genre'] = Radio(label="Your genre", labelHint="Select your genre", choices=CHOICES_GENRE)
+
+form['country'] = Select(label="Your country", labelHint="Select your country of origin", choices=CHOICES_COUNTRY)
+form['genre'] = Radio(label="Your genre", labelHint="Select your genre", choices=CHOICES_GENRE)
 
 
 def process(url):

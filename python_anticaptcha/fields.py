@@ -2,7 +2,7 @@ import six
 from python_anticaptcha.exceptions import InvalidWidthException, MissingNameException
 
 
-class BaseInput(object):
+class BaseField(object):
     label = None
     labelHint = None
 
@@ -15,11 +15,11 @@ class BaseInput(object):
         return data
 
 
-class NameBaseInput(BaseInput):
+class NameBaseField(BaseField):
     name = None
 
     def serialize(self, name=None):
-        data = super(NameBaseInput, self).serialize(name)
+        data = super(NameBaseField, self).serialize(name)
         if name:
             data['name'] = name
         elif self.name:
@@ -29,7 +29,7 @@ class NameBaseInput(BaseInput):
         return data
 
 
-class SimpleText(BaseInput):
+class SimpleText(BaseField):
     contentType = 'text'
 
     def __init__(self, content, label=None, labelHint=None, width=None):
@@ -52,7 +52,7 @@ class SimpleText(BaseInput):
         return data
 
 
-class Image(BaseInput):
+class Image(BaseField):
     contentType = 'image'
 
     def __init__(self, imageUrl, label=None, labelHint=None):
@@ -67,7 +67,7 @@ class Image(BaseInput):
         return data
 
 
-class WebLink(BaseInput):
+class WebLink(BaseField):
     contentType = 'link'
 
     def __init__(self, linkText, linkUrl, label=None, labelHint=None, width=None):
@@ -95,7 +95,7 @@ class WebLink(BaseInput):
         return data
 
 
-class TextInput(NameBaseInput):
+class TextInput(NameBaseField):
     def __init__(self, placeHolder=None, label=None, labelHint=None, width=None):
         self.label = label
         self.labelHint = labelHint
@@ -121,7 +121,7 @@ class TextInput(NameBaseInput):
         return data
 
 
-class Textarea(NameBaseInput):
+class Textarea(NameBaseField):
     def __init__(self, placeHolder=None, rows=None, label=None, width=None, labelHint=None):
         self.label = label
         self.labelHint = labelHint
@@ -143,7 +143,7 @@ class Textarea(NameBaseInput):
         return data
 
 
-class Checkbox(NameBaseInput):
+class Checkbox(NameBaseField):
     def __init__(self, text, label=None, labelHint=None):
         self.label = label
         self.labelHint = labelHint
@@ -157,7 +157,7 @@ class Checkbox(NameBaseInput):
         return data
 
 
-class Select(NameBaseInput):
+class Select(NameBaseField):
     type = 'select'
 
     def __init__(self, label=None, choices=None, labelHint=None):
@@ -188,7 +188,7 @@ class Radio(Select):
     type = 'radio'
 
 
-class ImageUpload(NameBaseInput):
+class ImageUpload(NameBaseField):
     def __init__(self, label=None, labelHint=None):
         self.label = label
         self.labelHint = labelHint

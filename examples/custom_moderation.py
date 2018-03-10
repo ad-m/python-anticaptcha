@@ -4,7 +4,7 @@ from os import environ
 import time
 from python_anticaptcha.base import SLEEP_EVERY_CHECK_FINISHED
 from python_anticaptcha import AnticaptchaClient
-from python_anticaptcha.inputs import Radio
+from python_anticaptcha.fields import Radio
 from python_anticaptcha.tasks import CustomCaptchaTask
 
 api_key = environ['KEY']

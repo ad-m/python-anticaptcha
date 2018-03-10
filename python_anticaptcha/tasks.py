@@ -1,5 +1,5 @@
 import base64
-from .inputs import BaseInput
+from .fields import BaseField
 
 
 class BaseTask(object):
@@ -112,11 +112,13 @@ class CustomCaptchaTask(BaseTask):
                      'imageUrl': self.imageUrl})
         if self.form:
             forms = []
-            for name, form in self.form.items():
-                if isinstance(form, BaseInput):
-                    forms.append(form.serialize(name))
+            for name, field in self.form.items():
+                if isinstance(field, BaseField):
+                    forms.append(field.serialize(name))
                 else:
-                    forms.append(form)
+                    field = field.copy()
+                    field['name'] = name
+                    forms.append(field)
             data['forms'] = forms
         if self.assignment:
             data['assignment'] = self.assignment

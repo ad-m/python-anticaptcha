@@ -30,4 +30,11 @@ Proxy
    :undoc-members:
 
 
+.. _form_fields:
 
+Fields
+------
+
+ .. automodule:: python_anticaptcha.fields
+   :members:
+   :undoc-members:

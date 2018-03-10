@@ -20,8 +20,8 @@ class CustomDotTestCase(TestCase):
 class CustomModerationTestCase(TestCase):
     def test_process_bulk_iter(self):
         from examples import custom_moderation
-        self.assertItemsEqual(custom_moderation.process_bulk_iter(custom_moderation.URLS),
-                              zip(custom_moderation.URLS, custom_moderation.RESULTS))
+        self.assertSequenceEqual(custom_moderation.process_bulk_iter(custom_moderation.URLS),
+                                 zip(custom_moderation.URLS, custom_moderation.RESULTS))
 
     def test_process_bulk(self):
         from examples import custom_moderation
@@ -31,7 +31,8 @@ class CustomModerationTestCase(TestCase):
 @skipIf('KEY' not in os.environ, 'Missing KEY environment variable. Unable to connect Anti-captcha.com')
 @skipIf('PROXY_URL' not in os.environ, 'Missing PROXY_URL environment variable')
 class FuncaptchaTestCase(TestCase):
-    @retry(AnticatpchaException, tries=3) # CI Proxy is unstable. Occasionally fails, so I repeat my attempt to have others selected.
+    @retry(AnticatpchaException,
+           tries=3)  # CI Proxy is unstable. Occasionally fails, so I repeat my attempt to have others selected.
     def test_funcaptcha(self):
         from examples import funcaptcha
         self.assertTrue(funcaptcha.process())
