@@ -2,6 +2,7 @@ from setuptools import setup
 from codecs import open
 from os import path, system
 import sys
+
 here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README file
@@ -9,6 +10,15 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 version = '0.2.0'
+
+tests_deps = [
+    'nose',
+    'retry'
+]
+
+extras = {
+    'tests': tests_deps,
+}
 
 if sys.argv[-1] == 'publish':
     try:
@@ -19,7 +29,6 @@ if sys.argv[-1] == 'publish':
     print("You probably want to also tag the version now:")
     print("  git push --tags")
     sys.exit()
-
 
 setup(
     name='python-anticaptcha',
@@ -41,8 +50,11 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
     ],
+    test_suite='tests',
     use_2to3=True,
     keywords='recaptcha captcha development',
     packages=['python_anticaptcha'],
     install_requires=['requests', 'six'],
+    tests_require=tests_deps,
+    extras_require=extras
 )

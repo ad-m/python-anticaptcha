@@ -5,7 +5,7 @@ from six.moves.urllib_parse import urljoin
 from .exceptions import AnticatpchaException
 
 SLEEP_EVERY_CHECK_FINISHED = 3
-MAXIMUM_JOIN_TIME = 60*5
+MAXIMUM_JOIN_TIME = 60 * 5
 
 
 class Job(object):
@@ -30,6 +30,9 @@ class Job(object):
     def get_token_response(self):  # Funcaptcha
         return self._last_result['solution']['token']
 
+    def get_answers(self):
+        return self._last_result['solution']['answers']
+
     def get_captcha_text(self):  # Image
         return self._last_result['solution']['text']
 
@@ -43,7 +46,9 @@ class Job(object):
             time.sleep(SLEEP_EVERY_CHECK_FINISHED)
             elapsed_time += SLEEP_EVERY_CHECK_FINISHED
             if elapsed_time is not None and elapsed_time > maximum_time:
-                raise AnticatpchaException(None, 250, "The execution time exceeded a maximum time of {} seconds. It takes {} seconds.".format(maximum_time, elapsed_time))
+                raise AnticatpchaException(None, 250,
+                                           "The execution time exceeded a maximum time of {} seconds. It takes {} seconds.".format(
+                                               maximum_time, elapsed_time))
 
 
 class AnticaptchaClient(object):
@@ -103,7 +108,7 @@ class AnticaptchaClient(object):
     def reportIncorrectImage(self, task_id):
         request = {"clientKey": self.client_key,
                    "taskId": task_id
-                  }
+                   }
         response = self.session.post(urljoin(self.base_url, self.REPORT_IMAGE_URL), json=request).json()
         self._check_response(response)
         return response.get('status', False) != False

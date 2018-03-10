@@ -2,7 +2,7 @@ import re
 import requests
 from os import environ
 
-from python_anticaptcha import AnticaptchaClient, Proxy, NoCaptchaTaskProxylessTask
+from python_anticaptcha import AnticaptchaClient, NoCaptchaTaskProxylessTask
 
 api_key = environ['KEY']
 site_key_pattern = 'data-sitekey="(.+?)"'
@@ -28,8 +28,11 @@ def form_submit(token):
     return requests.post(url, data={'g-recaptcha-response': token}).text
 
 
-if __name__ == '__main__':
+def process():
     html = get_form_html()
     token = get_token(html)
-    form_submit = form_submit(token)
-    assert 'Verification Success... Hooray!' in form_submit
+    return form_submit(token)
+
+
+if __name__ == '__main__':
+    assert 'Verification Success... Hooray!' in process()

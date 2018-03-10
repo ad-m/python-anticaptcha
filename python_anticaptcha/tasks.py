@@ -1,4 +1,5 @@
 import base64
+from .inputs import BaseInput
 
 
 class BaseTask(object):
@@ -92,3 +93,31 @@ class ImageToTextTask(object):
                 'math': self.math,
                 'minLength': self.minLength,
                 'maxLength': self.maxLength}
+
+
+class CustomCaptchaTask(BaseTask):
+    type = 'CustomCaptchaTask'
+    imageUrl = None
+    assignment = None
+    form = None
+
+    def __init__(self, imageUrl, form=None, assignment=None):
+        self.imageUrl = imageUrl
+        self.form = form or {}
+        self.assignment = assignment
+
+    def serialize(self):
+        data = super(CustomCaptchaTask, self).serialize()
+        data.update({'type': self.type,
+                     'imageUrl': self.imageUrl})
+        if self.form:
+            forms = []
+            for name, form in self.form.items():
+                if isinstance(form, BaseInput):
+                    forms.append(form.serialize(name))
+                else:
+                    forms.append(form)
+            data['forms'] = forms
+        if self.assignment:
+            data['assignment'] = self.assignment
+        return data
