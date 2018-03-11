@@ -3,14 +3,22 @@ Custom fields
 
 Python-Anticaptcha since 0.3.0 supports task type ```CustomCaptchaTask``. It allows collects arbitrary description of image.
 
-This type of tasks is suitable for use when you need to describe what is on an image and you need workers to fill a custom form for this.
+This type of tasks is suitable for use when you need to describe what is on an image and you need workers to fill a custom form about this.
 
 Examples:
 
+* Build ML dataset
 * Read letters and numbers from a car license plate
 * Find a phone number on a commercial
+* Reading data from the invoice scan
 * Complete task like "count monkeys on a picture"
 * etc.
+
+If your case does not fit in such a flow, and yet you need a human factor for many repetitive tasks - `create an issue`_,
+use `Gitter`_ or contact privately.
+
+.. _create an issue: https://github.com/ad-m/python-anticaptcha/issues/new
+.. _Gitter: https://gitter.im/python-anticaptcha/Lobby
 
 At the beginning you need to initialize the `Anti-captcha.com`_ client:
 
