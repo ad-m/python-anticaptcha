@@ -54,7 +54,7 @@ class CustomCaptchaTaskTestCase(TestCase):
                  }}
             ]
         }
-        self.assertSequenceEqual(task.serialize().keys(), expected_result.keys())
+        self.assertSequenceEqual(sorted(task.serialize().keys()), sorted(expected_result.keys()))
         for result, expected in zip(task.serialize()['forms'], expected_result['forms']):
             self.assertSequenceEqual(sorted(result.keys()), sorted(expected.keys()))
             self.assertDictEqual(result, expected)
