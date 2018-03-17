@@ -34,8 +34,6 @@ CHOICES_GENRE = [('M', 'Male'),
 form = OrderedDict()
 form['dot_count'] = TextInput(label="Dot count", labelHint="Enter the number of dots.")
 form['dot_color'] = Select(label="Dot color", labelHint="Select the color of dots.", choices=CHOICES)
-form['country'] = Select(label="Your country", labelHint="Select your country of origin", choices=CHOICES_COUNTRY)
-form['genre'] = Radio(label="Your genre", labelHint="Select your genre", choices=CHOICES_GENRE)
 
 form['country'] = Select(label="Your country", labelHint="Select your country of origin", choices=CHOICES_COUNTRY)
 form['genre'] = Radio(label="Your genre", labelHint="Select your genre", choices=CHOICES_GENRE)
