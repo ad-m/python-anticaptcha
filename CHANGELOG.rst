@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.3.1 - unreleased
+0.3.1 - 2018-03-18
 ------------------
 
 Changed
@@ -18,4 +18,4 @@ Added
 Removed
 #######
 
-- Deprecated ``python_anticaptcha.exceptions.AnticatpchaException``
+- Deprecated ``python_anticaptcha.exceptions.AnticatpchaException``s
