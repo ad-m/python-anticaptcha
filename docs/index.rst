@@ -17,7 +17,7 @@ Welcome to python-anticaptcha's documentation!
    usage
    fields
    api
-
+   changes
 
 Indices and tables
 ==================
