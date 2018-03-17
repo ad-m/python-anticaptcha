@@ -13,7 +13,7 @@ Added
 #####
 
 - Added ``python_anticaptcha.exceptions.AnticatpchaException``
-
+- Added docs about error handling
 
 Removed
 #######

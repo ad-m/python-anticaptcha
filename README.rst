@@ -135,7 +135,7 @@ Custom tasks
 There is support for your own (captcha) forms. It allows you to analyze any data in various ways, eg. classify offensive
 image, count elements on the image, etc. The scope of the data, the form to describe them, you specify yourself.
 
-For details, go to the documentation.
+For details, go to 'Custom fields' section in the documentation.
 
 Setup proxy
 ###########
@@ -163,6 +163,25 @@ We recommend entering IP-based access control for incoming addresses to proxy. I
     209.212.146.168
 
 .. _Anticaptcha.com: http://getcaptchasolution.com/i1hvnzdymd
+
+Error handling
+##############
+
+In the event of an application error, the AnticaptchaException exception is thrown. To handle the exception, do the following:
+
+.. code:: python
+
+    from python_anticaptcha import AnticatpchaException, ImageToTextTask
+
+    try:
+        # any actions
+    except AnticatpchaException as e:
+        if e.error_code == 'ERROR_ZERO_BALANCE':
+            notify_about_no_funds(e.error_id, e.error_code, e.error_description)
+        else:
+            raise
+
+
 
 .. usage-end
 
