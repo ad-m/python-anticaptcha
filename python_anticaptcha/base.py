@@ -78,7 +78,7 @@ class AnticaptchaClient(object):
             response['errorDescription'] = "{} Your missing IP address is {}.".format(response['errorDescription'],
                                                                                       self.client_ip)
         if response.get('errorId', False):
-            raise AnticatpchaException(response['errorId'],
+            raise AnticaptchaException(response['errorId'],
                                        response['errorCode'],
                                        response['errorDescription'])
 
