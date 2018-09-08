@@ -18,4 +18,4 @@ Added
 Removed
 #######
 
-- Deprecated ``python_anticaptcha.exceptions.AnticatpchaException``s
+- Deprecated ``python_anticaptcha.exceptions.AnticatpchaException``

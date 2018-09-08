@@ -18,6 +18,7 @@ tests_deps = [
 
 extras = {
     'tests': tests_deps,
+    'docs': 'sphinx'
 }
 
 if sys.argv[-1] == 'publish':
