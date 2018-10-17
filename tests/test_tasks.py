@@ -2,6 +2,8 @@ import os
 from collections import OrderedDict
 from unittest import TestCase, skipIf
 
+import six
+
 from python_anticaptcha import TextInput, Select, AnticaptchaClient
 from python_anticaptcha.tasks import CustomCaptchaTask, \
     NoCaptchaTaskProxylessTask
@@ -75,4 +77,4 @@ class TestNoCaptchaTask(TestCase):
         )
         job = client.createTask(task)
         job.join()
-        self.assertIsInstance(job.get_solution_response(), (str, unicode))
+        self.assertIsInstance(job.get_solution_response(), six.string_types)
