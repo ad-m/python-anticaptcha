@@ -72,6 +72,27 @@ Example snippet for Recaptcha:
 
 The full integration example is available in file ``examples/recaptcha.py``.
 
+If you only process few page many times to increase reliability, you can specify
+whether the captcha is visible or not. This parameter is not required, as is the
+system detects invisible sitekeys automatically, and needs several recursive
+measures for automated training and analysis. For provide that pass
+``is_invisible`` parameter to ``NoCaptchaTaskProxylessTask`` or ``NoCaptchaTask`` eg.:
+
+.. code:: python
+
+    from python_anticaptcha import AnticaptchaClient, NoCaptchaTaskProxylessTask
+
+    api_key = '174faff8fbc769e94a5862391ecfd010'
+    site_key = '6Lc-0DYUAAAAAOPM3RGobCfKjIE5STmzvZfHbbNx'  # grab from site
+    url = 'https://losangeles.craigslist.org/lac/kid/d/housekeeper-sitting-pet-care/6720136191.html'
+
+    client = AnticaptchaClient(api_key)
+    task = NoCaptchaTaskProxylessTask(url, site_key, is_invisible=True)
+    job = client.createTask(task)
+    job.join()
+    print job.get_solution_response()
+
+
 Solve text captcha
 ##################
 
