@@ -9,7 +9,7 @@ python:
 install:
 - pip install .[tests] .[docs]
 script:
-- nosetests tests -v --processes=4
+- travis_retry nosetests tests -v --processes=4
 - sphinx-build -W docs /dev/shm/sphinx
 env:
   global:

@@ -1,8 +1,12 @@
+import os
 from collections import OrderedDict
-from unittest import TestCase
+from unittest import TestCase, skipIf
 
-from python_anticaptcha import TextInput, Select
-from python_anticaptcha.tasks import CustomCaptchaTask
+import six
+
+from python_anticaptcha import TextInput, Select, AnticaptchaClient
+from python_anticaptcha.tasks import CustomCaptchaTask, \
+    NoCaptchaTaskProxylessTask
 
 
 class CustomCaptchaTaskTestCase(TestCase):
@@ -60,3 +64,17 @@ class CustomCaptchaTaskTestCase(TestCase):
             self.assertDictEqual(result, expected)
         self.assertSequenceEqual(task.serialize()['forms'], expected_result['forms'])
         self.assertDictEqual(task.serialize(), expected_result)
+
+
+@skipIf('KEY' not in os.environ, 'Missing KEY environment variable. Unable to connect Anti-captcha.com')
+# @skipIf('TRAVIS' in os.environ, 'Skip heavy tests in TravisCI.')
+class TestNoCaptchaTask(TestCase):
+    def test_invisible_captcha(self):
+        client = AnticaptchaClient(os.environ['KEY'])
+        task = NoCaptchaTaskProxylessTask(
+            website_url='https://losangeles.craigslist.org/lac/kid/d/housekeeper-sitting-pet-care/6720136191.html',
+            website_key='6Lc-0DYUAAAAAOPM3RGobCfKjIE5STmzvZfHbbNx',
+        )
+        job = client.createTask(task)
+        job.join()
+        self.assertIsInstance(job.get_solution_response(), six.string_types)
