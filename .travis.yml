@@ -8,6 +8,11 @@ python:
 - pypy
 - pypy3
 
+env:
+  - MOZ_HEADLESS=1
+addons:
+  firefox: latest
+
 install:
 - pip install .[tests] .[docs] coveralls
 script:
