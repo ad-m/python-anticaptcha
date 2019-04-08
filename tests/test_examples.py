@@ -49,7 +49,7 @@ class RecaptchaRequestTestCase(TestCase):
                       recaptcha_request.process())
 
 @skipIf('KEY' not in os.environ, 'Missing KEY environment variable. Unable to connect Anti-captcha.com')
-class RecaptchaRequestTestCase(TestCase):
+class RecaptchaSeleniumtTestCase(TestCase):
     def test_process(self):
         from examples import recaptcha_selenium
         from selenium.webdriver import Firefox
