@@ -13,9 +13,9 @@ class ProxyMixin(BaseTask):
         self.userAgent = kwargs.pop('user_agent')
         self.proxyAddress = kwargs.pop('proxy_address')
         self.proxyPort = kwargs.pop('proxy_port')
-        self.proxyLogin = kwargs.pop('proxy_login')
-        self.proxyPassword = kwargs.pop('proxy_password')
-        
+
+        self.proxyLogin = kwargs.pop('proxy_login', '')
+        self.proxyPassword = kwargs.pop('proxy_password', '')
         self.cookies = kwargs.pop('cookies', '')
         super(ProxyMixin, self).__init__(*args, **kwargs)
 
