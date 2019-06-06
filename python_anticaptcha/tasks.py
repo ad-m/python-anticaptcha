@@ -9,15 +9,25 @@ class BaseTask(object):
 
 class ProxyMixin(BaseTask):
     def __init__(self, *args, **kwargs):
-        self.proxy = kwargs.pop('proxy')
+        self.proxyType = kwargs.pop('proxy_type')
         self.userAgent = kwargs.pop('user_agent')
+        self.proxyAddress = kwargs.pop('proxy_address')
+        self.proxyPort = kwargs.pop('proxy_port')
+        self.proxyLogin = kwargs.pop('proxy_login')
+        self.proxyPassword = kwargs.pop('proxy_password')
+        
         self.cookies = kwargs.pop('cookies', '')
         super(ProxyMixin, self).__init__(*args, **kwargs)
 
     def serialize(self, **result):
         result = super(ProxyMixin, self).serialize(**result)
-        result.update(self.proxy.serialize())
         result['userAgent'] = self.userAgent
+        result['proxyType'] = self.proxyType
+        result['proxyAddress'] = self.proxyAddress
+        result['proxyPort'] = self.proxyPort
+        if self.proxyLogin:
+            result['proxyLogin'] = self.proxyLogin
+            result['proxyPassword'] = self.proxyPassword
         if self.cookies:
             result['cookies'] = self.cookies
         return result
