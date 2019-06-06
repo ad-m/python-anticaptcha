@@ -11,10 +11,10 @@ from python_anticaptcha import AnticatpchaException
 @skipIf('TRAVIS' in os.environ, 'Skip heavy tests in TravisCI.')
 class CustomDotTestCase(TestCase):
 
-    # @retry(tries=3)  # For unknown reasons, workers are not always able to count correctly. ¯\_(ツ)_/¯
+    @retry(tries=3)  # For unknown reasons, workers are not always able to count correctly. ¯\_(ツ)_/¯
     def test_process_dot(self):
         from examples import custom_dot
-        self.assertEqual(custom_dot.process(custom_dot.URL), custom_dot.EXPECTED_RESULT)
+        self.assertEqual(custom_dot.process(custom_dot.URL).trim(), custom_dot.EXPECTED_RESULT)
 
 
 @skipIf('KEY' not in os.environ, 'Missing KEY environment variable. Unable to connect Anti-captcha.com')
@@ -34,7 +34,7 @@ class CustomModerationTestCase(TestCase):
 @skipIf('TRAVIS' in os.environ, 'Skip heavy tests in TravisCI.')
 @skipIf('PROXY_URL' not in os.environ, 'Missing PROXY_URL environment variable')
 class FuncaptchaTestCase(TestCase):
-    # @retry(AnticatpchaException, tries=3)  # CI Proxy is unstable. Occasionally fails, so I repeat my attempt to have others selected.
+    @retry(AnticatpchaException, tries=3)  # CI Proxy is unstable. Occasionally fails, so I repeat my attempt to have others selected.
     def test_funcaptcha(self):
         from examples import funcaptcha
         self.assertTrue(funcaptcha.process())
@@ -42,6 +42,7 @@ class FuncaptchaTestCase(TestCase):
 
 @skipIf('KEY' not in os.environ, 'Missing KEY environment variable. Unable to connect Anti-captcha.com')
 class RecaptchaTestCase(TestCase):
+    @retry(AnticatpchaException, tries=3)  # Anticaptcha respons is not fully reliable.
     def test_process(self):
         from examples import recaptcha
         self.assertIn('Verification Success... Hooray!', recaptcha.process())
