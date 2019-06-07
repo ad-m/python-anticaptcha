@@ -9,11 +9,15 @@ python-anticaptcha
   :alt: Python package
 
 .. image:: https://badges.gitter.im/python-anticaptcha/Lobby.svg
-   :target: https://gitter.im/python-anticaptcha/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=share-link
-   :alt: Join the chat at https://gitter.im/python-anticaptcha/Lobby
+  :target: https://gitter.im/python-anticaptcha/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=share-link
+  :alt: Join the chat at https://gitter.im/python-anticaptcha/Lobby
 
 .. image:: https://img.shields.io/pypi/pyversions/python-anticaptcha.svg
   :alt: Python compatibility
+
+.. image:: https://coveralls.io/repos/github/ad-m/python-anticaptcha/badge.svg?branch=master
+  :target: https://coveralls.io/github/ad-m/python-anticaptcha?branch=master
+  :alt: Tests coverage
 
 .. introduction-start
 
