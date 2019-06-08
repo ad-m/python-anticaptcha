@@ -1,0 +1,6 @@
+htmlcov/
+.tox/
+dist/
+.git
+python_anticaptcha.egg-info
+.travis.yml
