@@ -41,12 +41,25 @@ class FuncaptchaTestCase(TestCase):
 
 
 @skipIf('KEY' not in os.environ, 'Missing KEY environment variable. Unable to connect Anti-captcha.com')
-class RecaptchaTestCase(TestCase):
+class RecaptchaRequestTestCase(TestCase):
     @retry(AnticatpchaException, tries=3)  # Anticaptcha respons is not fully reliable.
     def test_process(self):
-        from examples import recaptcha
-        self.assertIn('Verification Success... Hooray!', recaptcha.process())
+        from examples import recaptcha_request
+        self.assertIn('Verification Success... Hooray!',
+                      recaptcha_request.process())
 
+@skipIf('KEY' not in os.environ, 'Missing KEY environment variable. Unable to connect Anti-captcha.com')
+class RecaptchaSeleniumtTestCase(TestCase):
+    def test_process(self):
+        from examples import recaptcha_selenium
+        from selenium.webdriver import Firefox
+        from selenium.webdriver.firefox.options import Options
+
+        options = Options()
+        options.add_argument('-headless')
+        driver = Firefox(firefox_options=options)
+        self.assertIn('Verification Success... Hooray!',
+                      recaptcha_selenium.process(driver))
 
 @skipIf('KEY' not in os.environ, 'Missing KEY environment variable. Unable to connect Anti-captcha.com')
 class TextTestCase(TestCase):

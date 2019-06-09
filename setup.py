@@ -13,7 +13,8 @@ version = '0.3.2'
 
 tests_deps = [
     'nose',
-    'retry'
+    'retry',
+    'selenium'
 ]
 
 extras = {
