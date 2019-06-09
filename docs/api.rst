@@ -22,14 +22,6 @@ Tasks
    :members:
    :undoc-members:
 
-Proxy
------
-
- .. automodule:: python_anticaptcha.proxy
-   :members:
-   :undoc-members:
-
-
 .. _form_fields:
 
 Fields
