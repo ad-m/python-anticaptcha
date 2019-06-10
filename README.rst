@@ -13,6 +13,7 @@ python-anticaptcha
   :alt: Join the chat at https://gitter.im/python-anticaptcha/Lobby
 
 .. image:: https://img.shields.io/pypi/pyversions/python-anticaptcha.svg
+  :target: https://github.com/ad-m/python-anticaptcha/blob/master/setup.py
   :alt: Python compatibility
 
 .. image:: https://coveralls.io/repos/github/ad-m/python-anticaptcha/badge.svg?branch=master
