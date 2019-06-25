@@ -15,7 +15,7 @@ class ProxyMixin(BaseTask):
         self.proxyPort = kwargs.pop('proxy_port')
         self.proxyLogin = kwargs.pop('proxy_login')
         self.proxyPassword = kwargs.pop('proxy_password')
-        
+
         self.cookies = kwargs.pop('cookies', '')
         super(ProxyMixin, self).__init__(*args, **kwargs)
 
@@ -135,4 +135,27 @@ class CustomCaptchaTask(BaseTask):
             data['forms'] = forms
         if self.assignment:
             data['assignment'] = self.assignment
+        return data
+
+
+class RecaptchaV3TaskProxyless(BaseTask):
+    type = 'RecaptchaV3TaskProxyless'
+    websiteURL = None
+    websiteKey = None
+    minScore = None
+    pageAction = None
+
+    def __init__(self, website_url, website_key, min_score, page_action):
+        self.websiteURL = website_url
+        self.websiteKey = website_key
+        self.minScore = min_score
+        self.pageAction = page_action
+
+    def serialize(self):
+        data = super(RecaptchaV3TaskProxyless, self).serialize()
+        data['type'] = self.type
+        data['websiteURL'] = self.websiteURL
+        data['websiteKey'] = self.websiteKey
+        data['minScore'] = self.minScore
+        data['pageAction'] = self.pageAction
         return data
