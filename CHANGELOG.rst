@@ -1,6 +1,15 @@
 Changelog
 =========
 
+0.4.0 - 2019-06-25
+#####
+
+- Added ``python_anticaptcha.AnticaptchaClient.createTaskStream`` to receive responses without polling
+	The method, which is based on the callback result of captcha / task factory to Smee.io,
+	which immediately transfers it to library. Allows to significantly shorten the waiting time
+	for a response and to reduce load the network connection.
+	The method is in beta and the way it works may change. All comments are welcome.
+
 0.3.2 - 2018-10-17
 ------------------
 

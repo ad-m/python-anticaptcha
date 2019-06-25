@@ -1,6 +1,8 @@
 import requests
 import time
+import json
 
+from .compat import split
 from six.moves.urllib_parse import urljoin
 from .exceptions import AnticaptchaException
 
@@ -83,14 +85,52 @@ class AnticaptchaClient(object):
                                        response['errorDescription'])
 
     def createTask(self, task):
-        request = {"clientKey": self.client_key,
-                   "task": task.serialize(),
-                   "softId": self.SOFT_ID,
-                   "languagePool": self.language_pool,
-                   }
+        request = {
+            "clientKey": self.client_key,
+            "task": task.serialize(),
+            "softId": self.SOFT_ID,
+            "languagePool": self.language_pool,
+        }
         response = self.session.post(urljoin(self.base_url, self.CREATE_TASK_URL), json=request).json()
         self._check_response(response)
         return Job(self, response['taskId'])
+
+    def createTaskSmee(self, task):
+        '''
+        Beta method to stream response from smee.io
+        '''
+        response = self.session.head('https://smee.io/new')
+        smee_url = response.headers['Location']
+        request = {
+            "clientKey": self.client_key,
+            "task": task.serialize(),
+            "softId": self.SOFT_ID,
+            "languagePool": self.language_pool,
+            "callbackUrl": smee_url
+        }
+        r = requests.get(
+            url=smee_url,
+            headers={'Accept': 'text/event-stream'},
+            stream=True
+        )
+        response = self.session.post(
+            url=urljoin(self.base_url, self.CREATE_TASK_URL),
+            json=request
+        ).json()
+        self._check_response(response)
+        for line in r.iter_lines():
+            content = line.decode('utf-8')
+            print('content', content)
+            if '"host":"smee.io"' not in content:
+                continue
+            payload = json.loads(split(content, ':', 1)[1].strip())
+            if 'taskId' not in payload['body'] or str(payload['body']['taskId']) != str(response['taskId']):
+                continue
+            r.close()
+            print(payload['body'])
+            job = Job(client=self, task_id=response['taskId'])
+            job._last_result = payload['body']
+            return job
 
     def getTaskResult(self, task_id):
         request = {"clientKey": self.client_key,
