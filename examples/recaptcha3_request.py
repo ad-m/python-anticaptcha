@@ -23,10 +23,10 @@ def get_token(form_html):
         website_url=url,
         website_key=website_key,
         page_action=page_action,
-        min_score=0.5
+        min_score=0.7
     )
     job = client.createTask(task)
-    job.join(maximum_time=900)
+    job.join(maximum_time=9*60)
     return [page_action, job.get_solution_response()]
 
 
@@ -47,5 +47,6 @@ def process():
 
 
 if __name__ == '__main__':
-    print(process())
-    # assert 'Verification Success... Hooray!' in process()
+    result = process()
+    assert result['success'] is True
+    print("Processed successfully")
