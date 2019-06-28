@@ -101,9 +101,10 @@ class AnticaptchaClient(object):
         '''
         response = self.session.head('https://smee.io/new')
         smee_url = response.headers['Location']
+        task = task.serialize();
         request = {
             "clientKey": self.client_key,
-            "task": task.serialize(),
+            "task": task,
             "softId": self.SOFT_ID,
             "languagePool": self.language_pool,
             "callbackUrl": smee_url
@@ -120,14 +121,14 @@ class AnticaptchaClient(object):
         self._check_response(response)
         for line in r.iter_lines():
             content = line.decode('utf-8')
-            print('content', content)
             if '"host":"smee.io"' not in content:
                 continue
             payload = json.loads(split(content, ':', 1)[1].strip())
             if 'taskId' not in payload['body'] or str(payload['body']['taskId']) != str(response['taskId']):
                 continue
             r.close()
-            print(payload['body'])
+            if task['type'] == 'CustomCaptchaTask':
+                payload['body']['solution'] = payload['body']['data'][0]
             job = Job(client=self, task_id=response['taskId'])
             job._last_result = payload['body']
             return job

@@ -41,10 +41,12 @@ form['genre'] = Radio(label="Your genre", labelHint="Select your genre", choices
 
 def process(url):
     client = AnticaptchaClient(api_key)
-    task = CustomCaptchaTask(imageUrl=url, assignment="Count the dots and indicate their color.", form=form)
-
-    job = client.createTask(task)
-    job.join()
+    task = CustomCaptchaTask(
+        imageUrl=url,
+        assignment="Count the dots and indicate their color.",
+        form=form
+    )
+    job = client.createTaskSmee(task)
     answer = job.get_answers()
     return answer['dot_count'], answer['dot_color']
 
