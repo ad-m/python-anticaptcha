@@ -18,6 +18,7 @@ Welcome to python-anticaptcha's documentation!
    fields
    api
    changes
+   development
 
 Indices and tables
 ==================
