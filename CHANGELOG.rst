@@ -1,7 +1,10 @@
 Changelog
 =========
 
-0.4.0 - 2019-06-25
+0.4.0 - 2019-06-28
+------------------
+
+Added
 #####
 
 - Added ``python_anticaptcha.AnticaptchaClient.createTaskStream`` to receive responses without polling
@@ -9,6 +12,7 @@ Changelog
 	which immediately transfers it to library. Allows to significantly shorten the waiting time
 	for a response and to reduce load the network connection.
 	The method is in beta and the way it works may change. All comments are welcome.
+- Recaptcha V3 is now officially supported by Anti-Captcha. Added ``python_anticaptcha.RecaptchaV3TaskProxyless``.
 
 0.3.2 - 2018-10-17
 ------------------
