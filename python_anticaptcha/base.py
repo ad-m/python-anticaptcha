@@ -109,7 +109,7 @@ class AnticaptchaClient(object):
             "languagePool": self.language_pool,
             "callbackUrl": smee_url
         }
-        r = requests.get(
+        r = self.session.get(
             url=smee_url,
             headers={'Accept': 'text/event-stream'},
             stream=True
