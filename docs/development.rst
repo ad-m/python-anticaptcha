@@ -14,5 +14,6 @@ Follow these steps to publish the new release:
 
 * update changelog - use any text editor
 * bump version - use ```bumpversion {major,minor,patch}```
-* upload release to PyPI - use ```twine upload dist```
+* build package - use ```python setup.py sdist bdist_wheel --universal```
+* upload release to PyPI - use ```twine upload dist/*```
 * push changes to GitHub - ```git push origin && git push --tags```
