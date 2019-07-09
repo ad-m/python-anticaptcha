@@ -9,3 +9,5 @@ from .fields import (
     Radio, ImageUpload
 )
 AnticatpchaException = AnticaptchaException
+
+__version__ = '0.4.0'
