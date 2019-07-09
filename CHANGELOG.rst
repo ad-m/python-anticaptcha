@@ -1,6 +1,19 @@
 Changelog
 =========
 
+0.4.1 - 2019-07-09
+------------------
+
+Added
+#####
+
+- Added ``python_anticaptcha.__version__`` to provide version signature (see PEP396)
+
+Changed
+#######
+
+- ``python_anticaptcha.AnticaptchaClient.createTaskStream`` use shared session & keep connection.
+
 0.4.0 - 2019-06-28
 ------------------
 
