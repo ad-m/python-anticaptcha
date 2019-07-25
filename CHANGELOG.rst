@@ -12,7 +12,7 @@ Added
 Changed
 #######
 
-- ``python_anticaptcha.AnticaptchaClient.createTaskStream`` use shared session & keep connection.
+- ``python_anticaptcha.AnticaptchaClient.createTaskSmee`` use shared session & keep connection.
 
 0.4.0 - 2019-06-28
 ------------------
@@ -20,7 +20,7 @@ Changed
 Added
 #####
 
-- Added ``python_anticaptcha.AnticaptchaClient.createTaskStream`` to receive responses without polling
+- Added ``python_anticaptcha.AnticaptchaClient.createTaskSmee`` to receive responses without polling
 	The method, which is based on the callback result of captcha / task factory to Smee.io,
 	which immediately transfers it to library. Allows to significantly shorten the waiting time
 	for a response and to reduce load the network connection.
