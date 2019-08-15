@@ -28,5 +28,6 @@ jobs:
     - name: Test with pytest
       run: |
         pip install .[tests] coveralls
-        nosetests tests -v --with-coverage --cover-package=python_anticaptcha --processes=8
-        coveralls
+        # nosetests tests -v --with-coverage --cover-package=python_anticaptcha --processes=8
+        nosetests tests -v --processes=8
+        # coveralls
