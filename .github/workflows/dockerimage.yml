@@ -12,9 +12,8 @@ jobs:
     - uses: actions/checkout@v1
     - name: Lint Dockerfile
       uses: "jwr0/dockerfile-linter-action"
-      secrets:
-      - GITHUB_TOKEN
       env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         DOCKERFILE: "./Dockerfile.docs"
     - name: Build the Docker image
       run: docker build -f Dockerfile.docs . --tag docs:$(date +%s)
