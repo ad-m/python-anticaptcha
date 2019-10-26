@@ -9,7 +9,6 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
-version = '0.4.1'
 
 tests_deps = [
     'nose',
@@ -22,19 +21,8 @@ extras = {
     'docs': 'sphinx'
 }
 
-if sys.argv[-1] == 'publish':
-    try:
-        import wheel
-    except ImportError:
-        raise ImportError("Fix: pip install wheel")
-    system('python setup.py sdist bdist_wheel --universal upload')
-    print("You probably want to also tag the version now:")
-    print("  git push --tags")
-    sys.exit()
-
 setup(
     name='python-anticaptcha',
-    version=version,
     description='Client library for solve captchas with Anticaptcha.com support.',
     long_description=long_description,
     url='https://github.com/ad-m/python-anticaptcha',
@@ -54,7 +42,8 @@ setup(
         'Programming Language :: Python :: 3.7',
     ],
     test_suite='tests',
-    use_2to3=True,
+    use_scm_version = {"root": ".", "relative_to": __file__},
+    setup_requires=['setuptools_scm'],
     keywords='recaptcha captcha development',
     packages=['python_anticaptcha'],
     install_requires=['requests', 'six'],
