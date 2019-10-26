@@ -43,7 +43,9 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Build distribution
-      run: python3 setup.py sdist bdist_wheel
+      run: |
+        pip install setuptools_scm
+        python3 setup.py sdist bdist_wheel
 
     - name: Publish a Python distribution to PyPI
       uses: pypa/gh-action-pypi-publish@master
