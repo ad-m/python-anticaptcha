@@ -1,8 +1,8 @@
 python-anticaptcha
 ==================
 
-.. image:: https://travis-ci.org/ad-m/python-anticaptcha.svg?branch=master
-  :target: https://travis-ci.org/ad-m/python-anticaptcha
+.. image:: https://github.com/ad-m/python-anticaptcha/workflows/Python%20package/badge.svg
+  :target: https://github.com/ad-m/python-anticaptcha/actions?workflow=Python+package
 
 .. image:: https://img.shields.io/pypi/v/python-anticaptcha.svg
   :target: https://pypi.org/project/python-anticaptcha/
@@ -15,10 +15,6 @@ python-anticaptcha
 .. image:: https://img.shields.io/pypi/pyversions/python-anticaptcha.svg
   :target: https://github.com/ad-m/python-anticaptcha/blob/master/setup.py
   :alt: Python compatibility
-
-.. image:: https://coveralls.io/repos/github/ad-m/python-anticaptcha/badge.svg?branch=master
-  :target: https://coveralls.io/github/ad-m/python-anticaptcha?branch=master
-  :alt: Tests coverage
 
 .. introduction-start
 
