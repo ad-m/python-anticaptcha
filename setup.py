@@ -43,7 +43,7 @@ setup(
     ],
     test_suite='tests',
     use_scm_version = {"root": ".", "relative_to": __file__},
-    setup_requires=['setuptools_scm'],
+    setup_requires=['setuptools_scm','wheel'],
     keywords='recaptcha captcha development',
     packages=['python_anticaptcha'],
     install_requires=['requests', 'six'],
