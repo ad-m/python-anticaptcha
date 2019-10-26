@@ -31,32 +31,3 @@ jobs:
         # nosetests tests -v --with-coverage --cover-package=python_anticaptcha --processes=8
         nosetests tests -v --processes=8
         # coveralls
-
-  publish:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
-      with:
-        python-version: "3.7"
-
-    - name: Build distribution
-      run: |
-        pip install setuptools_scm wheel
-        python3 setup.py sdist bdist_wheel
-
-    - name: Publish a Python distribution to PyPI
-      if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-      uses: pypa/gh-action-pypi-publish@master
-      with:
-        user: __token__
-        password: ${{ secrets.pypi_password }}
-
-    - name: Publish package to TestPyPI
-      uses: pypa/gh-action-pypi-publish@master
-      with:
-        user: __token__
-        password: ${{ secrets.test_pypi_password }}
-        repository_url: https://test.pypi.org/legacy/

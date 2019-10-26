@@ -42,7 +42,7 @@ setup(
         'Programming Language :: Python :: 3.7',
     ],
     test_suite='tests',
-    use_scm_version = {"root": ".", "relative_to": __file__},
+    use_scm_version = True,
     setup_requires=['setuptools_scm','wheel'],
     keywords='recaptcha captcha development',
     packages=['python_anticaptcha'],
