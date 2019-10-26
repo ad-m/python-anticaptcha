@@ -1,6 +1,22 @@
 Changelog
 =========
 
+0.4.2 - 2019-10-27
+------------------
+
+Added
+#####
+
+- Added example ```remote_image.py```
+
+Changed
+#######
+
+- Switch CI from TravisCI to GitHub Actions
+- Automate PyPI releases
+- Use ```use_scm_version``` for versioning
+- Drop ```use_2to3``` in ```setup.py```
+
 0.4.1 - 2019-07-09
 ------------------
 
