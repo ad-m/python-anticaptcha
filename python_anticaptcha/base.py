@@ -50,7 +50,7 @@ class Job(object):
         return self.client.reportIncorrectImage(self.task_id)
     
     def report_incorrect_recaptcha(self):
-        return self.client.reportIncorrectRecaptcha(self.task_id
+        return self.client.reportIncorrectRecaptcha(self.task_id)
                                                     
                                                     
     def join(self, maximum_time=None):
