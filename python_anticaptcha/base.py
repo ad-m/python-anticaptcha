@@ -38,9 +38,13 @@ class Job(object):
     def get_captcha_text(self):  # Image
         return self._last_result['solution']['text']
 
-    def report_incorrect(self):
+    def report_incorrect_image(self):
         return self.client.reportIncorrectImage(self.task_id)
-
+    
+    def report_incorrect_recaptcha(self):
+        return self.client.reportIncorrectRecaptcha(self.task_id
+                                                    
+                                                    
     def join(self, maximum_time=None):
         elapsed_time = 0
         maximum_time = maximum_time or MAXIMUM_JOIN_TIME
@@ -59,6 +63,7 @@ class AnticaptchaClient(object):
     TASK_RESULT_URL = "/getTaskResult"
     BALANCE_URL = "/getBalance"
     REPORT_IMAGE_URL = "/reportIncorrectImageCaptcha"
+    REPORT_RECAPTCHA_URL = "/reportIncorrectRecaptcha"
     SOFT_ID = 847
     language_pool = "en"
 
@@ -151,5 +156,13 @@ class AnticaptchaClient(object):
                    "taskId": task_id
                    }
         response = self.session.post(urljoin(self.base_url, self.REPORT_IMAGE_URL), json=request).json()
+        self._check_response(response)
+        return response.get('status', False) != False
+                                                    
+    def reportIncorrectRecaptcha(self, task_id):
+        request = {"clientKey": self.client_key,
+                   "taskId": task_id
+        }
+        response = self.session.post(urljoin(self.base_url, self.REPORT_RECAPTCHA_URL), json=request).json()
         self._check_response(response)
         return response.get('status', False) != False
