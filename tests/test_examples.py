@@ -97,3 +97,12 @@ class TextTestCase(TestCase):
     def test_process(self):
         from examples import text
         self.assertEqual(text.process(text.IMAGE).lower(), text.EXPECTED_RESULT.lower())
+
+@missing_key
+class HCaptchaTaskProxylessTestCase(TestCase):
+    def test_process(self):
+        from examples import hcaptcha_request
+        self.assertIn(
+            "Your request have submitted successfully.",
+            hcaptcha_request.process()
+        )

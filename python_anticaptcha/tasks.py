@@ -159,3 +159,19 @@ class RecaptchaV3TaskProxyless(BaseTask):
         data['minScore'] = self.minScore
         data['pageAction'] = self.pageAction
         return data
+
+class HCaptchaTaskProxyless(BaseTask):
+    type = 'HCaptchaTaskProxyless'
+    websiteURL = None
+    websiteKey = None
+
+    def __init__(self, website_url, website_key):
+        self.websiteURL = website_url
+        self.websiteKey = website_key
+
+    def serialize(self):
+        data = super(HCaptchaTaskProxyless, self).serialize()
+        data['type'] = self.type
+        data['websiteURL'] = self.websiteURL
+        data['websiteKey'] = self.websiteKey
+        return data
