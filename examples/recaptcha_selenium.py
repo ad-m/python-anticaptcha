@@ -8,6 +8,7 @@ invisible_captcha = True
 url = "https://www.google.com/recaptcha/api2/demo?invisible={}".format(
     str(invisible_captcha)
 )
+EXPECTED_RESULT = "Verification Success... Hooray!"
 client = AnticaptchaClient(api_key)
 
 
@@ -16,7 +17,7 @@ def get_token(url, site_key, invisible):
         website_url=url, website_key=site_key, is_invisible=invisible
     )
     job = client.createTask(task)
-    job.join()
+    job.join(maximum_time=60 * 15)
     return job.get_solution_response()
 
 
@@ -51,4 +52,4 @@ if __name__ == "__main__":
     options = Options()
     # options.add_argument('-headless')
     driver = Firefox(firefox_options=options)
-    assert "Verification Success... Hooray!" in process(driver)
+    assert EXPECTED_RESULT in process(driver)

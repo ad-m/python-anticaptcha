@@ -7,6 +7,7 @@ from python_anticaptcha import AnticaptchaClient, NoCaptchaTaskProxylessTask
 api_key = environ["KEY"]
 site_key_pattern = 'data-sitekey="(.+?)"'
 url = "https://www.google.com/recaptcha/api2/demo?invisible=false"
+EXPECTED_RESULT = "Verification Success... Hooray!"
 client = AnticaptchaClient(api_key)
 session = requests.Session()
 

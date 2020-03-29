@@ -9,6 +9,7 @@ site_key_pattern = 'data-sitekey="(.+?)"'
 url = "http://hcaptcha.jawne.info.pl/"
 client = AnticaptchaClient(api_key)
 session = requests.Session()
+EXPECTED_RESULT = "Your request have submitted successfully."
 
 
 def get_form_html():
@@ -34,4 +35,4 @@ def process():
 
 
 if __name__ == "__main__":
-    assert "Your request have submitted successfully." in process()
+    assert EXPECTED_RESULT in process()
