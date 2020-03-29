@@ -132,7 +132,7 @@ class HCaptchaTaskProxylessTestCase(TestCase):
 class SquareNetTask(TestCase):
     # For unknown reasons, workers are not always
     # able to count correctly. ¯\_(ツ)_/¯
-    @retry(tries=3)
+    @retry(tries=5)
     def test_process(self):
         from examples import squarenet
 
