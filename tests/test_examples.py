@@ -81,7 +81,7 @@ class RecaptchaV3TestCase(TestCase):
 
 
 @missing_key
-@skipIf('CI' in process.env, 'Skip heavy, unreliable test on CI')
+@skipIf('CI' in os.environ, 'Skip heavy, unreliable test on CI')
 class RecaptchaSeleniumtTestCase(TestCase):
     def test_process(self):
         from examples import recaptcha_selenium
