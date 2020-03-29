@@ -16,7 +16,7 @@ jobs:
     - name: Build distribution
       run: |
         pip install setuptools_scm wheel
-        python3 setup.py sdist bdist_wheel
+        python setup.py sdist bdist_wheel
 
     - name: Publish distribution 📦 to PyPI
       if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')

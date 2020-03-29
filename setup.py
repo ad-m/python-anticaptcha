@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 from codecs import open
 from os import path, system
 import sys
@@ -38,7 +38,7 @@ setup(
     use_scm_version=True,
     setup_requires=["setuptools_scm", "wheel"],
     keywords="recaptcha captcha development",
-    packages=["python_anticaptcha"],
+    packages=find_packages("python_anticaptcha"),
     install_requires=["requests", "six"],
     tests_require=tests_deps,
     extras_require=extras,
