@@ -1,6 +1,23 @@
 Changelog
 =========
 
+0.5.0 - 2020-03-29
+------------------
+
+Added
+#####
+
+- Added ```HCaptchaTaskProxyless``` and ```HCaptchaTaskProxyless``` for support `hCaptcha
+<https://www.hcaptcha.com/>`_ . See ```examples/hcaptcha_request.py``` for detailed usage example.
+- Added ```SquareNetTask```. See ```examples/squarenet.py``` for detailed usage example.
+
+Changed
+#######
+
+- Expose ```FunCaptchaProxylessTask``` as ```python_anticaptcha.FunCaptchaProxylessTask```
+- Expose ```CustomCaptchaTask``` as ```python_anticaptcha.CustomCaptchaTask```
+- Format code via Black
+
 0.4.2 - 2019-10-27
 ------------------
 
