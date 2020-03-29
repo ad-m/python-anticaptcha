@@ -17,7 +17,7 @@ def get_token(url, site_key, invisible):
         website_url=url, website_key=site_key, is_invisible=invisible
     )
     job = client.createTask(task)
-    job.join(maximum_time=60 * 8)
+    job.join(maximum_time=60 * 15)
     return job.get_solution_response()
 
 
@@ -48,12 +48,8 @@ def get_sitekey(driver):
 if __name__ == "__main__":
     from selenium.webdriver import Firefox
     from selenium.webdriver.firefox.options import Options
-    from selenium.webdriver import FirefoxProfile
-
-    ffprofile = FirefoxProfile()
-    ffprofile.set_preference("intl.accept_languages", "ja")
 
     options = Options()
     # options.add_argument('-headless')
-    driver = Firefox(firefox_profile=ffprofile, firefox_options=options)
-    assert "Verification Success... Hooray!" in process(driver)
+    driver = Firefox(firefox_options=options)
+    assert EXPECTED_RESULT in process(driver)

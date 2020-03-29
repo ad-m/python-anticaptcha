@@ -46,7 +46,7 @@ def build_jobs(urls):
 
 def process_bulk(urls):
     jobs = build_jobs(urls)
-    [job.join() for job in jobs]
+    [job.join(maximum_time=60 * 10) for job in jobs]
     return [job.get_answers()["content"] for job in jobs]
 
 
