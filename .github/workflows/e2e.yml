@@ -1,0 +1,32 @@
+name: E2E test ↔️
+
+on:
+  push:
+  repository_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: "3.7"
+
+    - name: Build distribution
+      run: make install
+    
+    - name: Install Geckodriver
+      run: |
+        wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz
+        mkdir geckodriver
+        tar -xzf geckodriver-v0.24.0-linux64.tar.gz -C geckodriver
+
+    - name: Run integration tests
+      run: |
+        export PATH=$PATH:$PWD/geckodriver
+        nosetests tests -v --with-coverage --cover-package=python_anticaptcha --processes=8
+      env:
+        KEY: ${{ secrets.anticaptcha_key }}
