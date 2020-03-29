@@ -7,7 +7,7 @@ Changelog
 Added
 #####
 
-- Added ```HCaptchaTaskProxyless``` and ```HCaptchaTaskProxyless``` for
+- Added ```HCaptchaTaskProxyless``` and ```HCaptchaTask``` for
   support hCaptcha_ . See ```examples/hcaptcha_request.py``` for detailed 
   usage example.
 - Added ```SquareNetTask```. See ```examples/squarenet.py``` for detailed
