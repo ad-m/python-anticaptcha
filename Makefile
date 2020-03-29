@@ -1,7 +1,10 @@
-.PHONY: lint fmt build docs
+.PHONY: lint fmt build docs install
 
 build:
 	python setup.py sdist bdist_wheel
+
+install:
+	pip install .
 
 clean:
 	rm -r build
