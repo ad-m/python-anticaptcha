@@ -13,10 +13,11 @@ jobs:
       with:
         python-version: "3.7"
 
+    - name: Install setup dependencies
+      run: pip install setuptools_scm wheel
+
     - name: Build distribution
-      run: |
-        pip install setuptools_scm wheel
-        python3 setup.py sdist bdist_wheel
+      run: make build
 
     - name: Publish distribution 📦 to PyPI
       if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')

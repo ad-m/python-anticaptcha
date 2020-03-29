@@ -25,19 +25,22 @@ class Job(object):
 
     def check_is_ready(self):
         self._update()
-        return self._last_result['status'] == 'ready'
+        return self._last_result["status"] == "ready"
 
     def get_solution_response(self):  # Recaptcha
-        return self._last_result['solution']['gRecaptchaResponse']
+        return self._last_result["solution"]["gRecaptchaResponse"]
 
     def get_token_response(self):  # Funcaptcha
-        return self._last_result['solution']['token']
+        return self._last_result["solution"]["token"]
 
     def get_answers(self):
-        return self._last_result['solution']['answers']
+        return self._last_result["solution"]["answers"]
 
     def get_captcha_text(self):  # Image
-        return self._last_result['solution']['text']
+        return self._last_result["solution"]["text"]
+
+    def get_cells_numbers(self):
+        return self._last_result["solution"]["cellNumbers"]
 
     def report_incorrect(self):
         warnings.warn(
@@ -60,9 +63,13 @@ class Job(object):
             time.sleep(SLEEP_EVERY_CHECK_FINISHED)
             elapsed_time += SLEEP_EVERY_CHECK_FINISHED
             if elapsed_time is not None and elapsed_time > maximum_time:
-                raise AnticaptchaException(None, 250,
-                                           "The execution time exceeded a maximum time of {} seconds. It takes {} seconds.".format(
-                                               maximum_time, elapsed_time))
+                raise AnticaptchaException(
+                    None,
+                    250,
+                    "The execution time exceeded a maximum time of {} seconds. It takes {} seconds.".format(
+                        maximum_time, elapsed_time
+                    ),
+                )
 
 
 class AnticaptchaClient(object):
@@ -75,27 +82,31 @@ class AnticaptchaClient(object):
     SOFT_ID = 847
     language_pool = "en"
 
-    def __init__(self, client_key, language_pool="en", host="api.anti-captcha.com", use_ssl=True):
+    def __init__(
+        self, client_key, language_pool="en", host="api.anti-captcha.com", use_ssl=True
+    ):
         self.client_key = client_key
         self.language_pool = language_pool
-        self.base_url = "{proto}://{host}/".format(proto="https" if use_ssl else "http",
-                                                   host=host)
+        self.base_url = "{proto}://{host}/".format(
+            proto="https" if use_ssl else "http", host=host
+        )
         self.session = requests.Session()
 
     @property
     def client_ip(self):
-        if not hasattr(self, '_client_ip'):
-            self._client_ip = self.session.get('http://httpbin.org/ip').json()['origin']
+        if not hasattr(self, "_client_ip"):
+            self._client_ip = self.session.get("http://httpbin.org/ip").json()["origin"]
         return self._client_ip
 
     def _check_response(self, response):
-        if response.get('errorId', False) == 11:
-            response['errorDescription'] = "{} Your missing IP address is {}.".format(response['errorDescription'],
-                                                                                      self.client_ip)
-        if response.get('errorId', False):
-            raise AnticaptchaException(response['errorId'],
-                                       response['errorCode'],
-                                       response['errorDescription'])
+        if response.get("errorId", False) == 11:
+            response["errorDescription"] = "{} Your missing IP address is {}.".format(
+                response["errorDescription"], self.client_ip
+            )
+        if response.get("errorId", False):
+            raise AnticaptchaException(
+                response["errorId"], response["errorCode"], response["errorDescription"]
+            )
 
     def createTask(self, task):
         request = {
@@ -104,67 +115,73 @@ class AnticaptchaClient(object):
             "softId": self.SOFT_ID,
             "languagePool": self.language_pool,
         }
-        response = self.session.post(urljoin(self.base_url, self.CREATE_TASK_URL), json=request).json()
+        response = self.session.post(
+            urljoin(self.base_url, self.CREATE_TASK_URL), json=request
+        ).json()
         self._check_response(response)
-        return Job(self, response['taskId'])
+        return Job(self, response["taskId"])
 
     def createTaskSmee(self, task):
-        '''
+        """
         Beta method to stream response from smee.io
-        '''
-        response = self.session.head('https://smee.io/new')
-        smee_url = response.headers['Location']
-        task = task.serialize();
+        """
+        response = self.session.head("https://smee.io/new")
+        smee_url = response.headers["Location"]
+        task = task.serialize()
         request = {
             "clientKey": self.client_key,
             "task": task,
             "softId": self.SOFT_ID,
             "languagePool": self.language_pool,
-            "callbackUrl": smee_url
+            "callbackUrl": smee_url,
         }
         r = self.session.get(
-            url=smee_url,
-            headers={'Accept': 'text/event-stream'},
-            stream=True
+            url=smee_url, headers={"Accept": "text/event-stream"}, stream=True
         )
         response = self.session.post(
-            url=urljoin(self.base_url, self.CREATE_TASK_URL),
-            json=request
+            url=urljoin(self.base_url, self.CREATE_TASK_URL), json=request
         ).json()
         self._check_response(response)
         for line in r.iter_lines():
-            content = line.decode('utf-8')
+            content = line.decode("utf-8")
             if '"host":"smee.io"' not in content:
                 continue
-            payload = json.loads(split(content, ':', 1)[1].strip())
-            if 'taskId' not in payload['body'] or str(payload['body']['taskId']) != str(response['taskId']):
+            payload = json.loads(split(content, ":", 1)[1].strip())
+            if "taskId" not in payload["body"] or str(payload["body"]["taskId"]) != str(
+                response["taskId"]
+            ):
                 continue
             r.close()
-            if task['type'] == 'CustomCaptchaTask':
-                payload['body']['solution'] = payload['body']['data'][0]
-            job = Job(client=self, task_id=response['taskId'])
-            job._last_result = payload['body']
+            if task["type"] == "CustomCaptchaTask":
+                payload["body"]["solution"] = payload["body"]["data"][0]
+            job = Job(client=self, task_id=response["taskId"])
+            job._last_result = payload["body"]
             return job
 
     def getTaskResult(self, task_id):
-        request = {"clientKey": self.client_key,
-                   "taskId": task_id}
-        response = self.session.post(urljoin(self.base_url, self.TASK_RESULT_URL), json=request).json()
+        request = {"clientKey": self.client_key, "taskId": task_id}
+        response = self.session.post(
+            urljoin(self.base_url, self.TASK_RESULT_URL), json=request
+        ).json()
         self._check_response(response)
         return response
 
     def getBalance(self):
         request = {"clientKey": self.client_key}
-        response = self.session.post(urljoin(self.base_url, self.BALANCE_URL), json=request).json()
+        response = self.session.post(
+            urljoin(self.base_url, self.BALANCE_URL), json=request
+        ).json()
         self._check_response(response)
-        return response['balance']
+        return response["balance"]
 
     def reportIncorrectImage(self, task_id):
         request = {
             "clientKey": self.client_key,
             "taskId": task_id
         }
-        response = self.session.post(urljoin(self.base_url, self.REPORT_IMAGE_URL), json=request).json()
+        response = self.session.post(
+            urljoin(self.base_url, self.REPORT_IMAGE_URL), json=request
+        ).json()
         self._check_response(response)
         return response.get('status', False) != False
                                                     
@@ -173,6 +190,8 @@ class AnticaptchaClient(object):
             "clientKey": self.client_key,
             "taskId": task_id
         }
-        response = self.session.post(urljoin(self.base_url, self.REPORT_RECAPTCHA_URL), json=request).json()
+        response = self.session.post(
+            urljoin(self.base_url, self.REPORT_RECAPTCHA_URL), json=request
+        ).json()
         self._check_response(response)
         return response['status'] == "success"

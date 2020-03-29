@@ -1,21 +1,41 @@
 Changelog
 =========
 
+0.5.0 - 2020-03-30
+------------------
+
+Added
+#####
+
+- Added ``HCaptchaTaskProxyless`` and ``HCaptchaTask`` for
+  support hCaptcha_ . See ``examples/hcaptcha_request.py`` for detailed 
+  usage example.
+- Added ``SquareNetTask``. See ``examples/squarenet.py`` for detailed
+  usage example.
+
+Changed
+#######
+
+- Expose ``FunCaptchaProxylessTask`` as ``python_anticaptcha.FunCaptchaProxylessTask``
+- Expose ``CustomCaptchaTask`` as ``python_anticaptcha.CustomCaptchaTask``
+- Format code via Black
+- Move constant monitoring to GitHub Actions
+
 0.4.2 - 2019-10-27
 ------------------
 
 Added
 #####
 
-- Added example ```remote_image.py```
+- Added example ``remote_image.py``
 
 Changed
 #######
 
 - Switch CI from TravisCI to GitHub Actions
 - Automate PyPI releases
-- Use ```use_scm_version``` for versioning
-- Drop ```use_2to3``` in ```setup.py```
+- Use ``use_scm_version`` for versioning
+- Drop ``use_2to3`` in ``setup.py``
 
 0.4.1 - 2019-07-09
 ------------------
@@ -69,3 +89,5 @@ Removed
 #######
 
 - Deprecated ``python_anticaptcha.exceptions.AnticatpchaException``
+
+.. _hCaptcha: https://www.hcaptcha.com/
