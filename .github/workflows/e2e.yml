@@ -19,14 +19,9 @@ jobs:
       run: make install
     
     - name: Install Geckodriver
-      run: |
-        wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz
-        mkdir geckodriver
-        tar -xzf geckodriver-v0.24.0-linux64.tar.gz -C geckodriver
+      run: make gecko
 
     - name: Run integration tests
-      run: |
-        export PATH=$PATH:$PWD/geckodriver
-        nosetests tests -v --with-coverage --cover-package=python_anticaptcha --processes=8
+      run: make test
       env:
         KEY: ${{ secrets.anticaptcha_key }}
