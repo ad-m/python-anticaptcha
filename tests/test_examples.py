@@ -9,53 +9,55 @@ from python_anticaptcha import AnticatpchaException
 
 def missing_key(*args, **kwargs):
     return skipIf(
-        'KEY' not in os.environ,
-        'Missing KEY environment variable. '
-        'Unable to connect Anti-captcha.com'
+        "KEY" not in os.environ,
+        "Missing KEY environment variable. " "Unable to connect Anti-captcha.com",
     )(*args, **kwargs)
 
 
 @missing_key
-@skipIf('TRAVIS' in os.environ, 'Skip heavy tests in TravisCI.')
+@skipIf("TRAVIS" in os.environ, "Skip heavy tests in TravisCI.")
 class CustomDotTestCase(TestCase):
     # For unknown reasons, workers are not always
     # able to count correctly. ¯\_(ツ)_/¯
     @retry(tries=3)
     def test_process_dot(self):
         from examples import custom_dot
+
         self.assertEqual(
-            custom_dot.process(custom_dot.URL).trim(),
-            custom_dot.EXPECTED_RESULT
+            custom_dot.process(custom_dot.URL).trim(), custom_dot.EXPECTED_RESULT
         )
 
 
 @missing_key
-@skipIf('TRAVIS' in os.environ, 'Skip heavy tests in TravisCI.')
+@skipIf("TRAVIS" in os.environ, "Skip heavy tests in TravisCI.")
 class CustomModerationTestCase(TestCase):
     def test_process_bulk_iter(self):
         from examples import custom_moderation
+
         self.assertSequenceEqual(
             sorted(list(custom_moderation.process_bulk_iter(custom_moderation.URLS))),
-            sorted(zip(custom_moderation.URLS, custom_moderation.RESULTS))
+            sorted(zip(custom_moderation.URLS, custom_moderation.RESULTS)),
         )
 
     def test_process_bulk(self):
         from examples import custom_moderation
+
         self.assertEqual(
             custom_moderation.process_bulk(custom_moderation.URLS),
-            custom_moderation.RESULTS
+            custom_moderation.RESULTS,
         )
 
 
 @missing_key
-@skipIf('TRAVIS' in os.environ, 'Skip heavy tests in TravisCI.')
-@skipIf('PROXY_URL' not in os.environ, 'Missing PROXY_URL environment variable')
+@skipIf("TRAVIS" in os.environ, "Skip heavy tests in TravisCI.")
+@skipIf("PROXY_URL" not in os.environ, "Missing PROXY_URL environment variable")
 class FuncaptchaTestCase(TestCase):
     # CI Proxy is unstable.
     # Occasionally fails, so I repeat my attempt to have others selected.
     @retry(tries=3)
     def test_funcaptcha(self):
         from examples import funcaptcha
+
         self.assertTrue(funcaptcha.process())
 
 
@@ -65,8 +67,8 @@ class RecaptchaRequestTestCase(TestCase):
     @retry(tries=3)
     def test_process(self):
         from examples import recaptcha_request
-        self.assertIn('Verification Success... Hooray!',
-                      recaptcha_request.process())
+
+        self.assertIn("Verification Success... Hooray!", recaptcha_request.process())
 
 
 @missing_key
@@ -75,7 +77,8 @@ class RecaptchaV3TestCase(TestCase):
     @retry(tries=3)
     def test_process(self):
         from examples import recaptcha3_request
-        self.assertTrue(recaptcha3_request.process()['success'])
+
+        self.assertTrue(recaptcha3_request.process()["success"])
 
 
 @missing_key
@@ -86,14 +89,36 @@ class RecaptchaSeleniumtTestCase(TestCase):
         from selenium.webdriver.firefox.options import Options
 
         options = Options()
-        options.add_argument('-headless')
+        options.add_argument("-headless")
         driver = Firefox(firefox_options=options)
-        self.assertIn('Verification Success... Hooray!',
-                      recaptcha_selenium.process(driver))
+        self.assertIn(
+            "Verification Success... Hooray!", recaptcha_selenium.process(driver)
+        )
 
 
 @missing_key
 class TextTestCase(TestCase):
     def test_process(self):
         from examples import text
+
         self.assertEqual(text.process(text.IMAGE).lower(), text.EXPECTED_RESULT.lower())
+
+
+@missing_key
+class HCaptchaTaskProxylessTestCase(TestCase):
+    def test_process(self):
+        from examples import hcaptcha_request
+
+        self.assertIn(
+            "Your request have submitted successfully.", hcaptcha_request.process()
+        )
+
+
+@missing_key
+class HCaptchaTaskProxylessTestCase(TestCase):
+    def test_process(self):
+        from examples import hcaptcha_request
+
+        self.assertIn(
+            "Your request have submitted successfully.", hcaptcha_request.process()
+        )

@@ -1,10 +1,11 @@
+import os
 from os import environ
 
 from python_anticaptcha import AnticaptchaClient, ImageToTextTask
 
 api_key = environ["KEY"]
-
-IMAGE = "examples/captcha_ms.jpeg"
+DIR = os.path.dirname(os.path.abspath(__file__))
+IMAGE = "{}/captcha_ms.jpeg".format(DIR)
 EXPECTED_RESULT = "56nn2"
 
 
