@@ -1,17 +1,30 @@
 from .base import AnticaptchaClient
 from pkg_resources import get_distribution, DistributionNotFound
 from .tasks import (
-    NoCaptchaTask, NoCaptchaTaskProxylessTask, 
-    FunCaptchaTask, FunCaptchaProxylessTask, 
+    NoCaptchaTask,
+    NoCaptchaTaskProxylessTask,
+    FunCaptchaTask,
+    FunCaptchaProxylessTask,
     RecaptchaV3TaskProxyless,
-    HCaptchaTaskProxyless, HCaptchaTaskProxyless,
-    SquareNetTask, ImageToTextTask, CustomCaptchaTask
+    HCaptchaTaskProxyless,
+    HCaptchaTaskProxyless,
+    SquareNetTask,
+    ImageToTextTask,
+    CustomCaptchaTask,
 )
 from .exceptions import AnticaptchaException
 from .fields import (
-    SimpleText, Image, WebLink, TextInput, Textarea, Checkbox, Select,
-    Radio, ImageUpload
+    SimpleText,
+    Image,
+    WebLink,
+    TextInput,
+    Textarea,
+    Checkbox,
+    Select,
+    Radio,
+    ImageUpload,
 )
+
 AnticatpchaException = AnticaptchaException
 
 try:

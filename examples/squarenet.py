@@ -10,12 +10,12 @@ client = AnticaptchaClient(api_key)
 session = requests.Session()
 DIR = os.path.dirname(os.path.abspath(__file__))
 filename = "{}/square.png".format(DIR)
-objectName = 'cat'
+objectName = "cat"
 size = [3, 3]
 
 
 def get_image(filename):
-    return open(filename,'rb')
+    return open(filename, "rb")
 
 
 def get_solution(fp, objectName, size):

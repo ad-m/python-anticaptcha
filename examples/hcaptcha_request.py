@@ -10,6 +10,7 @@ url = "http://hcaptcha.jawne.info.pl/"
 client = AnticaptchaClient(api_key)
 session = requests.Session()
 
+
 def get_form_html():
     return session.get(url).text
 
