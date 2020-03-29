@@ -38,7 +38,8 @@ class CustomModerationTestCase(TestCase):
             sorted(list(custom_moderation.process_bulk_iter(custom_moderation.URLS))),
             sorted(zip(custom_moderation.URLS, custom_moderation.RESULTS)),
         )
-
+    # unexperienced workers make mistakes
+    @retry(tries=3)
     def test_process_bulk(self):
         from examples import custom_moderation
 
