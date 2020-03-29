@@ -25,7 +25,7 @@ jobs:
     - name: Build docs
       run: |
         pip install .[docs]
-        sphinx-build -W docs /dev/shm/sphinx    
+        make docs
     - name: Test with pytest
       run: |
         pip install .[tests] # coveralls

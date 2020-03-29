@@ -1,4 +1,4 @@
-.PHONY: lint fmt build
+.PHONY: lint fmt build docs
 
 build:
 	python setup.py sdist bdist_wheel
@@ -12,3 +12,6 @@ lint:
 
 fmt:
 	docker run --rm -v /$$(pwd):/data cytopia/black ./
+
+docs:
+	sphinx-build -W docs /dev/shm/sphinx

@@ -7,9 +7,11 @@ Changelog
 Added
 #####
 
-- Added ```HCaptchaTaskProxyless``` and ```HCaptchaTaskProxyless``` for support `hCaptcha
-<https://www.hcaptcha.com/>`_ . See ```examples/hcaptcha_request.py``` for detailed usage example.
-- Added ```SquareNetTask```. See ```examples/squarenet.py``` for detailed usage example.
+- Added ```HCaptchaTaskProxyless``` and ```HCaptchaTaskProxyless``` for
+  support hCaptcha_ . See ```examples/hcaptcha_request.py``` for detailed 
+  usage example.
+- Added ```SquareNetTask```. See ```examples/squarenet.py``` for detailed
+  usage example.
 
 Changed
 #######
@@ -86,3 +88,5 @@ Removed
 #######
 
 - Deprecated ``python_anticaptcha.exceptions.AnticatpchaException``
+
+.. _hCaptcha: https://www.hcaptcha.com/
