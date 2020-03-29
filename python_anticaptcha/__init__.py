@@ -1,8 +1,11 @@
 from .base import AnticaptchaClient
 from pkg_resources import get_distribution, DistributionNotFound
 from .tasks import (
-    NoCaptchaTask, NoCaptchaTaskProxylessTask, ImageToTextTask,
-    FunCaptchaTask, RecaptchaV3TaskProxyless, HCaptchaTaskProxyless
+    NoCaptchaTask, NoCaptchaTaskProxylessTask, 
+    FunCaptchaTask, FunCaptchaProxylessTask, 
+    RecaptchaV3TaskProxyless,
+    HCaptchaTaskProxyless, HCaptchaTaskProxyless,
+    SquareNetTask, ImageToTextTask, CustomCaptchaTask
 )
 from .exceptions import AnticaptchaException
 from .fields import (

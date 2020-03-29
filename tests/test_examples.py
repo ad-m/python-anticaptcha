@@ -106,3 +106,12 @@ class HCaptchaTaskProxylessTestCase(TestCase):
             "Your request have submitted successfully.",
             hcaptcha_request.process()
         )
+
+@missing_key
+class HCaptchaTaskProxylessTestCase(TestCase):
+    def test_process(self):
+        from examples import hcaptcha_request
+        self.assertIn(
+            "Your request have submitted successfully.",
+            hcaptcha_request.process()
+        )

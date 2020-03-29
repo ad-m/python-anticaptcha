@@ -55,27 +55,28 @@ class NoCaptchaTaskProxylessTask(BaseTask):
             data['isInvisible'] = self.isInvisible
         return data
 
+class NoCaptchaTask(ProxyMixin, NoCaptchaTaskProxylessTask):
+    type = "NoCaptchaTask"
 
-class FunCaptchaTask(ProxyMixin):
-    type = "FunCaptchaTask"
+class FunCaptchaProxylessTask(BaseTask):
+    type = "FunCaptchaTaskProxyless"
     websiteURL = None
     websiteKey = None
 
     def __init__(self, website_url, website_key, *args, **kwargs):
         self.websiteURL = website_url
         self.websiteKey = website_key
-        super(FunCaptchaTask, self).__init__(*args, **kwargs)
+        super(FunCaptchaProxylessTask, self).__init__(*args, **kwargs)
 
     def serialize(self, **result):
-        result = super(FunCaptchaTask, self).serialize(**result)
+        result = super(FunCaptchaProxylessTask, self).serialize(**result)
         result.update({'type': self.type,
                        'websiteURL': self.websiteURL,
                        'websitePublicKey': self.websiteKey})
         return result
 
-
-class NoCaptchaTask(ProxyMixin, NoCaptchaTaskProxylessTask):
-    type = "NoCaptchaTask"
+class FunCaptchaTask(ProxyMixin, NoCaptchaTaskProxylessTask):
+    type = "FunCaptchaTask"
 
 
 class ImageToTextTask(object):
@@ -175,3 +176,29 @@ class HCaptchaTaskProxyless(BaseTask):
         data['websiteURL'] = self.websiteURL
         data['websiteKey'] = self.websiteKey
         return data
+
+class HCaptchaTask(ProxyMixin, HCaptchaTaskProxyless):
+    type = 'HCaptchaTask'
+
+
+class SquareNetTask(BaseTask):
+    type = 'SquareNetTask'
+    fp = None
+    objectName = None
+    rowsCount = None
+    columnsCount = None
+
+    def __init__(self, fp, objectName, rowsCount, columnsCount):
+        self.fp = fp
+        self.objectName = objectName
+        self.rowsCount = rowsCount
+        self.columnsCount = columnsCount
+
+    def serialize(self):
+        data = super(SquareNetTask, self).serialize()
+        data['type'] = self.type
+        data['body'] = base64.b64encode(self.fp.read()).decode('utf-8')
+        data['objectName'] = self.objectName
+        data['rowsCount'] = self.rowsCount
+        data['columnsCount'] = self.columnsCount
+        return data 

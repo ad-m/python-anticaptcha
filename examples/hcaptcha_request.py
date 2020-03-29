@@ -16,7 +16,6 @@ def get_form_html():
 
 def get_token(form_html):
     site_key = re.search(site_key_pattern, form_html).group(1)
-    print(site_key)
     task = HCaptchaTaskProxyless(website_url=url, website_key=site_key)
     job = client.createTask(task)
     job.join()

@@ -38,6 +38,9 @@ class Job(object):
     def get_captcha_text(self):  # Image
         return self._last_result['solution']['text']
 
+    def get_cells_numbers(self):
+        return self._last_result['solution']['cellNumbers']
+
     def report_incorrect(self):
         return self.client.reportIncorrectImage(self.task_id)
 
