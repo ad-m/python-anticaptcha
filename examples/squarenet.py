@@ -12,6 +12,7 @@ DIR = os.path.dirname(os.path.abspath(__file__))
 filename = "{}/square.png".format(DIR)
 objectName = "cat"
 size = [3, 3]
+EXPECTED_RESULT = [0, 4, 5, 8]
 
 
 def get_image(filename):
@@ -35,10 +36,9 @@ def process():
 
 if __name__ == "__main__":
     result = process()
-    print(result)
-    assert len(result) is 4
-    assert result[0] is 0
-    assert result[1] is 4
-    assert result[2] is 5
-    assert result[3] is 8
+    print("Result: " + str(result))
+    print("Expected: " + str(EXPECTED_RESULT))
+    assert len(result) == len(EXPECTED_RESULT)
+    for x in range(len(EXPECTED_RESULT)):
+        assert result[x] is EXPECTED_RESULT[x]
     print("Processed successfully")

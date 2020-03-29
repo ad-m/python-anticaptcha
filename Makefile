@@ -22,7 +22,7 @@ gecko:
 
 test:
 	# nosetests tests -v --with-coverage --cover-package=python_anticaptcha --processes=8
-	PATH=$$PATH:$$PWD/geckodriver nosetests tests -v --processes=8
+	PATH=$$PATH:$$PWD/geckodriver nosetests tests.test_examples.CustomDotTestCase --verbosity=3 --processes=8
 
 clean:
 	rm -r build

@@ -15,7 +15,6 @@ def missing_key(*args, **kwargs):
 
 
 @missing_key
-@skipIf("TRAVIS" in os.environ, "Skip heavy tests in TravisCI.")
 class CustomDotTestCase(TestCase):
     # For unknown reasons, workers are not always
     # able to count correctly. ¯\_(ツ)_/¯
@@ -23,13 +22,10 @@ class CustomDotTestCase(TestCase):
     def test_process_dot(self):
         from examples import custom_dot
 
-        self.assertEqual(
-            custom_dot.process(custom_dot.URL).trim(), custom_dot.EXPECTED_RESULT
-        )
+        self.assertEqual(custom_dot.process(custom_dot.URL), custom_dot.EXPECTED_RESULT)
 
 
 @missing_key
-@skipIf("TRAVIS" in os.environ, "Skip heavy tests in TravisCI.")
 class CustomModerationTestCase(TestCase):
     def test_process_bulk_iter(self):
         from examples import custom_moderation
@@ -49,7 +45,6 @@ class CustomModerationTestCase(TestCase):
 
 
 @missing_key
-@skipIf("TRAVIS" in os.environ, "Skip heavy tests in TravisCI.")
 @skipIf("PROXY_URL" not in os.environ, "Missing PROXY_URL environment variable")
 class FuncaptchaTestCase(TestCase):
     # CI Proxy is unstable.
@@ -68,7 +63,7 @@ class RecaptchaRequestTestCase(TestCase):
     def test_process(self):
         from examples import recaptcha_request
 
-        self.assertIn("Verification Success... Hooray!", recaptcha_request.process())
+        self.assertIn(recaptcha_request.EXPECTED_RESULT, recaptcha_request.process())
 
 
 @missing_key
@@ -92,7 +87,7 @@ class RecaptchaSeleniumtTestCase(TestCase):
         options.add_argument("-headless")
         driver = Firefox(firefox_options=options)
         self.assertIn(
-            "Verification Success... Hooray!", recaptcha_selenium.process(driver)
+            recaptcha_selenium.EXPECTED_RESULT, recaptcha_selenium.process(driver)
         )
 
 
@@ -109,9 +104,7 @@ class HCaptchaTaskProxylessTestCase(TestCase):
     def test_process(self):
         from examples import hcaptcha_request
 
-        self.assertIn(
-            "Your request have submitted successfully.", hcaptcha_request.process()
-        )
+        self.assertIn(hcaptcha_request.EXPECTED_RESULT, hcaptcha_request.process())
 
 
 @missing_key
@@ -122,3 +115,14 @@ class HCaptchaTaskProxylessTestCase(TestCase):
         self.assertIn(
             "Your request have submitted successfully.", hcaptcha_request.process()
         )
+
+
+@missing_key
+class SquareNetTask(TestCase):
+    # For unknown reasons, workers are not always
+    # able to count correctly. ¯\_(ツ)_/¯
+    @retry(tries=3)
+    def test_process(self):
+        from examples import squarenet
+
+        self.assertCountEqual(squarenet.EXPECTED_RESULT, squarenet.process())
