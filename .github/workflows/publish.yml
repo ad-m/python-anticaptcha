@@ -13,7 +13,7 @@ jobs:
       with:
         python-version: "3.7"
 
-    - name: Install build dependencies
+    - name: Install setup dependencies
       run: pip install setuptools_scm wheel
 
     - name: Build distribution
