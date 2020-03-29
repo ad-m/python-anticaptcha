@@ -12,14 +12,16 @@ Added
   usage example.
 - Added ``SquareNetTask``. See ``examples/squarenet.py`` for detailed
   usage example.
+- Added ```Job.report_incorrect_recaptcha``` and ```Job.report_incorrect_image``` .
 
 Changed
 #######
 
-- Expose ``FunCaptchaProxylessTask`` as ``python_anticaptcha.FunCaptchaProxylessTask``
-- Expose ``CustomCaptchaTask`` as ``python_anticaptcha.CustomCaptchaTask``
-- Format code via Black
+- Exposed ``FunCaptchaProxylessTask`` as ``python_anticaptcha.FunCaptchaProxylessTask``
+- Exposed ``CustomCaptchaTask`` as ``python_anticaptcha.CustomCaptchaTask``
+- Formated code via Black
 - Move constant monitoring to GitHub Actions
+- Deprecated ```Job.report_incorrect```. Use ```report_incorrect_image``` instead.
 
 0.4.2 - 2019-10-27
 ------------------

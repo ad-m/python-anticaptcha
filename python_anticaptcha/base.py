@@ -1,6 +1,7 @@
 import requests
 import time
 import json
+import warnings
 
 from .compat import split
 from six.moves.urllib_parse import urljoin
@@ -42,8 +43,19 @@ class Job(object):
         return self._last_result["solution"]["cellNumbers"]
 
     def report_incorrect(self):
-        return self.client.reportIncorrectImage(self.task_id)
+        warnings.warn(
+            "report_incorrect is deprecated, use report_incorrect_image instead",
+            DeprecationWarning
+        )
+        return self.client.report_incorrect_image()
 
+    def report_incorrect_image(self):
+        return self.client.reportIncorrectImage(self.task_id)
+    
+    def report_incorrect_recaptcha(self):
+        return self.client.reportIncorrectRecaptcha(self.task_id)
+                                                    
+                                                    
     def join(self, maximum_time=None):
         elapsed_time = 0
         maximum_time = maximum_time or MAXIMUM_JOIN_TIME
@@ -66,6 +78,7 @@ class AnticaptchaClient(object):
     TASK_RESULT_URL = "/getTaskResult"
     BALANCE_URL = "/getBalance"
     REPORT_IMAGE_URL = "/reportIncorrectImageCaptcha"
+    REPORT_RECAPTCHA_URL = "/reportIncorrectRecaptcha"
     SOFT_ID = 847
     language_pool = "en"
 
@@ -162,9 +175,23 @@ class AnticaptchaClient(object):
         return response["balance"]
 
     def reportIncorrectImage(self, task_id):
-        request = {"clientKey": self.client_key, "taskId": task_id}
+        request = {
+            "clientKey": self.client_key,
+            "taskId": task_id
+        }
         response = self.session.post(
             urljoin(self.base_url, self.REPORT_IMAGE_URL), json=request
         ).json()
         self._check_response(response)
-        return response.get("status", False) != False
+        return response.get('status', False) != False
+                                                    
+    def reportIncorrectRecaptcha(self, task_id):
+        request = {
+            "clientKey": self.client_key,
+            "taskId": task_id
+        }
+        response = self.session.post(
+            urljoin(self.base_url, self.REPORT_RECAPTCHA_URL), json=request
+        ).json()
+        self._check_response(response)
+        return response['status'] == "success"
