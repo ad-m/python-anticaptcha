@@ -6,7 +6,7 @@ from .tasks import (
     FunCaptchaTask,
     FunCaptchaProxylessTask,
     RecaptchaV3TaskProxyless,
-    HCaptchaTaskProxyless,
+    HCaptchaTask,
     HCaptchaTaskProxyless,
     SquareNetTask,
     ImageToTextTask,
