@@ -112,6 +112,7 @@ class TextTestCase(TestCase):
 
 @missing_key
 class HCaptchaTaskProxylessTestCase(TestCase):
+    @retry(tries=3)
     def test_process(self):
         from examples import hcaptcha_request
 
