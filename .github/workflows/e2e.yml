@@ -3,6 +3,8 @@ name: E2E test ↔️
 on:
   push:
   repository_dispatch:
+  schedule:
+  - cron: 0 12 * * *
 
 jobs:
   test:
