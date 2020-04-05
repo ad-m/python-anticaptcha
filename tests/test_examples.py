@@ -100,6 +100,7 @@ class RecaptchaSeleniumtTestCase(TestCase):
         self.assertIn(
             recaptcha_selenium.EXPECTED_RESULT, recaptcha_selenium.process(driver)
         )
+        driver.quit()
 
 
 @missing_key
