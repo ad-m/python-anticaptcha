@@ -1,6 +1,23 @@
 Changelog
 =========
 
+0.6.0 - 2020-04-13
+------------------
+
+Added
+#####
+
+- Added custom timeout for ```createTaskSmee```.
+  Use as ```client.createTaskSmee(task, timeout=5*60)```.
+  Default timeout is 5 minutes.
+- Added ```squarenet_validator```` for usage with thread pool
+  for concurrent execution
+
+Changed
+#######
+
+- Default 5 seconds timeout apply to all API request.
+
 0.5.1 - 2020-03-31
 ------------------
 
