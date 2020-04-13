@@ -1,6 +1,23 @@
 Changelog
 =========
 
+0.6.0 - 2020-04-13
+------------------
+
+Added
+#####
+
+- Added custom timeout for ``createTaskSmee``.
+  Use as ``client.createTaskSmee(task, timeout=5*60)``.
+  Default timeout is 5 minutes.
+- Added ``squarenet_validator`` for usage with thread pool
+  for concurrent execution
+
+Changed
+#######
+
+- Default 5 seconds timeout apply to all API request.
+
 0.5.1 - 2020-03-31
 ------------------
 
@@ -20,7 +37,7 @@ Added
   usage example.
 - Added ``SquareNetTask``. See ``examples/squarenet.py`` for detailed
   usage example.
-- Added ```Job.report_incorrect_recaptcha``` and ```Job.report_incorrect_image``` .
+- Added ``Job.report_incorrect_recaptcha`` and ``Job.report_incorrect_image`` .
 
 Changed
 #######
@@ -29,7 +46,7 @@ Changed
 - Exposed ``CustomCaptchaTask`` as ``python_anticaptcha.CustomCaptchaTask``
 - Formated code via Black
 - Move constant monitoring to GitHub Actions
-- Deprecated ```Job.report_incorrect```. Use ```report_incorrect_image``` instead.
+- Deprecated ``Job.report_incorrect``. Use ``report_incorrect_image`` instead.
 
 0.4.2 - 2019-10-27
 ------------------

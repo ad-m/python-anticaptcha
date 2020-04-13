@@ -30,7 +30,7 @@ class CustomDotTestCase(TestCase):
 @missing_key
 class CustomModerationTestCase(TestCase):
     # unexperienced workers make mistakes
-    @retry(tries=3)
+    @retry(tries=6)
     def test_process_bulk_iter(self):
         from examples import custom_moderation
 
@@ -38,8 +38,9 @@ class CustomModerationTestCase(TestCase):
             sorted(list(custom_moderation.process_bulk_iter(custom_moderation.URLS))),
             sorted(zip(custom_moderation.URLS, custom_moderation.RESULTS)),
         )
+
     # unexperienced workers make mistakes
-    @retry(tries=3)
+    @retry(tries=6)
     def test_process_bulk(self):
         from examples import custom_moderation
 
@@ -64,7 +65,7 @@ class FuncaptchaTestCase(TestCase):
 @missing_key
 class RecaptchaRequestTestCase(TestCase):
     # Anticaptcha responds is not fully reliable.
-    @retry(tries=3)
+    @retry(tries=6)
     def test_process(self):
         from examples import recaptcha_request
 
@@ -82,8 +83,9 @@ class RecaptchaV3TestCase(TestCase):
 
 
 @missing_key
-@skipIf('CI' not in os.environ, 'Skip heavy, unreliable test on CI')
 class RecaptchaSeleniumtTestCase(TestCase):
+    # Anticaptcha responds is not fully reliable.
+    @retry(tries=6)
     def test_process(self):
         from examples import recaptcha_selenium
         from selenium.webdriver import Firefox

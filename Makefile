@@ -23,7 +23,7 @@ gecko:
 
 test:
 	# nosetests tests -v --with-coverage --cover-package=python_anticaptcha --processes=8
-	PATH=$$PATH:$$PWD/geckodriver nosetests tests --verbosity=3 --processes=8 --process-timeout=1200
+	PATH=$$PATH:$$PWD/geckodriver nosetests tests --verbosity=3 --processes=8 --process-timeout=1800
 
 clean:
 	rm -r build geckodriver
