@@ -47,7 +47,7 @@ class Job(object):
             "report_incorrect is deprecated, use report_incorrect_image instead",
             DeprecationWarning,
         )
-        return self.client.report_incorrect_image()
+        return self.client.reportIncorrectImage()
 
     def report_incorrect_image(self):
         return self.client.reportIncorrectImage(self.task_id)
