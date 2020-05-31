@@ -54,7 +54,7 @@ class NoCaptchaTaskProxylessTask(BaseTask):
             "websiteKey": self.websiteKey,
         }
         if self.websiteSToken is not None:
-            data["websiteSToken"] = self.websiteSToken
+            data["recaptchaDataSValue"] = self.websiteSToken
         if self.isInvisible is not None:
             data["isInvisible"] = self.isInvisible
         return data
