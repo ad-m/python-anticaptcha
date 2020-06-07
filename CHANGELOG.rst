@@ -8,6 +8,7 @@ Added
 #####
 
 -  Added parameter `recaptchaDataSValue` in `NoCaptchaTask*`
+   
    Thanks to this change added support for additional "data-s"  used by some custom
    ReCaptcha deployments, which is in fact a one-time token and must be grabbed
    every time you want to solve a Recaptcha.
