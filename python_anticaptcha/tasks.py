@@ -38,6 +38,7 @@ class NoCaptchaTaskProxylessTask(BaseTask):
     websiteURL = None
     websiteKey = None
     websiteSToken = None
+    recaptchaDataSValue = None
 
     def __init__(
         self,

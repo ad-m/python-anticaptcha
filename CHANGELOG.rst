@@ -1,6 +1,24 @@
 Changelog
 =========
 
+0.7.0 - 2020-06-08
+------------------
+
+Added
+#####
+
+-  Added parameter `recaptchaDataSValue` in `NoCaptchaTask*`
+   Thanks to this change added support for additional "data-s"  used by some custom
+   ReCaptcha deployments, which is in fact a one-time token and must be grabbed
+   every time you want to solve a Recaptcha.
+   `<div class="g-recaptcha" data-sitekey="some sitekey" data-s="THIS_TOKEN"></div>`
+
+Changed
+#######
+
+- Fixed deprecated method `report_incorrect`. 
+  You should currently use `report_incorrect_image` instead already.
+
 0.6.0 - 2020-04-13
 ------------------
 
