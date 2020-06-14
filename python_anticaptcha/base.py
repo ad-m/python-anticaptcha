@@ -78,6 +78,7 @@ class AnticaptchaClient(object):
     BALANCE_URL = "/getBalance"
     REPORT_IMAGE_URL = "/reportIncorrectImageCaptcha"
     REPORT_RECAPTCHA_URL = "/reportIncorrectRecaptcha"
+    APP_STAT_URL = "/getAppStats"
     SOFT_ID = 847
     language_pool = "en"
     response_timeout = 5
@@ -180,12 +181,27 @@ class AnticaptchaClient(object):
         return response
 
     def getBalance(self):
-        request = {"clientKey": self.client_key}
+        request = {
+            "clientKey": self.client_key,
+            "softId": self.SOFT_ID,
+        }
         response = self.session.post(
             urljoin(self.base_url, self.BALANCE_URL), json=request
         ).json()
         self._check_response(response)
         return response["balance"]
+
+    def getAppStats(self, soft_id, mode):
+        request = {
+            "clientKey": self.client_key,
+            "softId": soft_id,
+            "mode": mode
+        }
+        response = self.session.post(
+            urljoin(self.base_url, self.APP_STAT_URL), json=request
+        ).json()
+        self._check_response(response)
+        return response
 
     def reportIncorrectImage(self, task_id):
         request = {"clientKey": self.client_key, "taskId": task_id}
