@@ -1,5 +1,6 @@
 import re
 import time
+import os
 from os import environ
 import gzip
 
@@ -11,7 +12,8 @@ url = "http://hcaptcha.jawne.info.pl/recaptcha.php"
 EXPECTED_RESULT = '"success": true,'
 client = AnticaptchaClient(api_key)
 
-wrapper_code = open('callback_sniffer.js', 'rb').read()
+DIR = os.path.dirname(os.path.abspath(__file__))
+wrapper_code = open(os.path.join(DIR, 'callback_sniffer.js'), 'rb').read()
 
 def get_token(url, site_key):
     task = NoCaptchaTaskProxylessTask(
@@ -59,6 +61,7 @@ if __name__ == "__main__":
     driver = webdriver.Firefox(seleniumwire_options={
         'custom_response_handler': custom
     })
+
     try:
         assert EXPECTED_RESULT in process(driver)
     finally:
