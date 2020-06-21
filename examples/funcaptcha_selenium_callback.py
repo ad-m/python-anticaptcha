@@ -1,15 +1,17 @@
 import re
 import time
+from urllib.parse import urlparse, quote
 import os
 from os import environ
 import gzip
 
-from python_anticaptcha import AnticaptchaClient, NoCaptchaTaskProxylessTask
+from python_anticaptcha import AnticaptchaClient, FunCaptchaProxylessTask
+from selenium.webdriver.common.by import By
 
 api_key = environ["KEY"]
-site_key_pattern = "'sitekey': '(.+?)'"
-url = "http://hcaptcha.jawne.info.pl/recaptcha.php"
-EXPECTED_RESULT = '"success": true,'
+site_key_pattern = 'public_key: "(.+?)",'
+url = "https://client-demo.arkoselabs.com/solo-animals"
+EXPECTED_RESULT = "Solved!"
 client = AnticaptchaClient(api_key)
 
 DIR = os.path.dirname(os.path.abspath(__file__))
@@ -19,10 +21,10 @@ with open(os.path.join(DIR, "callback_sniffer.js"), "rb") as fp:
 
 
 def get_token(url, site_key):
-    task = NoCaptchaTaskProxylessTask(website_url=url, website_key=site_key)
+    task = FunCaptchaProxylessTask(website_url=url, website_key=site_key)
     job = client.createTask(task)
     job.join(maximum_time=60 * 15)
-    return job.get_solution_response()
+    return job.get_token_response()
 
 
 def process(driver):
@@ -36,10 +38,17 @@ def process(driver):
 
 
 def form_submit(driver, token):
-    driver.execute_script(
-        "document.getElementById('g-recaptcha-response').innerHTML='{}';".format(token)
+    script = """
+    document.getElementById('FunCaptcha-Token').value = decodeURIComponent('{0}');
+    document.getElementById('verification-token').value = decodeURIComponent('{0}');
+    document.getElementById('submit-btn').disabled = false;
+    """.format(
+        quote(token)
     )
-    driver.execute_script("grecaptcha.recaptchaCallback[0]('{}')".format(token))
+    time.sleep(1)
+    # as example call callback - not required in that example
+    driver.execute_script("ArkoseEnforcement.funcaptchaCallback[0]('{}')".format(token))
+    driver.find_element(By.ID, "submit-btn").click()
     time.sleep(1)
 
 
@@ -51,9 +60,19 @@ if __name__ == "__main__":
     from seleniumwire import webdriver  # Import from seleniumwire
 
     def custom(req, req_body, res, res_body):
-        if not req.path or not "recaptcha" in req.path:
+        if not req.path:
             return
-        if not res.headers.get("Content-Type", None) == "text/javascript":
+        if not "arkoselabs" in req.path:
+            return
+        if not res.headers.get("Content-Type", None) in [
+            "text/javascript",
+            "application/javascript",
+        ]:
+            print(
+                "Skip invalid content type",
+                req.path,
+                res.headers.get("Content-Type", None),
+            )
             return
         if res.headers["Content-Encoding"] == "gzip":
             del res.headers["Content-Encoding"]

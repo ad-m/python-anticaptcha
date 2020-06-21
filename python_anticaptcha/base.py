@@ -192,11 +192,7 @@ class AnticaptchaClient(object):
         return response["balance"]
 
     def getAppStats(self, soft_id, mode):
-        request = {
-            "clientKey": self.client_key,
-            "softId": soft_id,
-            "mode": mode
-        }
+        request = {"clientKey": self.client_key, "softId": soft_id, "mode": mode}
         response = self.session.post(
             urljoin(self.base_url, self.APP_STAT_URL), json=request
         ).json()
