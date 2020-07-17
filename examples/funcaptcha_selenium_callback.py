@@ -1,6 +1,6 @@
 import re
 import time
-from urllib.parse import urlparse, quote
+from six.moves.urllib.parse import quote
 import os
 from os import environ
 import gzip

@@ -1,6 +1,20 @@
 Changelog
 =========
 
+0.7.1 - 2020-07-17
+------------------
+
+Added
+#####
+
+- Added examples for proxy mode including `hcaptcha_request_proxy`
+
+Changed
+#######
+
+- Fix inheritance of `FunCaptchaTask`
+- Added `FunCaptchaTask` to e2e tests
+
 0.7.0 - 2020-06-08
 ------------------
 

@@ -1,4 +1,5 @@
-from urllib.parse import urlparse, quote
+from six.moves.urllib.parse import quote
+from six.moves.urllib import parse
 
 import requests
 from os import environ
@@ -19,7 +20,7 @@ proxy_urls = environ["PROXY_URL"].split(",")
 
 
 def parse_url(url):
-    parsed = urlparse(url)
+    parsed = parse.urlparse(url)
     return dict(
         proxy_type=parsed.scheme,
         proxy_address=parsed.hostname,

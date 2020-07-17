@@ -95,7 +95,7 @@ class FunCaptchaProxylessTask(BaseTask):
         return result
 
 
-class FunCaptchaTask(ProxyMixin, NoCaptchaTaskProxylessTask):
+class FunCaptchaTask(ProxyMixin, FunCaptchaProxylessTask):
     type = "FunCaptchaTask"
 
 
@@ -197,12 +197,13 @@ class HCaptchaTaskProxyless(BaseTask):
     websiteURL = None
     websiteKey = None
 
-    def __init__(self, website_url, website_key):
+    def __init__(self, website_url, website_key, *args, **kwargs):
         self.websiteURL = website_url
         self.websiteKey = website_key
+        super(HCaptchaTaskProxyless, self).__init__(*args, **kwargs)
 
-    def serialize(self):
-        data = super(HCaptchaTaskProxyless, self).serialize()
+    def serialize(self, **result):
+        data = super(HCaptchaTaskProxyless, self).serialize(**result)
         data["type"] = self.type
         data["websiteURL"] = self.websiteURL
         data["websiteKey"] = self.websiteKey
