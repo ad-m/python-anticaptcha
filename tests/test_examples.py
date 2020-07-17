@@ -65,7 +65,7 @@ class FuncaptchaTestCase(TestCase):
     def test_funcaptcha(self):
         from examples import funcaptcha_request
 
-        self.assertIn('Solved!', funcaptcha_request.process())
+        self.assertIn("Solved!", funcaptcha_request.process())
 
 
 @missing_key
@@ -121,7 +121,7 @@ class TextTestCase(TestCase):
 
 
 @missing_key
-@skipIf(True, 'We testing via proxy for performance reason.')
+@skipIf(True, "We testing via proxy for performance reason.")
 class HCaptchaTaskProxylessTestCase(TestCase):
     @retry(tries=3)
     def test_process(self):
@@ -132,6 +132,7 @@ class HCaptchaTaskProxylessTestCase(TestCase):
 
 @missing_key
 class HCaptchaTaskTestCase(TestCase):
+    @retry(tries=3)
     def test_process(self):
         from examples import hcaptcha_request_proxy
 

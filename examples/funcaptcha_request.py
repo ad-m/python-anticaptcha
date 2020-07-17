@@ -45,10 +45,17 @@ def get_token(form_html):
     return job.get_token_response()
 
 
+def form_submit(token):
+    return requests.post(
+        url="{}/verify".format(url), data={"name": "xx", "fc-token": token}
+    ).text
+
+
 def process():
     html = get_form_html()
-    return get_token(html)
+    token = get_token(html)
+    return form_submit(token)
 
 
 if __name__ == "__main__":
-    print('Solved!' in process())
+    print("Solved!" in process())
