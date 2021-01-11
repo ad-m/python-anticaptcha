@@ -184,7 +184,7 @@ We recommend entering IP-based access control for incoming addresses to proxy. I
     69.65.41.21
     209.212.146.168
 
-.. _Anticaptcha.com: http://getcaptchasolution.com/i1hvnzdymd
+.. _Anticaptcha.com: http://getcaptchasolution.com/p9bwplkicx
 
 Error handling
 ##############
