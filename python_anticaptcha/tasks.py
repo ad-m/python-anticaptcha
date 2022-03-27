@@ -12,7 +12,7 @@ class UserAgentMixin(BaseTask):
         super(UserAgentMixin, self).__init__(*args, **kwargs)
 
     def serialize(self, **result):
-        result = super(UserAgentMixin).serialize(**result)
+        result = super(UserAgentMixin, self).serialize(**result)
         result["userAgent"] = self.userAgent
         return result
 
@@ -22,7 +22,7 @@ class CookieMixin(BaseTask):
         self.cookies = kwargs.pop("cookies", "")
 
     def serialize(self, **result):
-        result = super(CookieMixin).serialize(**result)
+        result = super(CookieMixin, self).serialize(**result)
         if self.cookies:
             result["cookies"] = self.cookies
 
