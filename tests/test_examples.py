@@ -91,7 +91,7 @@ class RecaptchaSeleniumtTestCase(TestCase):
         ffprofile = FirefoxProfile()
         ffprofile.set_preference("intl.accept_languages", "en-US")
 
-        with open_driver(firefox_profile=ffprofile, firefox_options=options) as driver:
+        with open_driver(firefox_profile=ffprofile, options=options) as driver:
             self.assertIn(
                 recaptcha_selenium.EXPECTED_RESULT, recaptcha_selenium.process(driver)
             )
