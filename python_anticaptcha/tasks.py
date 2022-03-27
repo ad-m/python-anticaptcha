@@ -25,6 +25,7 @@ class CookieMixin(BaseTask):
         result = super(CookieMixin, self).serialize(**result)
         if self.cookies:
             result["cookies"] = self.cookies
+        return result
 
 
 class ProxyMixin(BaseTask):
