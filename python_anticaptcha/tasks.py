@@ -2,7 +2,10 @@ import base64
 
 
 class BaseTask(object):
+    type = None
+
     def serialize(self, **result):
+        result['type'] = self.type
         return result
 
 
@@ -12,9 +15,9 @@ class UserAgentMixin(BaseTask):
         super(UserAgentMixin, self).__init__(*args, **kwargs)
 
     def serialize(self, **result):
-        result = super(UserAgentMixin, self).serialize(**result)
-        result["userAgent"] = self.userAgent
-        return result
+        data = super(UserAgentMixin, self).serialize(**result)
+        data["userAgent"] = self.userAgent
+        return data
 
 
 class CookieMixin(BaseTask):
@@ -22,10 +25,10 @@ class CookieMixin(BaseTask):
         self.cookies = kwargs.pop("cookies", "")
 
     def serialize(self, **result):
-        result = super(CookieMixin, self).serialize(**result)
+        data = super(CookieMixin, self).serialize(**result)
         if self.cookies:
-            result["cookies"] = self.cookies
-        return result
+            data["cookies"] = self.cookies
+        return data
 
 
 class ProxyMixin(BaseTask):
@@ -38,16 +41,16 @@ class ProxyMixin(BaseTask):
         super(ProxyMixin, self).__init__(*args, **kwargs)
 
     def serialize(self, **result):
-        result = super(ProxyMixin, self).serialize(**result)
-        result["proxyType"] = self.proxyType
-        result["proxyAddress"] = self.proxyAddress
-        result["proxyPort"] = self.proxyPort
+        data = super(ProxyMixin, self).serialize(**result)
+        data["proxyType"] = self.proxyType
+        data["proxyAddress"] = self.proxyAddress
+        data["proxyPort"] = self.proxyPort
         if self.proxyLogin:
-            result["proxyLogin"] = self.proxyLogin
-            result["proxyPassword"] = self.proxyPassword
+            data["proxyLogin"] = self.proxyLogin
+            data["proxyPassword"] = self.proxyPassword
         if self.cookies:
-            result["cookies"] = self.cookies
-        return result
+            data["cookies"] = self.cookies
+        return data
 
 
 class NoCaptchaTaskProxylessTask(BaseTask):
@@ -71,12 +74,10 @@ class NoCaptchaTaskProxylessTask(BaseTask):
         self.recaptchaDataSValue = recaptcha_data_s_value
         self.isInvisible = is_invisible
 
-    def serialize(self):
-        data = {
-            "type": self.type,
-            "websiteURL": self.websiteURL,
-            "websiteKey": self.websiteKey,
-        }
+    def serialize(self, **result):
+        data = super(NoCaptchaTaskProxylessTask, self).serialize(**result)
+        data["websiteURL"] =  self.websiteURL
+        data["websiteKey"] = self.websiteKey
         if self.websiteSToken is not None:
             data["websiteSToken"] = self.websiteSToken
         if self.isInvisible is not None:
@@ -117,15 +118,14 @@ class FunCaptchaProxylessTask(BaseTask):
         super(FunCaptchaProxylessTask, self).__init__(*args, **kwargs)
 
     def serialize(self, **result):
-        result = super(FunCaptchaProxylessTask, self).serialize(**result)
-        result["type"] = (self.type,)
-        result["websiteURL"] = self.websiteURL
-        result["websitePublicKey"] = self.websiteKey
+        data = super(FunCaptchaProxylessTask, self).serialize(**result)
+        data["websiteURL"] = self.websiteURL
+        data["websitePublicKey"] = self.websiteKey
         if self.funcaptchaApiJSSubdomain:
-            result["funcaptchaApiJSSubdomain"] = self.funcaptchaApiJSSubdomain
+            data["funcaptchaApiJSSubdomain"] = self.funcaptchaApiJSSubdomain
         if self.data:
-            result["data"] = self.data
-        return result
+            data["data"] = self.data
+        return data
 
 
 class FunCaptchaTask(ProxyMixin, UserAgentMixin, CookieMixin, FunCaptchaProxylessTask):
@@ -166,19 +166,18 @@ class ImageToTextTask(object):
         self.comment = comment
         self.websiteUrl = website_url
 
-    def serialize(self):
-        return {
-            "type": self.type,
-            "body": base64.b64encode(self.fp.read()).decode("utf-8"),
-            "phrase": self.phrase,
-            "case": self.case,
-            "numeric": self.numeric,
-            "math": self.math,
-            "minLength": self.minLength,
-            "maxLength": self.maxLength,
-            "comment": self.comment,
-            "websiteUrl": self.websiteUrl,
-        }
+    def serialize(self, result):
+        data = super(ImageToTextTask, self).serialize(**result)
+        data["body"] = base64.b64encode(self.fp.read()).decode("utf-8")
+        data["phrase"] = self.phrase
+        data["case"] = self.case
+        data["numeric"] = self.numeric
+        data["math"] = self.math
+        data["minLength"] = self.minLength
+        data["maxLength"] = self.maxLength
+        data["comment"] = self.comment
+        data["websiteUrl"] = self.websiteUrl
+        return data
 
 
 class RecaptchaV3TaskProxyless(BaseTask):
@@ -198,9 +197,8 @@ class RecaptchaV3TaskProxyless(BaseTask):
         self.pageAction = page_action
         self.isEnterprise = is_enterprise
 
-    def serialize(self):
-        data = super(RecaptchaV3TaskProxyless, self).serialize()
-        data["type"] = self.type
+    def serialize(self, **result):
+        data = super(RecaptchaV3TaskProxyless, self).serialize(**result)
         data["websiteURL"] = self.websiteURL
         data["websiteKey"] = self.websiteKey
         data["minScore"] = self.minScore
@@ -221,7 +219,6 @@ class HCaptchaTaskProxyless(BaseTask):
 
     def serialize(self, **result):
         data = super(HCaptchaTaskProxyless, self).serialize(**result)
-        data["type"] = self.type
         data["websiteURL"] = self.websiteURL
         data["websiteKey"] = self.websiteKey
         return data
@@ -244,9 +241,8 @@ class RecaptchaV2EnterpriseTaskProxyless(BaseTask):
         self.enterprisePayload = enterprise_payload
         self.apiDomain = api_domain
 
-    def serialize(self):
-        data = super(RecaptchaV2EnterpriseTaskProxyless, self).serialize()
-        data["type"] = self.type
+    def serialize(self, **result):
+        data = super(RecaptchaV2EnterpriseTaskProxyless, self).serialize(**result)
         data["websiteURL"] = self.websiteURL
         data["websiteKey"] = self.websiteKey
         if self.enterprisePayload:
@@ -278,9 +274,8 @@ class GeeTestTaskProxyless(BaseTask):
         self.geetestGetLib = lib
         super(GeeTestTaskProxyless).__init__(*args, **kwargs)
 
-    def serialize(self):
-        data = super(GeeTestTaskProxyless, self).serialize()
-        data["type"] = self.type
+    def serialize(self, **result):
+        data = super(GeeTestTaskProxyless, self).serialize(**result)
         data["websiteURL"] = self.websiteURL
         data["gt"] = self.gt
         data["challenge"] = self.challenge
@@ -306,9 +301,8 @@ class AntiGateTaskProxyless(BaseTask):
         self.templateName = template_name
         self.variables = variables
 
-    def serialize(self):
-        data = super(AntiGateTaskProxyless, self).serialize()
-        data["type"] = self.type
+    def serialize(self, **result):
+        data = super(AntiGateTaskProxyless, self).serialize(**result)
         data["websiteURL"] = self.websiteURL
         data["templateName"] = self.templateName
         data["variables"] = self.variables
