@@ -5,6 +5,7 @@ from retry import retry
 import os
 
 from python_anticaptcha import AnticatpchaException
+from contextlib import contextmanager
 
 _multiprocess_can_split_ = True
 
@@ -23,37 +24,14 @@ def missing_proxy(*args, **kwargs):
 
 
 @missing_key
-class CustomDotTestCase(TestCase):
-    # For unknown reasons, workers are not always
-    # able to count correctly. ¯\_(ツ)_/¯
+class AntiGateTestCase(TestCase):
     @retry(tries=3)
-    def test_process_dot(self):
-        from examples import custom_dot
+    def test_process_antigate(self):
+        from examples import antigate
 
-        self.assertEqual(custom_dot.process(custom_dot.URL), custom_dot.EXPECTED_RESULT)
-
-
-@missing_key
-class CustomModerationTestCase(TestCase):
-    # unexperienced workers make mistakes
-    @retry(tries=6)
-    def test_process_bulk_iter(self):
-        from examples import custom_moderation
-
-        self.assertSequenceEqual(
-            sorted(list(custom_moderation.process_bulk_iter(custom_moderation.URLS))),
-            sorted(zip(custom_moderation.URLS, custom_moderation.RESULTS)),
-        )
-
-    # unexperienced workers make mistakes
-    @retry(tries=6)
-    def test_process_bulk(self):
-        from examples import custom_moderation
-
-        self.assertEqual(
-            custom_moderation.process_bulk(custom_moderation.URLS),
-            custom_moderation.RESULTS,
-        )
+        solution = antigate.process()
+        for key in ["url", "domain", "localStorage", "cookies", "fingerprint"]:
+            self.assertIn(key, solution)
 
 
 @missing_key
@@ -89,27 +67,34 @@ class RecaptchaV3ProxylessTestCase(TestCase):
         self.assertTrue(recaptcha3_request.process()["success"])
 
 
-@missing_key
-class RecaptchaSeleniumtTestCase(TestCase):
-    # Anticaptcha responds is not fully reliable.
-    @retry(tries=6)
-    def test_process(self):
-        from examples import recaptcha_selenium
-        from selenium.webdriver import Firefox
-        from selenium.webdriver.firefox.options import Options
-        from selenium.webdriver import FirefoxProfile
-
-        options = Options()
-        options.add_argument("-headless")
-
-        ffprofile = FirefoxProfile()
-        ffprofile.set_preference("intl.accept_languages", "en-US")
-
-        driver = Firefox(firefox_profile=ffprofile, firefox_options=options)
-        self.assertIn(
-            recaptcha_selenium.EXPECTED_RESULT, recaptcha_selenium.process(driver)
-        )
+@contextmanager
+def open_driver(*args, **kwargs):
+    from selenium.webdriver import Firefox
+    driver = Firefox(*args, **kwargs)
+    try:
+        yield driver
+    finally:
         driver.quit()
+
+# @missing_key
+# class RecaptchaSeleniumtTestCase(TestCase):
+#     # Anticaptcha responds is not fully reliable.
+#     @retry(tries=6)
+#     def test_process(self):
+#         from examples import recaptcha_selenium
+#         from selenium.webdriver.firefox.options import Options
+#         from selenium.webdriver import FirefoxProfile
+
+#         options = Options()
+#         # options.add_argument("-headless")
+
+#         ffprofile = FirefoxProfile()
+#         ffprofile.set_preference("intl.accept_languages", "en-US")
+
+#         with open_driver(firefox_profile=ffprofile, firefox_options=options) as driver:
+#             self.assertIn(
+#                 recaptcha_selenium.EXPECTED_RESULT, recaptcha_selenium.process(driver)
+#             )
 
 
 @missing_key
@@ -131,6 +116,7 @@ class HCaptchaTaskProxylessTestCase(TestCase):
 
 
 @missing_key
+@missing_proxy
 class HCaptchaTaskTestCase(TestCase):
     @retry(tries=3)
     def test_process(self):
@@ -140,14 +126,3 @@ class HCaptchaTaskTestCase(TestCase):
             "Your request have submitted successfully.",
             hcaptcha_request_proxy.process(),
         )
-
-
-@missing_key
-class SquareNetTask(TestCase):
-    # For unknown reasons, workers are not always
-    # able to count correctly. ¯\_(ツ)_/¯
-    @retry(tries=10)
-    def test_process(self):
-        from examples import squarenet
-
-        self.assertCountEqual(squarenet.EXPECTED_RESULT, squarenet.process())
