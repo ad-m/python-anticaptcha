@@ -76,25 +76,25 @@ def open_driver(*args, **kwargs):
     finally:
         driver.quit()
 
-# @missing_key
-# class RecaptchaSeleniumtTestCase(TestCase):
-#     # Anticaptcha responds is not fully reliable.
-#     @retry(tries=6)
-#     def test_process(self):
-#         from examples import recaptcha_selenium
-#         from selenium.webdriver.firefox.options import Options
-#         from selenium.webdriver import FirefoxProfile
+@missing_key
+class RecaptchaSeleniumtTestCase(TestCase):
+    # Anticaptcha responds is not fully reliable.
+    @retry(tries=6)
+    def test_process(self):
+        from examples import recaptcha_selenium
+        from selenium.webdriver.firefox.options import Options
+        from selenium.webdriver import FirefoxProfile
 
-#         options = Options()
-#         # options.add_argument("-headless")
+        options = Options()
+        # options.add_argument("-headless")
 
-#         ffprofile = FirefoxProfile()
-#         ffprofile.set_preference("intl.accept_languages", "en-US")
+        ffprofile = FirefoxProfile()
+        ffprofile.set_preference("intl.accept_languages", "en-US")
 
-#         with open_driver(firefox_profile=ffprofile, firefox_options=options) as driver:
-#             self.assertIn(
-#                 recaptcha_selenium.EXPECTED_RESULT, recaptcha_selenium.process(driver)
-#             )
+        with open_driver(firefox_profile=ffprofile, firefox_options=options) as driver:
+            self.assertIn(
+                recaptcha_selenium.EXPECTED_RESULT, recaptcha_selenium.process(driver)
+            )
 
 
 @missing_key
