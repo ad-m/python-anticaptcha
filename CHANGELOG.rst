@@ -1,6 +1,35 @@
 Changelog
 =========
 
+1.0.0 - 2022-03-28
+------------------
+
+Added
+#####
+
+- Add new tasks:
+
+  - ``AntiGateTask`` and ``AntiGateTaskProxyless``
+  - ``RecaptchaV2EnterpriseTask`` and ``RecaptchaV2EnterpriseTaskProxyless``
+  - ``GeeTestTask`` and ``GeeTestTaskProxyless``
+  - ``RecaptchaV2Task`` (alias of ``NoCaptchaTask``) and ``RecaptchaV2TaskProxyless`` (alias of ``NoCaptchaTaskProxyless``)
+
+- Add example for ``AntiGateTaskProxyless``
+- Add optional parameters ``comment``, ``websiteUrl`` to ``ImageToTextTask``
+- Add optional parameter ``funcaptchaApiJSSubdomain``, ``data`` to ``FunCaptchaTask*``
+- Add optional parameter ``isEnterprise`` to ``RecaptchaV3Task*``
+
+Removed
+#######
+
+- Drop tasks unsupported upstream: ``CustomCaptchaTask``, ``SquareNetTask``
+
+Changed
+#######
+
+- Internal refactor to extract ``UserAgentMixin``, ``CookieMixin``
+- Use nose2 for tests
+
 0.7.1 - 2020-07-17
 ------------------
 
