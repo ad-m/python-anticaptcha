@@ -5,7 +5,7 @@ class BaseTask(object):
     type = None
 
     def serialize(self, **result):
-        result['type'] = self.type
+        result["type"] = self.type
         return result
 
 
@@ -23,6 +23,7 @@ class UserAgentMixin(BaseTask):
 class CookieMixin(BaseTask):
     def __init__(self, *args, **kwargs):
         self.cookies = kwargs.pop("cookies", "")
+        super(CookieMixin, self).__init__(*args, **kwargs)
 
     def serialize(self, **result):
         data = super(CookieMixin, self).serialize(**result)
@@ -67,16 +68,19 @@ class NoCaptchaTaskProxylessTask(BaseTask):
         website_s_token=None,
         is_invisible=None,
         recaptcha_data_s_value=None,
+        *args,
+        **kwargs
     ):
         self.websiteURL = website_url
         self.websiteKey = website_key
         self.websiteSToken = website_s_token
         self.recaptchaDataSValue = recaptcha_data_s_value
         self.isInvisible = is_invisible
+        super(NoCaptchaTaskProxylessTask, self).__init__(*args, **kwargs)
 
     def serialize(self, **result):
         data = super(NoCaptchaTaskProxylessTask, self).serialize(**result)
-        data["websiteURL"] =  self.websiteURL
+        data["websiteURL"] = self.websiteURL
         data["websiteKey"] = self.websiteKey
         if self.websiteSToken is not None:
             data["websiteSToken"] = self.websiteSToken
@@ -155,6 +159,7 @@ class ImageToTextTask(object):
         max_length=None,
         comment=None,
         website_url=None,
+        *args, **kwargs
     ):
         self.fp = fp
         self.phrase = phrase
@@ -165,8 +170,9 @@ class ImageToTextTask(object):
         self.maxLength = max_length
         self.comment = comment
         self.websiteUrl = website_url
+        super(ImageToTextTask, self).__init__(*args, **kwargs)
 
-    def serialize(self, result):
+    def serialize(self, **result):
         data = super(ImageToTextTask, self).serialize(**result)
         data["body"] = base64.b64encode(self.fp.read()).decode("utf-8")
         data["phrase"] = self.phrase
@@ -189,13 +195,14 @@ class RecaptchaV3TaskProxyless(BaseTask):
     isEnterprise = False
 
     def __init__(
-        self, website_url, website_key, min_score, page_action, is_enterprise=False
+        self, website_url, website_key, min_score, page_action, is_enterprise=False, *args, **kwargs
     ):
         self.websiteURL = website_url
         self.websiteKey = website_key
         self.minScore = min_score
         self.pageAction = page_action
         self.isEnterprise = is_enterprise
+        super(RecaptchaV3TaskProxyless, self).__init__(*args, **kwargs)
 
     def serialize(self, **result):
         data = super(RecaptchaV3TaskProxyless, self).serialize(**result)
@@ -235,11 +242,12 @@ class RecaptchaV2EnterpriseTaskProxyless(BaseTask):
     enterprisePayload = None
     apiDomain = None
 
-    def __init__(self, website_url, website_key, enterprise_payload, api_domain):
+    def __init__(self, website_url, website_key, enterprise_payload, api_domain, *args, **kwargs):
         self.websiteURL = website_url
         self.websiteKey = website_key
         self.enterprisePayload = enterprise_payload
         self.apiDomain = api_domain
+        super(RecaptchaV2EnterpriseTaskProxyless, self).__init__(*args, **kwargs)
 
     def serialize(self, **result):
         data = super(RecaptchaV2EnterpriseTaskProxyless, self).serialize(**result)
@@ -300,6 +308,7 @@ class AntiGateTaskProxyless(BaseTask):
         self.websiteURL = website_url
         self.templateName = template_name
         self.variables = variables
+        super(AntiGateTaskProxyless).__init__(*args, **kwargs)
 
     def serialize(self, **result):
         data = super(AntiGateTaskProxyless, self).serialize(**result)
@@ -307,6 +316,7 @@ class AntiGateTaskProxyless(BaseTask):
         data["templateName"] = self.templateName
         data["variables"] = self.variables
         return data
+
 
 class AntiGateTask(ProxyMixin, AntiGateTaskProxyless):
     pass
