@@ -46,10 +46,10 @@ def get_sitekey(driver):
 
 
 if __name__ == "__main__":
-    from selenium.webdriver import Firefox
-    from selenium.webdriver.firefox.options import Options
+    from selenium.webdriver import Chrome
+    from selenium.webdriver.chrome.options import Options
 
     options = Options()
-    # options.add_argument('-headless')
-    driver = Firefox(firefox_options=options)
+    options.add_experimental_option('prefs', {'intl.accept_languages': 'en_US'})
+    driver = Chrome(options=options)
     assert EXPECTED_RESULT in process(driver)
