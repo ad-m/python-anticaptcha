@@ -25,8 +25,7 @@ gecko:
 	rm ${CHROMEDRIVER_DIR}/chromedriver_linux64.zip
 
 test:
-	# nosetests tests -v --with-coverage --cover-package=python_anticaptcha --processes=8
-	PATH=$$PWD/geckodriver:$$PATH nosetests tests --verbosity=3 --processes=8 --process-timeout=1800
+	PATH=$$PWD/geckodriver:$$PATH nose2 --verbose
 
 clean:
 	rm -r build geckodriver
