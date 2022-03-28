@@ -136,7 +136,7 @@ class FunCaptchaTask(ProxyMixin, UserAgentMixin, CookieMixin, FunCaptchaProxyles
     type = "FunCaptchaTask"
 
 
-class ImageToTextTask(object):
+class ImageToTextTask(BaseTask):
     type = "ImageToTextTask"
     fp = None
     phrase = None
