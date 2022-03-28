@@ -21,12 +21,3 @@ Tasks
  .. automodule:: python_anticaptcha.tasks
    :members:
    :undoc-members:
-
-.. _form_fields:
-
-Fields
-------
-
- .. automodule:: python_anticaptcha.fields
-   :members:
-   :undoc-members:

@@ -10,11 +10,12 @@ with open(path.join(here, "README.rst"), encoding="utf-8") as f:
     long_description = f.read()
 
 
-tests_deps = ["nose", "retry", "selenium"]
+tests_deps = ["retry", "nose2", "selenium"]
 
 extras = {"tests": tests_deps, "docs": "sphinx"}
 
 setup(
+    test_suite='nose2.collector.collector',
     name="python-anticaptcha",
     description="Client library for solve captchas with Anticaptcha.com support.",
     long_description=long_description,
@@ -33,8 +34,10 @@ setup(
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
     ],
-    test_suite="tests",
     use_scm_version=True,
     setup_requires=["setuptools_scm", "wheel"],
     keywords="recaptcha captcha development",

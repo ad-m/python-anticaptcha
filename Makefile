@@ -1,4 +1,7 @@
-.PHONY: lint fmt build docs install test
+CHROMEDRIVER_VERSION=99.0.4844.17
+CHROMEDRIVER_DIR=${PWD}/geckodriver
+
+.PHONY: lint fmt build docs install test gecko
 
 build:
 	python setup.py sdist bdist_wheel
@@ -16,14 +19,13 @@ install_pkg:
 	pip install .
 
 gecko:
-	wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz
-	mkdir geckodriver
-	tar -xzf geckodriver-v0.24.0-linux64.tar.gz -C geckodriver
-	rm geckodriver-v0.24.0-linux64.tar.gz
+	mkdir -p ${CHROMEDRIVER_DIR}
+	wget -q -P ${CHROMEDRIVER_DIR} "http://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip"
+	unzip ${CHROMEDRIVER_DIR}/chromedriver* -d ${CHROMEDRIVER_DIR}
+	rm ${CHROMEDRIVER_DIR}/chromedriver_linux64.zip
 
 test:
-	# nosetests tests -v --with-coverage --cover-package=python_anticaptcha --processes=8
-	PATH=$$PATH:$$PWD/geckodriver nosetests tests --verbosity=3 --processes=8 --process-timeout=1800
+	PATH=$$PWD/geckodriver:$$PATH nose2 --verbose
 
 clean:
 	rm -r build geckodriver

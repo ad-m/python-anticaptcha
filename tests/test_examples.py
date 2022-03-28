@@ -69,12 +69,14 @@ class RecaptchaV3ProxylessTestCase(TestCase):
 
 @contextmanager
 def open_driver(*args, **kwargs):
-    from selenium.webdriver import Firefox
-    driver = Firefox(*args, **kwargs)
+    from selenium.webdriver import Chrome
+
+    driver = Chrome(*args, **kwargs)
     try:
         yield driver
     finally:
         driver.quit()
+
 
 @missing_key
 class RecaptchaSeleniumtTestCase(TestCase):
@@ -82,16 +84,15 @@ class RecaptchaSeleniumtTestCase(TestCase):
     @retry(tries=6)
     def test_process(self):
         from examples import recaptcha_selenium
-        from selenium.webdriver.firefox.options import Options
-        from selenium.webdriver import FirefoxProfile
+        from selenium.webdriver.chrome.options import Options
 
         options = Options()
-        # options.add_argument("-headless")
-
-        ffprofile = FirefoxProfile()
-        ffprofile.set_preference("intl.accept_languages", "en-US")
-
-        with open_driver(firefox_profile=ffprofile, firefox_options=options) as driver:
+        options.headless = True
+        options.add_experimental_option('prefs', {'intl.accept_languages': 'en_US'})
+    
+        with open_driver(
+            options=options,
+        ) as driver:
             self.assertIn(
                 recaptcha_selenium.EXPECTED_RESULT, recaptcha_selenium.process(driver)
             )

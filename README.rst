@@ -151,14 +151,6 @@ Example snippet for reporting an incorrect image task:
     print job.get_captcha_text()
     job.report_incorrect()
 
-Custom tasks
-############
-
-There is support for your own (captcha) forms. It allows you to analyze any data in various ways, eg. classify offensive
-image, count elements on the image, etc. The scope of the data, the form to describe them, you specify yourself.
-
-For details, go to 'Custom fields' section in the documentation.
-
 Setup proxy
 ###########
 
@@ -202,8 +194,6 @@ In the event of an application error, the AnticaptchaException exception is thro
             notify_about_no_funds(e.error_id, e.error_code, e.error_description)
         else:
             raise
-
-
 
 .. usage-end
 
