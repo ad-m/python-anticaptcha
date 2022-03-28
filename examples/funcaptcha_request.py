@@ -2,12 +2,13 @@ from six.moves.urllib import parse
 import requests
 from os import environ
 import re
-from random import choice
 
 from python_anticaptcha import AnticaptchaClient, FunCaptchaTask
 
 api_key = environ["KEY"]
 site_key_pattern = 'public_key: "(.+?)",'
+site_key_pattern = 'public_key: "(.+?)",'
+surl_pattern = 'surl: "(.+?)",'
 url = "https://client-demo.arkoselabs.com/solo-animals"
 client = AnticaptchaClient(api_key)
 session = requests.Session()
@@ -37,23 +38,31 @@ def get_form_html():
 
 def get_token(form_html):
     proxy = parse_url(proxy_url)
-
     site_key = re.search(site_key_pattern, form_html).group(1)
-    task = FunCaptchaTask(url, site_key, user_agent=UA, **proxy)
+    print("Determined site-key:", site_key)
+    surl = re.search(surl_pattern, form_html).group(1)
+    print("Determined surl:", surl)
+    task = FunCaptchaTask(surl, site_key, user_agent=UA, **proxy)
     job = client.createTask(task)
-    job.join(maximum_time=10 ** 4)
+    job.join(maximum_time=10**4)
     return job.get_token_response()
 
 
 def form_submit(token):
     return requests.post(
-        url="{}/verify".format(url), data={"name": "xx", "fc-token": token}
+        url="{}/verify".format(url),
+        data={"name": "xx", "fc-token": token},
+        proxies={
+            "http": proxy_url,
+            "https": proxy_url,
+        },
     ).text
 
 
 def process():
     html = get_form_html()
     token = get_token(html)
+    print("Received token:", token)
     return form_submit(token)
 
 
