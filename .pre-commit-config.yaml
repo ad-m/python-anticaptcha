@@ -11,3 +11,6 @@ repos:
     hooks:
       - id: mypy
         additional_dependencies: [types-requests>=2.31]
+        files: ^python_anticaptcha/
+        pass_filenames: false
+        args: [python_anticaptcha]
