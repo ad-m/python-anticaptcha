@@ -1,9 +1,8 @@
+import json
 from os import environ
-from re import TEMPLATE
 
 from python_anticaptcha import AnticaptchaClient
-from python_anticaptcha.tasks import AntiGateTask, AntiGateTaskProxyless
-import json
+from python_anticaptcha.tasks import AntiGateTaskProxyless
 
 api_key = environ["KEY"]
 

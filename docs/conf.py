@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Configuration file for the Sphinx documentation builder.
 #
@@ -20,13 +19,13 @@ sys.path.insert(0, os.path.abspath(".."))
 
 # -- Project information -----------------------------------------------------
 
-project = u"python-anticaptcha"
-copyright = u"2018-2026, Adam Dobrawy"
-author = u"Adam Dobrawy"
+project = "python-anticaptcha"
+copyright = "2018-2026, Adam Dobrawy"
+author = "Adam Dobrawy"
 
 # Version is managed by setuptools-scm; leave empty for Sphinx
-version = u""
-release = u""
+version = ""
+release = ""
 
 
 # -- General configuration ---------------------------------------------------
@@ -69,7 +68,7 @@ language = "en"
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path .
-exclude_patterns = [u"_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"
@@ -143,8 +142,8 @@ latex_documents = [
     (
         master_doc,
         "python-anticaptcha.tex",
-        u"python-anticaptcha Documentation",
-        u"Adam Dobrawy",
+        "python-anticaptcha Documentation",
+        "Adam Dobrawy",
         "manual",
     ),
 ]
@@ -154,9 +153,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, "python-anticaptcha", u"python-anticaptcha Documentation", [author], 1)
-]
+man_pages = [(master_doc, "python-anticaptcha", "python-anticaptcha Documentation", [author], 1)]
 
 
 # -- Options for Texinfo output ----------------------------------------------
@@ -168,7 +165,7 @@ texinfo_documents = [
     (
         master_doc,
         "python-anticaptcha",
-        u"python-anticaptcha Documentation",
+        "python-anticaptcha Documentation",
         author,
         "python-anticaptcha",
         "One line description of project.",

@@ -5,7 +5,7 @@ from python_anticaptcha import AnticaptchaClient, ImageToTextTask
 
 api_key = environ["KEY"]
 DIR = os.path.dirname(os.path.abspath(__file__))
-IMAGE = "{}/captcha_ms.jpeg".format(DIR)
+IMAGE = f"{DIR}/captcha_ms.jpeg"
 EXPECTED_RESULT = "56nn2"
 
 

@@ -1,8 +1,8 @@
-from six.moves.urllib import parse
-
 import re
-import requests
 from os import environ
+
+import requests
+from six.moves.urllib import parse
 
 from python_anticaptcha import AnticaptchaClient, HCaptchaTask
 

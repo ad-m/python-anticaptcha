@@ -1,8 +1,8 @@
-from unittest.mock import patch, MagicMock
-import os
+from unittest.mock import MagicMock, patch
+
 import pytest
 
-from python_anticaptcha.sync_client import AnticaptchaClient, Job, SLEEP_EVERY_CHECK_FINISHED
+from python_anticaptcha.sync_client import SLEEP_EVERY_CHECK_FINISHED, AnticaptchaClient, Job
 from python_anticaptcha.exceptions import AnticaptchaException
 
 
@@ -66,9 +66,7 @@ class TestCheckResponse:
             "errorCode": "ERROR_IP_NOT_ALLOWED",
             "errorDescription": "IP not allowed",
         }
-        with patch.object(
-            type(self.client), "client_ip", new_callable=lambda: property(lambda self: "5.6.7.8")
-        ):
+        with patch.object(type(self.client), "client_ip", new_callable=lambda: property(lambda self: "5.6.7.8")):
             with pytest.raises(AnticaptchaException) as exc_info:
                 self.client._check_response(response)
             assert "5.6.7.8" in exc_info.value.error_description
@@ -156,7 +154,7 @@ class TestJobSolutionGetters:
 
 
 class TestJobJoinTimeout:
-    @patch("python_anticaptcha.base.time.sleep")
+    @patch("python_anticaptcha.sync_client.time.sleep")
     def test_timeout_raises(self, mock_sleep):
         client = MagicMock()
         client.getTaskResult.return_value = {"status": "processing"}
@@ -167,7 +165,7 @@ class TestJobJoinTimeout:
 
 
 class TestJobJoinOnCheck:
-    @patch("python_anticaptcha.base.time.sleep")
+    @patch("python_anticaptcha.sync_client.time.sleep")
     def test_on_check_called_each_iteration(self, mock_sleep):
         client = MagicMock()
         # Return processing twice, then ready
@@ -184,7 +182,7 @@ class TestJobJoinOnCheck:
         callback.assert_any_call(SLEEP_EVERY_CHECK_FINISHED, "processing")
         callback.assert_any_call(SLEEP_EVERY_CHECK_FINISHED * 2, "processing")
 
-    @patch("python_anticaptcha.base.time.sleep")
+    @patch("python_anticaptcha.sync_client.time.sleep")
     def test_on_check_none_by_default(self, mock_sleep):
         client = MagicMock()
         client.getTaskResult.return_value = {"status": "ready", "solution": {}}
@@ -192,7 +190,7 @@ class TestJobJoinOnCheck:
         # Should not raise when on_check is not provided
         job.join()
 
-    @patch("python_anticaptcha.base.time.sleep")
+    @patch("python_anticaptcha.sync_client.time.sleep")
     def test_on_check_not_called_when_immediately_ready(self, mock_sleep):
         client = MagicMock()
         client.getTaskResult.return_value = {"status": "ready", "solution": {}}
@@ -200,6 +198,67 @@ class TestJobJoinOnCheck:
         callback = MagicMock()
         job.join(on_check=callback)
         callback.assert_not_called()
+
+
+class TestJobJoinBackoff:
+    @patch("python_anticaptcha.sync_client.time.sleep")
+    def test_backoff_sleep_schedule(self, mock_sleep):
+        client = MagicMock()
+        # processing 6 times then ready — enough to hit the 10s cap
+        client.getTaskResult.side_effect = [
+            {"status": "processing"},
+            {"status": "processing"},
+            {"status": "processing"},
+            {"status": "processing"},
+            {"status": "processing"},
+            {"status": "processing"},
+            {"status": "ready", "solution": {}},
+        ]
+        job = Job(client, task_id=1)
+        job.join(backoff=True)
+        sleep_values = [call.args[0] for call in mock_sleep.call_args_list]
+        assert sleep_values == [1, 2, 4, 8, 10, 10]
+
+    @patch("python_anticaptcha.sync_client.time.sleep")
+    def test_backoff_false_uses_fixed_interval(self, mock_sleep):
+        client = MagicMock()
+        client.getTaskResult.side_effect = [
+            {"status": "processing"},
+            {"status": "processing"},
+            {"status": "processing"},
+            {"status": "ready", "solution": {}},
+        ]
+        job = Job(client, task_id=1)
+        job.join(backoff=False)
+        sleep_values = [call.args[0] for call in mock_sleep.call_args_list]
+        assert sleep_values == [SLEEP_EVERY_CHECK_FINISHED] * 3
+
+    @patch("python_anticaptcha.sync_client.time.sleep")
+    def test_backoff_timeout_still_works(self, mock_sleep):
+        client = MagicMock()
+        client.getTaskResult.return_value = {"status": "processing"}
+        job = Job(client, task_id=1)
+        with pytest.raises(AnticaptchaException) as exc_info:
+            job.join(maximum_time=5, backoff=True)
+        assert "exceeded" in str(exc_info.value).lower()
+
+    @patch("python_anticaptcha.sync_client.time.sleep")
+    def test_backoff_with_on_check(self, mock_sleep):
+        client = MagicMock()
+        client.getTaskResult.side_effect = [
+            {"status": "processing"},
+            {"status": "processing"},
+            {"status": "processing"},
+            {"status": "ready", "solution": {}},
+        ]
+        job = Job(client, task_id=1)
+        callback = MagicMock()
+        job.join(backoff=True, on_check=callback)
+        assert callback.call_count == 3
+        # Elapsed times: 1, 1+2=3, 3+4=7
+        callback.assert_any_call(1, "processing")
+        callback.assert_any_call(3, "processing")
+        callback.assert_any_call(7, "processing")
 
 
 class TestContextManager:

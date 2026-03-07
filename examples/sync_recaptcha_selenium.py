@@ -5,9 +5,7 @@ from python_anticaptcha import AnticaptchaClient, NoCaptchaTaskProxylessTask
 
 api_key = environ["KEY"]
 invisible_captcha = True
-url = "https://www.google.com/recaptcha/api2/demo?invisible={}".format(
-    str(invisible_captcha)
-)
+url = f"https://www.google.com/recaptcha/api2/demo?invisible={str(invisible_captcha)}"
 EXPECTED_RESULT = "Verification Success... Hooray!"
 client = AnticaptchaClient(api_key)
 
@@ -33,9 +31,9 @@ def process(driver):
 
 def form_submit(driver, token):
     driver.execute_script(
-        "document.getElementById('g-recaptcha-response').innerHTML='{}';".format(token)
+        f"document.getElementById('g-recaptcha-response').innerHTML='{token}';"
     )
-    driver.execute_script("onSuccess('{}')".format(token))
+    driver.execute_script(f"onSuccess('{token}')")
     time.sleep(1)
 
 

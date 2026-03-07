@@ -1,22 +1,22 @@
 import io
 
 from python_anticaptcha.tasks import (
-    NoCaptchaTaskProxylessTask,
-    RecaptchaV2TaskProxyless,
-    NoCaptchaTask,
-    RecaptchaV2Task,
+    AntiGateTask,
+    AntiGateTaskProxyless,
     FunCaptchaProxylessTask,
     FunCaptchaTask,
-    ImageToTextTask,
-    RecaptchaV3TaskProxyless,
-    HCaptchaTaskProxyless,
-    HCaptchaTask,
-    RecaptchaV2EnterpriseTaskProxyless,
-    RecaptchaV2EnterpriseTask,
-    GeeTestTaskProxyless,
     GeeTestTask,
-    AntiGateTaskProxyless,
-    AntiGateTask,
+    GeeTestTaskProxyless,
+    HCaptchaTask,
+    HCaptchaTaskProxyless,
+    ImageToTextTask,
+    NoCaptchaTask,
+    NoCaptchaTaskProxylessTask,
+    RecaptchaV2EnterpriseTask,
+    RecaptchaV2EnterpriseTaskProxyless,
+    RecaptchaV2Task,
+    RecaptchaV2TaskProxyless,
+    RecaptchaV3TaskProxyless,
 )
 
 PROXY_KWARGS = dict(
@@ -32,18 +32,14 @@ USER_AGENT_KWARGS = dict(user_agent="Mozilla/5.0")
 
 class TestNoCaptchaTaskProxylessTask:
     def test_type(self):
-        task = NoCaptchaTaskProxylessTask(
-            website_url="https://example.com", website_key="key123"
-        )
+        task = NoCaptchaTaskProxylessTask(website_url="https://example.com", website_key="key123")
         data = task.serialize()
         assert data["type"] == "NoCaptchaTaskProxyless"
         assert data["websiteURL"] == "https://example.com"
         assert data["websiteKey"] == "key123"
 
     def test_optional_fields_omitted(self):
-        task = NoCaptchaTaskProxylessTask(
-            website_url="https://example.com", website_key="key123"
-        )
+        task = NoCaptchaTaskProxylessTask(website_url="https://example.com", website_key="key123")
         data = task.serialize()
         assert "websiteSToken" not in data
         assert "isInvisible" not in data
@@ -65,9 +61,7 @@ class TestNoCaptchaTaskProxylessTask:
 
 class TestRecaptchaV2TaskProxyless:
     def test_type(self):
-        task = RecaptchaV2TaskProxyless(
-            website_url="https://example.com", website_key="key123"
-        )
+        task = RecaptchaV2TaskProxyless(website_url="https://example.com", website_key="key123")
         assert task.serialize()["type"] == "RecaptchaV2TaskProxyless"
 
 
@@ -102,9 +96,7 @@ class TestRecaptchaV2Task:
 
 class TestFunCaptchaProxylessTask:
     def test_type_and_required_fields(self):
-        task = FunCaptchaProxylessTask(
-            website_url="https://example.com", website_key="pubkey"
-        )
+        task = FunCaptchaProxylessTask(website_url="https://example.com", website_key="pubkey")
         data = task.serialize()
         assert data["type"] == "FunCaptchaTaskProxyless"
         assert data["websiteURL"] == "https://example.com"
@@ -171,9 +163,15 @@ class TestImageToTextTask:
 
     def test_optional_fields_included(self):
         task = ImageToTextTask(
-            b"data", phrase=True, case=True, numeric=1,
-            math=False, min_length=3, max_length=10,
-            comment="solve this", website_url="https://example.com",
+            b"data",
+            phrase=True,
+            case=True,
+            numeric=1,
+            math=False,
+            min_length=3,
+            max_length=10,
+            comment="solve this",
+            website_url="https://example.com",
         )
         data = task.serialize()
         assert data["phrase"] is True
@@ -215,9 +213,7 @@ class TestRecaptchaV3TaskProxyless:
 
 class TestHCaptchaTaskProxyless:
     def test_serialize(self):
-        task = HCaptchaTaskProxyless(
-            website_url="https://example.com", website_key="hkey"
-        )
+        task = HCaptchaTaskProxyless(website_url="https://example.com", website_key="hkey")
         data = task.serialize()
         assert data["type"] == "HCaptchaTaskProxyless"
         assert data["websiteURL"] == "https://example.com"
@@ -277,9 +273,7 @@ class TestRecaptchaV2EnterpriseTask:
 
 class TestGeeTestTaskProxyless:
     def test_required_fields(self):
-        task = GeeTestTaskProxyless(
-            website_url="https://example.com", gt="gt123", challenge="ch456"
-        )
+        task = GeeTestTaskProxyless(website_url="https://example.com", gt="gt123", challenge="ch456")
         data = task.serialize()
         assert data["type"] == "GeeTestTaskProxyless"
         assert data["websiteURL"] == "https://example.com"

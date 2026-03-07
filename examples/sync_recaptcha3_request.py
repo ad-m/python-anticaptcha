@@ -1,12 +1,14 @@
 import re
-import requests
 from os import environ
+
+import requests
 from six.moves.urllib_parse import urljoin
+
 from python_anticaptcha import AnticaptchaClient, RecaptchaV3TaskProxyless
 
 api_key = environ["KEY"]
-site_key_pattern = "grecaptcha.execute\('(.+?)'"
-action_name_pattern = "\{action: '(.+?)'\}"
+site_key_pattern = r"grecaptcha.execute\('(.+?)'"
+action_name_pattern = r"\{action: '(.+?)'\}"
 url = "https://recaptcha-demo.appspot.com/recaptcha-v3-request-scores.php"
 client = AnticaptchaClient(api_key)
 session = requests.Session()
