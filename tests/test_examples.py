@@ -3,11 +3,10 @@ from unittest import TestCase, skipIf
 from retry import retry
 
 import os
+import pytest
 
 from python_anticaptcha import AnticatpchaException
 from contextlib import contextmanager
-
-_multiprocess_can_split_ = True
 
 
 def missing_key(*args, **kwargs):
@@ -23,6 +22,7 @@ def missing_proxy(*args, **kwargs):
     )(*args, **kwargs)
 
 
+@pytest.mark.e2e
 @missing_key
 class AntiGateTestCase(TestCase):
     @retry(tries=3)
@@ -34,6 +34,7 @@ class AntiGateTestCase(TestCase):
             self.assertIn(key, solution)
 
 
+@pytest.mark.e2e
 @missing_key
 @missing_proxy
 class FuncaptchaTestCase(TestCase):
@@ -46,6 +47,7 @@ class FuncaptchaTestCase(TestCase):
         self.assertIn("Solved!", funcaptcha_request.process())
 
 
+@pytest.mark.e2e
 @missing_key
 class RecaptchaRequestTestCase(TestCase):
     # Anticaptcha responds is not fully reliable.
@@ -56,6 +58,7 @@ class RecaptchaRequestTestCase(TestCase):
         self.assertIn(recaptcha_request.EXPECTED_RESULT, recaptcha_request.process())
 
 
+@pytest.mark.e2e
 @missing_key
 @skipIf(True, "Anti-captcha unable to provide required score, but we tests via proxy")
 class RecaptchaV3ProxylessTestCase(TestCase):
@@ -78,6 +81,7 @@ def open_driver(*args, **kwargs):
         driver.quit()
 
 
+@pytest.mark.e2e
 @missing_key
 class RecaptchaSeleniumtTestCase(TestCase):
     # Anticaptcha responds is not fully reliable.
@@ -98,6 +102,7 @@ class RecaptchaSeleniumtTestCase(TestCase):
             )
 
 
+@pytest.mark.e2e
 @missing_key
 class TextTestCase(TestCase):
     def test_process(self):
@@ -106,6 +111,7 @@ class TextTestCase(TestCase):
         self.assertEqual(text.process(text.IMAGE).lower(), text.EXPECTED_RESULT.lower())
 
 
+@pytest.mark.e2e
 @missing_key
 @skipIf(True, "We testing via proxy for performance reason.")
 class HCaptchaTaskProxylessTestCase(TestCase):
@@ -116,6 +122,7 @@ class HCaptchaTaskProxylessTestCase(TestCase):
         self.assertIn(hcaptcha_request.EXPECTED_RESULT, hcaptcha_request.process())
 
 
+@pytest.mark.e2e
 @missing_key
 @missing_proxy
 class HCaptchaTaskTestCase(TestCase):

@@ -7,12 +7,11 @@ with open(path.join(here, "README.rst"), encoding="utf-8") as f:
     long_description = f.read()
 
 
-tests_deps = ["retry", "nose2", "selenium"]
+tests_deps = ["retry", "pytest", "selenium"]
 
 extras = {"tests": tests_deps, "docs": "sphinx"}
 
 setup(
-    test_suite="nose2.collector.collector",
     name="python-anticaptcha",
     description="Client library for solve captchas with Anticaptcha.com support.",
     long_description=long_description,
@@ -39,6 +38,5 @@ setup(
     keywords="recaptcha captcha development",
     packages=["python_anticaptcha"],
     install_requires=["requests"],
-    tests_require=tests_deps,
     extras_require=extras,
 )

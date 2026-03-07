@@ -1,7 +1,7 @@
 CHROMEDRIVER_VERSION=99.0.4844.17
 CHROMEDRIVER_DIR=${PWD}/geckodriver
 
-.PHONY: lint fmt build docs install test gecko
+.PHONY: lint fmt build docs install test test_e2e gecko
 
 build:
 	python setup.py sdist bdist_wheel
@@ -25,7 +25,10 @@ gecko:
 	rm ${CHROMEDRIVER_DIR}/chromedriver_linux64.zip
 
 test:
-	PATH=$$PWD/geckodriver:$$PATH nose2 --verbose
+	pytest
+
+test_e2e:
+	PATH=$$PWD/geckodriver:$$PATH pytest -m e2e --override-ini="addopts="
 
 clean:
 	rm -r build geckodriver
