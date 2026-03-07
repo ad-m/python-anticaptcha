@@ -1,9 +1,6 @@
+from importlib.metadata import version, PackageNotFoundError
+
 from .base import AnticaptchaClient
-try:
-    from importlib.metadata import version, PackageNotFoundError
-except ImportError:
-    # Python < 3.8 fallback
-    from importlib_metadata import version, PackageNotFoundError
 from .tasks import (
     NoCaptchaTaskProxylessTask,
     RecaptchaV2TaskProxyless,
@@ -20,7 +17,7 @@ from .tasks import (
     GeeTestTaskProxyless,
     GeeTestTask,
     AntiGateTaskProxyless,
-    AntiGateTask
+    AntiGateTask,
 )
 from .exceptions import AnticaptchaException
 

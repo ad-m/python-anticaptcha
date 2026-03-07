@@ -3,15 +3,14 @@ import time
 import json
 import warnings
 
-from .compat import split
-from six.moves.urllib_parse import urljoin
+from urllib.parse import urljoin
 from .exceptions import AnticaptchaException
 
 SLEEP_EVERY_CHECK_FINISHED = 3
 MAXIMUM_JOIN_TIME = 60 * 5
 
 
-class Job(object):
+class Job:
     client = None
     task_id = None
     _last_result = None
@@ -74,7 +73,7 @@ class Job(object):
                 )
 
 
-class AnticaptchaClient(object):
+class AnticaptchaClient:
     client_key = None
     CREATE_TASK_URL = "/createTask"
     TASK_RESULT_URL = "/getTaskResult"
@@ -163,14 +162,12 @@ class AnticaptchaClient(object):
             content = line.decode("utf-8")
             if '"host":"smee.io"' not in content:
                 continue
-            payload = json.loads(split(content, ":", 1)[1].strip())
+            payload = json.loads(content.split(":", maxsplit=1)[1].strip())
             if "taskId" not in payload["body"] or str(payload["body"]["taskId"]) != str(
                 response["taskId"]
             ):
                 continue
             r.close()
-            if task["type"] == "CustomCaptchaTask":
-                payload["body"]["solution"] = payload["body"]["data"][0]
             job = Job(client=self, task_id=response["taskId"])
             job._last_result = payload["body"]
             return job
