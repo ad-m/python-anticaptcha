@@ -64,7 +64,7 @@ class Job(object):
         while not self.check_is_ready():
             time.sleep(SLEEP_EVERY_CHECK_FINISHED)
             elapsed_time += SLEEP_EVERY_CHECK_FINISHED
-            if elapsed_time is not None and elapsed_time > maximum_time:
+            if elapsed_time > maximum_time:
                 raise AnticaptchaException(
                     None,
                     250,
@@ -108,7 +108,7 @@ class AnticaptchaClient(object):
         if response.get("errorId", False) == 11:
             response[
                 "errorDescription"
-            ] = "{} Your missing IP address is propably {}.".format(
+            ] = "{} Your missing IP address is probably {}.".format(
                 response["errorDescription"], self.client_ip
             )
         if response.get("errorId", False):
