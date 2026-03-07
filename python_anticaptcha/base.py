@@ -61,6 +61,12 @@ class Job:
     def report_incorrect_recaptcha(self) -> bool:
         return self.client.reportIncorrectRecaptcha(self.task_id)
 
+    def __repr__(self) -> str:
+        status = self._last_result.get("status") if self._last_result else None
+        if status:
+            return f"<Job task_id={self.task_id} status={status!r}>"
+        return f"<Job task_id={self.task_id}>"
+
     def join(self, maximum_time: int | None = None) -> None:
         elapsed_time = 0
         maximum_time = maximum_time or MAXIMUM_JOIN_TIME
@@ -114,6 +120,11 @@ class AnticaptchaClient:
 
     def close(self):
         self.session.close()
+
+    def __repr__(self) -> str:
+        from urllib.parse import urlparse
+        host = urlparse(self.base_url).hostname or self.base_url
+        return f"<AnticaptchaClient host={host!r}>"
 
     @property
     def client_ip(self) -> str:
