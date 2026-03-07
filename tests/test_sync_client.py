@@ -2,7 +2,7 @@ from unittest.mock import patch, MagicMock
 import os
 import pytest
 
-from python_anticaptcha.base import AnticaptchaClient, Job, SLEEP_EVERY_CHECK_FINISHED
+from python_anticaptcha.sync_client import AnticaptchaClient, Job, SLEEP_EVERY_CHECK_FINISHED
 from python_anticaptcha.exceptions import AnticaptchaException
 
 

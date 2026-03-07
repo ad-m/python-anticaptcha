@@ -24,12 +24,12 @@ The client can be used as a context manager to ensure the underlying session is 
 Async client
 ############
 
-For async frameworks (FastAPI, aiohttp, Starlette), install with async support::
+.. note::
 
-    pip install python-anticaptcha[async]
+   Requires the ``async`` extra: ``pip install python-anticaptcha[async]``
 
-Then use ``AsyncAnticaptchaClient`` — the API mirrors the sync client but all
-methods are awaitable:
+For async frameworks (FastAPI, aiohttp, Starlette) use ``AsyncAnticaptchaClient`` —
+the API mirrors the sync client but all methods are awaitable:
 
 .. code:: python
 
@@ -46,6 +46,9 @@ methods are awaitable:
         print(job.get_solution_response())
 
 The full integration example is available in file ``examples/async_recaptcha_request.py``.
+
+Sync client
+###########
 
 Solve recaptcha
 ###############
@@ -66,7 +69,7 @@ Example snippet for Recaptcha:
     job.join()
     print(job.get_solution_response())
 
-The full integration example is available in file ``examples/recaptcha_request.py``.
+The full integration example is available in file ``examples/sync_recaptcha_request.py``.
 
 If you process the same page many times, to increase reliability you can specify
 whether the captcha is visible or not. This parameter is not required, as the

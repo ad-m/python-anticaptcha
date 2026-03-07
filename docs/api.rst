@@ -1,10 +1,10 @@
 API
 ===
 
-Base
-----
+Sync Client
+-----------
 
- .. automodule:: python_anticaptcha.base
+ .. automodule:: python_anticaptcha.sync_client
    :members:
    :undoc-members:
 

@@ -48,7 +48,7 @@ with AnticaptchaClient(api_key) as client:
     job.join()
 ```
 
-### Async Usage
+## Async Usage
 
 For async frameworks, use `AsyncAnticaptchaClient` — the API mirrors the sync
 client but all methods are awaitable:
@@ -69,6 +69,8 @@ async with AsyncAnticaptchaClient(api_key) as client:
 
 The full integration example is available in file `examples/async_recaptcha_request.py`.
 
+## Sync Usage
+
 ### Solve recaptcha
 
 Example snippet for Recaptcha:
@@ -87,7 +89,7 @@ job.join()
 print(job.get_solution_response())
 ```
 
-The full integration example is available in file `examples/recaptcha_request.py`.
+The full integration example is available in file `examples/sync_recaptcha_request.py`.
 
 If you process the same page many times, to increase reliability you can specify
 whether the captcha is visible or not. This parameter is not required, as the

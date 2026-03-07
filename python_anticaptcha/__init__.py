@@ -1,6 +1,6 @@
 from importlib.metadata import version, PackageNotFoundError
 
-from .base import AnticaptchaClient, Job
+from .sync_client import AnticaptchaClient, Job
 from .proxy import Proxy
 from .tasks import (
     NoCaptchaTaskProxylessTask,
