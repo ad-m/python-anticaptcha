@@ -12,6 +12,12 @@ class BaseTask:
         result["type"] = self.type
         return result
 
+    def __repr__(self) -> str:
+        attrs = {k: v for k, v in self.__dict__.items()
+                 if not k.startswith("_") and v is not None}
+        fields = " ".join(f"{k}={v!r}" for k, v in attrs.items())
+        return f"<{self.__class__.__name__} {fields}>"
+
 
 class UserAgentMixin(BaseTask):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
