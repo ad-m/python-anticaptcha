@@ -23,6 +23,7 @@ Changed
 - Migrate from ``setup.py`` / ``setup.cfg`` to ``pyproject.toml`` (PEP 621) (`#122 <https://github.com/ad-m/python-anticaptcha/pull/122>`_)
 - Switch README from RST to Markdown (`#126 <https://github.com/ad-m/python-anticaptcha/pull/126>`_)
 - Switch test runner from nose2 to pytest
+- Switch PyPI publishing to trusted publishing via GitHub Actions (`#114 <https://github.com/ad-m/python-anticaptcha/pull/114>`_)
 - Fix ``RecaptchaV2EnterpriseTask`` missing proxyless base class inheritance
 - Fix ``ImageToTextTask.serialize()`` sending ``None`` values
 - Fix ``GeeTestTask`` incorrect inheritance
