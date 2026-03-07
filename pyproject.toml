@@ -31,6 +31,9 @@ async = ["httpx>=0.24"]
 tests = ["pytest", "retry", "selenium"]
 docs = ["sphinx"]
 
+[tool.setuptools.package-data]
+python_anticaptcha = ["py.typed"]
+
 [tool.setuptools-scm]
 fallback_version = "0.0.0"
 

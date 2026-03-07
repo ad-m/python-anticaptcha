@@ -15,7 +15,7 @@ AnticatpchaException = AnticaptchaException
 
 
 class InvalidWidthException(AnticaptchaException):
-    def __init__(self, width):
+    def __init__(self, width: int) -> None:
         self.width = width
         msg = "Invalid width (%s). Can be one of these: 100, 50, 33, 25." % (
             self.width,
@@ -24,7 +24,7 @@ class InvalidWidthException(AnticaptchaException):
 
 
 class MissingNameException(AnticaptchaException):
-    def __init__(self, cls):
+    def __init__(self, cls: type) -> None:
         self.cls = cls
         msg = 'Missing name data in {0}. Provide {0}.__init__(name="X") or {0}.serialize(name="X")'.format(
             str(self.cls)

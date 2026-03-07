@@ -5,10 +5,12 @@ import requests
 import time
 import json
 import warnings
+from types import TracebackType
 from typing import Any
 
 from urllib.parse import urljoin
 from .exceptions import AnticaptchaException
+from .tasks import BaseTask
 
 SLEEP_EVERY_CHECK_FINISHED = 3
 MAXIMUM_JOIN_TIME = 60 * 5
@@ -111,14 +113,19 @@ class AnticaptchaClient:
         )
         self.session = requests.Session()
 
-    def __enter__(self):
+    def __enter__(self) -> AnticaptchaClient:
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> bool:
         self.session.close()
         return False
 
-    def close(self):
+    def close(self) -> None:
         self.session.close()
 
     def __repr__(self) -> str:
@@ -146,7 +153,7 @@ class AnticaptchaClient:
                 response["errorId"], response["errorCode"], response["errorDescription"]
             )
 
-    def createTask(self, task: Any) -> Job:
+    def createTask(self, task: BaseTask) -> Job:
         request = {
             "clientKey": self.client_key,
             "task": task.serialize(),
@@ -161,7 +168,7 @@ class AnticaptchaClient:
         self._check_response(response)
         return Job(self, response["taskId"])
 
-    def createTaskSmee(self, task: Any, timeout: int = MAXIMUM_JOIN_TIME) -> Job:
+    def createTaskSmee(self, task: BaseTask, timeout: int = MAXIMUM_JOIN_TIME) -> Job:
         """
         Beta method to stream response from smee.io
         """
