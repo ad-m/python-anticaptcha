@@ -308,7 +308,7 @@ class AntiGateTaskProxyless(BaseTask):
         self.websiteURL = website_url
         self.templateName = template_name
         self.variables = variables
-        super(AntiGateTaskProxyless).__init__(*args, **kwargs)
+        super(AntiGateTaskProxyless).__init__(self, *args, **kwargs)
 
     def serialize(self, **result):
         data = super(AntiGateTaskProxyless, self).serialize(**result)
