@@ -9,10 +9,7 @@ from urllib.parse import urljoin
 try:
     import httpx
 except ImportError:
-    raise ImportError(
-        "httpx is required for async support. "
-        "Install it with: pip install python-anticaptcha[async]"
-    )
+    httpx = None  # type: ignore[assignment]
 
 from .exceptions import AnticaptchaException
 from .tasks import BaseTask
@@ -130,6 +127,11 @@ class AsyncAnticaptchaClient:
         host: str = "api.anti-captcha.com",
         use_ssl: bool = True,
     ) -> None:
+        if httpx is None:
+            raise ImportError(
+                "httpx is required for async support. "
+                "Install it with: pip install python-anticaptcha[async]"
+            )
         self.client_key = client_key or os.environ.get("ANTICAPTCHA_API_KEY")
         if not self.client_key:
             raise AnticaptchaException(
