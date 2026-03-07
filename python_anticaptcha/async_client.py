@@ -7,7 +7,7 @@ from typing import Any, Callable, Literal
 from urllib.parse import urljoin
 
 try:
-    import httpx
+    import httpx  # type: ignore[import-not-found]
 except ImportError:
     httpx = None  # type: ignore[assignment]
 
@@ -129,8 +129,7 @@ class AsyncAnticaptchaClient:
     ) -> None:
         if httpx is None:
             raise ImportError(
-                "httpx is required for async support. "
-                "Install it with: pip install python-anticaptcha[async]"
+                "httpx is required for async support. Install it with: pip install python-anticaptcha[async]"
             )
         self.client_key = client_key or os.environ.get("ANTICAPTCHA_API_KEY")
         if not self.client_key:
@@ -186,19 +185,19 @@ class AsyncAnticaptchaClient:
             "softId": self.SOFT_ID,
             "languagePool": self.language_pool,
         }
-        response = (await self.session.post(
-            urljoin(self.base_url, self.CREATE_TASK_URL),
-            json=request,
-            timeout=self.response_timeout,
-        )).json()
+        response = (
+            await self.session.post(
+                urljoin(self.base_url, self.CREATE_TASK_URL),
+                json=request,
+                timeout=self.response_timeout,
+            )
+        ).json()
         await self._check_response(response)
         return AsyncJob(self, response["taskId"])
 
     async def getTaskResult(self, task_id: int) -> dict[str, Any]:
         request = {"clientKey": self.client_key, "taskId": task_id}
-        response = (await self.session.post(
-            urljoin(self.base_url, self.TASK_RESULT_URL), json=request
-        )).json()
+        response = (await self.session.post(urljoin(self.base_url, self.TASK_RESULT_URL), json=request)).json()
         await self._check_response(response)
         return response
 
@@ -207,33 +206,25 @@ class AsyncAnticaptchaClient:
             "clientKey": self.client_key,
             "softId": self.SOFT_ID,
         }
-        response = (await self.session.post(
-            urljoin(self.base_url, self.BALANCE_URL), json=request
-        )).json()
+        response = (await self.session.post(urljoin(self.base_url, self.BALANCE_URL), json=request)).json()
         await self._check_response(response)
         return response["balance"]
 
     async def getAppStats(self, soft_id: int, mode: str) -> dict[str, Any]:
         request = {"clientKey": self.client_key, "softId": soft_id, "mode": mode}
-        response = (await self.session.post(
-            urljoin(self.base_url, self.APP_STAT_URL), json=request
-        )).json()
+        response = (await self.session.post(urljoin(self.base_url, self.APP_STAT_URL), json=request)).json()
         await self._check_response(response)
         return response
 
     async def reportIncorrectImage(self, task_id: int) -> bool:
         request = {"clientKey": self.client_key, "taskId": task_id}
-        response = (await self.session.post(
-            urljoin(self.base_url, self.REPORT_IMAGE_URL), json=request
-        )).json()
+        response = (await self.session.post(urljoin(self.base_url, self.REPORT_IMAGE_URL), json=request)).json()
         await self._check_response(response)
         return bool(response.get("status", False))
 
     async def reportIncorrectRecaptcha(self, task_id: int) -> bool:
         request = {"clientKey": self.client_key, "taskId": task_id}
-        response = (await self.session.post(
-            urljoin(self.base_url, self.REPORT_RECAPTCHA_URL), json=request
-        )).json()
+        response = (await self.session.post(urljoin(self.base_url, self.REPORT_RECAPTCHA_URL), json=request)).json()
         await self._check_response(response)
         return response["status"] == "success"
 

@@ -1,9 +1,9 @@
 import contextlib
 from importlib.metadata import PackageNotFoundError, version
 
-from .sync_client import AnticaptchaClient, Job
 from .exceptions import AnticaptchaException
 from .proxy import Proxy
+from .sync_client import AnticaptchaClient, Job
 from .tasks import (
     AntiGateTask,
     AntiGateTaskProxyless,
@@ -29,7 +29,7 @@ with contextlib.suppress(PackageNotFoundError):
     __version__ = version(__name__)
 
 
-def __getattr__(name: str):
+def __getattr__(name: str) -> type:
     if name in ("AsyncAnticaptchaClient", "AsyncJob"):
         from .async_client import AsyncAnticaptchaClient, AsyncJob
 

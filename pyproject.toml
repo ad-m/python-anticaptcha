@@ -30,7 +30,7 @@ Homepage = "https://github.com/ad-m/python-anticaptcha"
 
 [project.optional-dependencies]
 async = ["httpx>=0.24"]
-tests = ["pytest", "pytest-asyncio", "retry", "selenium"]
+tests = ["pytest", "pytest-asyncio", "httpx>=0.24", "retry", "selenium"]
 docs = ["sphinx", "sphinx-rtd-theme"]
 
 [tool.setuptools.package-data]

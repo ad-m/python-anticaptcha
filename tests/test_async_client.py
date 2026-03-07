@@ -1,10 +1,11 @@
-from unittest.mock import patch, MagicMock, AsyncMock
+from unittest.mock import AsyncMock, MagicMock, patch
+
 import pytest
 
 from python_anticaptcha.async_client import (
+    SLEEP_EVERY_CHECK_FINISHED,
     AsyncAnticaptchaClient,
     AsyncJob,
-    SLEEP_EVERY_CHECK_FINISHED,
 )
 from python_anticaptcha.exceptions import AnticaptchaException
 
@@ -180,11 +181,13 @@ class TestAsyncJobJoinOnCheck:
     @patch("python_anticaptcha.async_client.asyncio.sleep", new_callable=AsyncMock)
     async def test_on_check_called_each_iteration(self, mock_sleep):
         client = MagicMock()
-        client.getTaskResult = AsyncMock(side_effect=[
-            {"status": "processing"},
-            {"status": "processing"},
-            {"status": "ready", "solution": {}},
-        ])
+        client.getTaskResult = AsyncMock(
+            side_effect=[
+                {"status": "processing"},
+                {"status": "processing"},
+                {"status": "ready", "solution": {}},
+            ]
+        )
         job = AsyncJob(client, task_id=1)
         callback = MagicMock()
         await job.join(on_check=callback)

@@ -2,8 +2,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from python_anticaptcha.sync_client import SLEEP_EVERY_CHECK_FINISHED, AnticaptchaClient, Job
 from python_anticaptcha.exceptions import AnticaptchaException
+from python_anticaptcha.sync_client import SLEEP_EVERY_CHECK_FINISHED, AnticaptchaClient, Job
 
 
 class TestAnticaptchaClientInit:
