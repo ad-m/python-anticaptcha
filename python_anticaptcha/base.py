@@ -68,6 +68,15 @@ class Job:
         return f"<Job task_id={self.task_id}>"
 
     def join(self, maximum_time: int | None = None, on_check=None) -> None:
+        """Poll for task completion, blocking until ready or timeout.
+
+        :param maximum_time: Maximum seconds to wait (default: ``MAXIMUM_JOIN_TIME``).
+        :param on_check: Optional callback invoked after each poll with
+            ``(elapsed_time, status)`` where *elapsed_time* is the total seconds
+            waited so far and *status* is the last task status string
+            (e.g. ``"processing"``).
+        :raises AnticaptchaException: If *maximum_time* is exceeded.
+        """
         elapsed_time = 0
         maximum_time = maximum_time or MAXIMUM_JOIN_TIME
         while not self.check_is_ready():
