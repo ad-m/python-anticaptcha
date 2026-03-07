@@ -27,7 +27,7 @@ jobs:
     - uses: nanasess/setup-chromedriver@v2
 
     - name: Run integration tests
-      run: make test
+      run: make test_e2e
       env:
         KEY: ${{ secrets.anticaptcha_key }}
         PROXY_URL: "${{ secrets.proxy_url }}"
