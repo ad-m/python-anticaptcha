@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import base64
-from typing import Any, BinaryIO
+from pathlib import Path
+from typing import Any, BinaryIO, Union
 
 
 class BaseTask:
@@ -139,7 +140,7 @@ class FunCaptchaTask(ProxyMixin, UserAgentMixin, CookieMixin, FunCaptchaProxyles
 
 class ImageToTextTask(BaseTask):
     type = "ImageToTextTask"
-    fp = None
+    _body = None
     phrase = None
     case = None
     numeric = None
@@ -151,7 +152,7 @@ class ImageToTextTask(BaseTask):
 
     def __init__(
         self,
-        fp: BinaryIO,
+        image: Union[str, Path, bytes, BinaryIO],
         phrase: bool | None = None,
         case: bool | None = None,
         numeric: int | None = None,
@@ -163,7 +164,13 @@ class ImageToTextTask(BaseTask):
         *args: Any,
         **kwargs: Any,
     ) -> None:
-        self.fp = fp
+        if isinstance(image, (str, Path)):
+            with open(image, "rb") as f:
+                self._body = base64.b64encode(f.read()).decode("utf-8")
+        elif isinstance(image, bytes):
+            self._body = base64.b64encode(image).decode("utf-8")
+        else:
+            self._body = base64.b64encode(image.read()).decode("utf-8")
         self.phrase = phrase
         self.case = case
         self.numeric = numeric
@@ -176,7 +183,7 @@ class ImageToTextTask(BaseTask):
 
     def serialize(self, **result: Any) -> dict[str, Any]:
         data = super().serialize(**result)
-        data["body"] = base64.b64encode(self.fp.read()).decode("utf-8")
+        data["body"] = self._body
         if self.phrase is not None:
             data["phrase"] = self.phrase
         if self.case is not None:

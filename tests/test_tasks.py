@@ -138,22 +138,40 @@ class TestFunCaptchaTask:
 class TestImageToTextTask:
     def test_serialize_base64(self):
         fp = io.BytesIO(b"fake image data")
-        task = ImageToTextTask(fp=fp)
+        task = ImageToTextTask(fp)
         data = task.serialize()
         assert data["type"] == "ImageToTextTask"
         assert data["body"] == "ZmFrZSBpbWFnZSBkYXRh"
 
+    def test_from_bytes(self):
+        task = ImageToTextTask(b"fake image data")
+        data = task.serialize()
+        assert data["type"] == "ImageToTextTask"
+        assert data["body"] == "ZmFrZSBpbWFnZSBkYXRh"
+
+    def test_from_file_path(self, tmp_path):
+        img = tmp_path / "captcha.jpeg"
+        img.write_bytes(b"fake image data")
+        task = ImageToTextTask(str(img))
+        data = task.serialize()
+        assert data["body"] == "ZmFrZSBpbWFnZSBkYXRh"
+
+    def test_from_pathlib_path(self, tmp_path):
+        img = tmp_path / "captcha.jpeg"
+        img.write_bytes(b"fake image data")
+        task = ImageToTextTask(img)
+        data = task.serialize()
+        assert data["body"] == "ZmFrZSBpbWFnZSBkYXRh"
+
     def test_optional_fields_omitted(self):
-        fp = io.BytesIO(b"data")
-        task = ImageToTextTask(fp=fp)
+        task = ImageToTextTask(b"data")
         data = task.serialize()
         for key in ["phrase", "case", "numeric", "math", "minLength", "maxLength", "comment", "websiteUrl"]:
             assert key not in data
 
     def test_optional_fields_included(self):
-        fp = io.BytesIO(b"data")
         task = ImageToTextTask(
-            fp=fp, phrase=True, case=True, numeric=1,
+            b"data", phrase=True, case=True, numeric=1,
             math=False, min_length=3, max_length=10,
             comment="solve this", website_url="https://example.com",
         )
