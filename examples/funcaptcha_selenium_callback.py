@@ -1,12 +1,13 @@
+import gzip
+import os
 import re
 import time
-from six.moves.urllib.parse import quote
-import os
 from os import environ
-import gzip
+
+from selenium.webdriver.common.by import By
+from six.moves.urllib.parse import quote
 
 from python_anticaptcha import AnticaptchaClient, FunCaptchaProxylessTask
-from selenium.webdriver.common.by import By
 
 api_key = environ["KEY"]
 site_key_pattern = 'public_key: "(.+?)",'
@@ -47,7 +48,7 @@ def form_submit(driver, token):
     )
     time.sleep(1)
     # as example call callback - not required in that example
-    driver.execute_script("ArkoseEnforcement.funcaptchaCallback[0]('{}')".format(token))
+    driver.execute_script(f"ArkoseEnforcement.funcaptchaCallback[0]('{token}')")
     driver.find_element(By.ID, "submit-btn").click()
     time.sleep(1)
 
@@ -62,9 +63,9 @@ if __name__ == "__main__":
     def custom(req, req_body, res, res_body):
         if not req.path:
             return
-        if not "arkoselabs" in req.path:
+        if "arkoselabs" not in req.path:
             return
-        if not res.headers.get("Content-Type", None) in [
+        if res.headers.get("Content-Type", None) not in [
             "text/javascript",
             "application/javascript",
         ]:

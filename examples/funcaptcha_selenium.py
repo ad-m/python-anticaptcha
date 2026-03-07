@@ -1,13 +1,10 @@
-from six.moves.urllib.parse import quote
-from six.moves.urllib import parse
-
-import requests
-from os import environ
 import re
+from os import environ
 from random import choice
+
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from six.moves.urllib import parse
+from six.moves.urllib.parse import quote
 
 from python_anticaptcha import AnticaptchaClient, FunCaptchaTask
 

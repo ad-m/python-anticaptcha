@@ -1,7 +1,7 @@
 CHROMEDRIVER_VERSION=99.0.4844.17
 CHROMEDRIVER_DIR=${PWD}/chromedriver
 
-.PHONY: lint fmt build docs install test test_e2e chromedriver
+.PHONY: lint fmt typecheck build docs install test test_e2e chromedriver
 
 build:
 	python -m build
@@ -34,11 +34,15 @@ clean:
 	rm -r build chromedriver
 
 lint:
-	docker run --rm -v /$$(pwd):/apps alpine/flake8 ./
-	docker run --rm -v /$$(pwd):/data cytopia/black --check ./
+	ruff check .
+	ruff format --check .
 
 fmt:
-	docker run --rm -v /$$(pwd):/data cytopia/black ./
+	ruff check --fix .
+	ruff format .
+
+typecheck:
+	mypy python_anticaptcha
 
 docs:
 	sphinx-build -W docs /dev/shm/sphinx

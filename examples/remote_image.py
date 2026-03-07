@@ -1,5 +1,6 @@
-import requests
 from os import environ
+
+import requests
 
 from python_anticaptcha import AnticaptchaClient, ImageToTextTask
 

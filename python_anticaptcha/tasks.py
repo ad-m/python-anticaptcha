@@ -2,19 +2,18 @@ from __future__ import annotations
 
 import base64
 from pathlib import Path
-from typing import Any, BinaryIO, Union
+from typing import Any, BinaryIO
 
 
 class BaseTask:
-    type = None
+    type: str | None = None
 
     def serialize(self, **result: Any) -> dict[str, Any]:
         result["type"] = self.type
         return result
 
     def __repr__(self) -> str:
-        attrs = {k: v for k, v in self.__dict__.items()
-                 if not k.startswith("_") and v is not None}
+        attrs = {k: v for k, v in self.__dict__.items() if not k.startswith("_") and v is not None}
         fields = " ".join(f"{k}={v!r}" for k, v in attrs.items())
         return f"<{self.__class__.__name__} {fields}>"
 
@@ -103,9 +102,7 @@ class RecaptchaV2TaskProxyless(NoCaptchaTaskProxylessTask):
     type = "RecaptchaV2TaskProxyless"
 
 
-class NoCaptchaTask(
-    ProxyMixin, UserAgentMixin, CookieMixin, NoCaptchaTaskProxylessTask
-):
+class NoCaptchaTask(ProxyMixin, UserAgentMixin, CookieMixin, NoCaptchaTaskProxylessTask):
     type = "NoCaptchaTask"
 
 
@@ -121,7 +118,13 @@ class FunCaptchaProxylessTask(BaseTask):
     data = None
 
     def __init__(
-        self, website_url: str, website_key: str, subdomain: str | None = None, data: str | None = None, *args: Any, **kwargs: Any,
+        self,
+        website_url: str,
+        website_key: str,
+        subdomain: str | None = None,
+        data: str | None = None,
+        *args: Any,
+        **kwargs: Any,
     ) -> None:
         self.websiteURL = website_url
         self.websiteKey = website_key
@@ -158,7 +161,7 @@ class ImageToTextTask(BaseTask):
 
     def __init__(
         self,
-        image: Union[str, Path, bytes, BinaryIO],
+        image: str | Path | bytes | BinaryIO,
         phrase: bool | None = None,
         case: bool | None = None,
         numeric: int | None = None,
@@ -218,7 +221,14 @@ class RecaptchaV3TaskProxyless(BaseTask):
     isEnterprise = False
 
     def __init__(
-        self, website_url: str, website_key: str, min_score: float, page_action: str, is_enterprise: bool = False, *args: Any, **kwargs: Any,
+        self,
+        website_url: str,
+        website_key: str,
+        min_score: float,
+        page_action: str,
+        is_enterprise: bool = False,
+        *args: Any,
+        **kwargs: Any,
     ) -> None:
         self.websiteURL = website_url
         self.websiteKey = website_key
@@ -265,7 +275,15 @@ class RecaptchaV2EnterpriseTaskProxyless(BaseTask):
     enterprisePayload = None
     apiDomain = None
 
-    def __init__(self, website_url: str, website_key: str, enterprise_payload: dict[str, Any] | None, api_domain: str | None, *args: Any, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        website_url: str,
+        website_key: str,
+        enterprise_payload: dict[str, Any] | None,
+        api_domain: str | None,
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
         self.websiteURL = website_url
         self.websiteKey = website_key
         self.enterprisePayload = enterprise_payload
@@ -283,9 +301,7 @@ class RecaptchaV2EnterpriseTaskProxyless(BaseTask):
         return data
 
 
-class RecaptchaV2EnterpriseTask(
-    ProxyMixin, UserAgentMixin, CookieMixin, RecaptchaV2EnterpriseTaskProxyless
-):
+class RecaptchaV2EnterpriseTask(ProxyMixin, UserAgentMixin, CookieMixin, RecaptchaV2EnterpriseTaskProxyless):
     type = "RecaptchaV2EnterpriseTask"
 
 
@@ -298,7 +314,14 @@ class GeeTestTaskProxyless(BaseTask):
     geetestGetLib = None
 
     def __init__(
-        self, website_url: str, gt: str, challenge: str, subdomain: str | None = None, lib: str | None = None, *args: Any, **kwargs: Any,
+        self,
+        website_url: str,
+        gt: str,
+        challenge: str,
+        subdomain: str | None = None,
+        lib: str | None = None,
+        *args: Any,
+        **kwargs: Any,
     ) -> None:
         self.websiteURL = website_url
         self.gt = gt
@@ -329,7 +352,14 @@ class AntiGateTaskProxyless(BaseTask):
     templateName = None
     variables = None
 
-    def __init__(self, website_url: str, template_name: str, variables: dict[str, Any], *args: Any, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        website_url: str,
+        template_name: str,
+        variables: dict[str, Any],
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
         self.websiteURL = website_url
         self.templateName = template_name
         self.variables = variables
