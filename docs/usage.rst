@@ -1,7 +1,7 @@
 Usage
 =====
 
-To use this library do you need `Anticaptcha.com`_ API key.
+To use this library you need `Anticaptcha.com`_ API key.
 
 You can pass the key explicitly or set the ``ANTICAPTCHA_API_KEY`` environment variable:
 
@@ -32,12 +32,11 @@ Example snippet for Recaptcha:
     job.join()
     print(job.get_solution_response())
 
-The full integration example is available in file ``examples/recaptcha.py``.
+The full integration example is available in file ``examples/recaptcha_request.py``.
 
-If you only process few page many times to increase reliability, you can specify
-whether the captcha is visible or not. This parameter is not required, as is the
-system detects invisible sitekeys automatically, and needs several recursive
-measures for automated training and analysis. For provide that pass
+If you process the same page many times, to increase reliability you can specify
+whether the captcha is visible or not. This parameter is not required, as the
+system detects invisible sitekeys automatically. To provide that, pass
 ``is_invisible`` parameter to ``NoCaptchaTaskProxylessTask`` or ``NoCaptchaTask`` eg.:
 
 .. code:: python
@@ -123,7 +122,7 @@ the possibility of simply launching such a server by:
     pip install mitmproxy
     mitmweb -p 9190 -b 0.0.0.0 --ignore '.' --socks
 
-Next to in your application use something like:
+Then in your application use something like:
 
 .. code:: python
 

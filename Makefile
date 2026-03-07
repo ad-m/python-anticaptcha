@@ -1,10 +1,10 @@
 CHROMEDRIVER_VERSION=99.0.4844.17
-CHROMEDRIVER_DIR=${PWD}/geckodriver
+CHROMEDRIVER_DIR=${PWD}/chromedriver
 
-.PHONY: lint fmt build docs install test test_e2e gecko
+.PHONY: lint fmt build docs install test test_e2e chromedriver
 
 build:
-	python setup.py sdist bdist_wheel
+	python -m build
 
 install: install_test install_docs install_pkg
 	
@@ -18,7 +18,7 @@ install_pkg:
 	python -m pip install --upgrade pip wheel
 	pip install .
 
-gecko:
+chromedriver:
 	mkdir -p ${CHROMEDRIVER_DIR}
 	wget -q -P ${CHROMEDRIVER_DIR} "http://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip"
 	unzip ${CHROMEDRIVER_DIR}/chromedriver* -d ${CHROMEDRIVER_DIR}
@@ -28,10 +28,10 @@ test:
 	pytest
 
 test_e2e:
-	PATH=$$PWD/geckodriver:$$PATH pytest -m e2e --override-ini="addopts="
+	PATH=$$PWD/chromedriver:$$PATH pytest -m e2e --override-ini="addopts="
 
 clean:
-	rm -r build geckodriver
+	rm -r build chromedriver
 
 lint:
 	docker run --rm -v /$$(pwd):/apps alpine/flake8 ./

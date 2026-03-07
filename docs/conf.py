@@ -4,7 +4,7 @@
 #
 # This file does only contain a selection of the most common options. For a
 # full list see the documentation:
-# http://www.sphinx-doc.org/en/stable/config
+# https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 # -- Path setup --------------------------------------------------------------
 
@@ -21,13 +21,12 @@ sys.path.insert(0, os.path.abspath(".."))
 # -- Project information -----------------------------------------------------
 
 project = u"python-anticaptcha"
-copyright = u"2018, Adam Dobrawy"
+copyright = u"2018-2026, Adam Dobrawy"
 author = u"Adam Dobrawy"
 
-# The short X.Y version
+# Version is managed by setuptools-scm; leave empty for Sphinx
 version = u""
-# The full version, including alpha/beta/rc tags
-release = u"0.2.0"
+release = u""
 
 
 # -- General configuration ---------------------------------------------------
@@ -84,10 +83,9 @@ pygments_style = "sphinx"
 html_theme = "alabaster"
 
 try:
-    import sphinx_rtd_theme
+    import sphinx_rtd_theme  # noqa: F401
 
     html_theme = "sphinx_rtd_theme"
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 except ImportError:
     pass
 
