@@ -1,6 +1,7 @@
 from importlib.metadata import version, PackageNotFoundError
 
-from .base import AnticaptchaClient
+from .base import AnticaptchaClient, Job
+from .proxy import Proxy
 from .tasks import (
     NoCaptchaTaskProxylessTask,
     RecaptchaV2TaskProxyless,
@@ -28,3 +29,27 @@ try:
 except PackageNotFoundError:
     # package is not installed
     pass
+
+__all__ = [
+    "AnticaptchaClient",
+    "Job",
+    "Proxy",
+    "NoCaptchaTaskProxylessTask",
+    "RecaptchaV2TaskProxyless",
+    "NoCaptchaTask",
+    "RecaptchaV2Task",
+    "FunCaptchaProxylessTask",
+    "FunCaptchaTask",
+    "ImageToTextTask",
+    "RecaptchaV3TaskProxyless",
+    "HCaptchaTaskProxyless",
+    "HCaptchaTask",
+    "RecaptchaV2EnterpriseTaskProxyless",
+    "RecaptchaV2EnterpriseTask",
+    "GeeTestTaskProxyless",
+    "GeeTestTask",
+    "AntiGateTaskProxyless",
+    "AntiGateTask",
+    "AnticaptchaException",
+    "AnticatpchaException",
+]

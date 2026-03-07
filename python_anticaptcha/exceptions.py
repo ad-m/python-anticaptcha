@@ -1,5 +1,8 @@
+from __future__ import annotations
+
+
 class AnticaptchaException(Exception):
-    def __init__(self, error_id, error_code, error_description, *args):
+    def __init__(self, error_id: int | str | None, error_code: int | str, error_description: str, *args: object) -> None:
         super().__init__(
             "[{}:{}]{}".format(error_code, error_id, error_description)
         )

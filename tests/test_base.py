@@ -147,3 +147,34 @@ class TestJobJoinTimeout:
         with pytest.raises(AnticaptchaException) as exc_info:
             job.join(maximum_time=SLEEP_EVERY_CHECK_FINISHED)
         assert "exceeded" in str(exc_info.value).lower()
+
+
+class TestSnakeCaseAliases:
+    def test_create_task_alias(self):
+        assert AnticaptchaClient.create_task is AnticaptchaClient.createTask
+
+    def test_create_task_smee_alias(self):
+        assert AnticaptchaClient.create_task_smee is AnticaptchaClient.createTaskSmee
+
+    def test_get_task_result_alias(self):
+        assert AnticaptchaClient.get_task_result is AnticaptchaClient.getTaskResult
+
+    def test_get_balance_alias(self):
+        assert AnticaptchaClient.get_balance is AnticaptchaClient.getBalance
+
+    def test_get_app_stats_alias(self):
+        assert AnticaptchaClient.get_app_stats is AnticaptchaClient.getAppStats
+
+    def test_report_incorrect_image_alias(self):
+        assert AnticaptchaClient.report_incorrect_image is AnticaptchaClient.reportIncorrectImage
+
+    def test_report_incorrect_recaptcha_alias(self):
+        assert AnticaptchaClient.report_incorrect_recaptcha is AnticaptchaClient.reportIncorrectRecaptcha
+
+    def test_alias_works_on_instance(self):
+        client = AnticaptchaClient("key123")
+        mock_response = MagicMock()
+        mock_response.json.return_value = {"errorId": 0, "balance": 5.0}
+        with patch.object(client.session, "post", return_value=mock_response):
+            balance = client.get_balance()
+        assert balance == 5.0
