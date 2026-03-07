@@ -280,7 +280,7 @@ class GeeTestTaskProxyless(BaseTask):
         self.challenge = challenge
         self.geetestApiServerSubdomain = subdomain
         self.geetestGetLib = lib
-        super(GeeTestTaskProxyless).__init__(*args, **kwargs)
+        super(GeeTestTaskProxyless, self).__init__(*args, **kwargs)
 
     def serialize(self, **result):
         data = super(GeeTestTaskProxyless, self).serialize(**result)
