@@ -22,7 +22,7 @@ def missing_proxy(*args, **kwargs):
 class AntiGateTestCase(TestCase):
     @retry(tries=3)
     def test_process_antigate(self):
-        from examples import antigate
+        from examples import sync_antigate as antigate
 
         solution = antigate.process()
         for key in ["url", "domain", "localStorage", "cookies", "fingerprint"]:
@@ -37,7 +37,7 @@ class FuncaptchaTestCase(TestCase):
     # Occasionally fails, so I repeat my attempt to have others selected.
     @retry(tries=3)
     def test_funcaptcha(self):
-        from examples import funcaptcha_request
+        from examples import sync_funcaptcha_request as funcaptcha_request
 
         self.assertIn("Solved!", funcaptcha_request.process())
 
@@ -48,7 +48,7 @@ class RecaptchaRequestTestCase(TestCase):
     # Anticaptcha responds is not fully reliable.
     @retry(tries=6)
     def test_process(self):
-        from examples import recaptcha_request
+        from examples import sync_recaptcha_request as recaptcha_request
 
         self.assertIn(recaptcha_request.EXPECTED_RESULT, recaptcha_request.process())
 
@@ -60,7 +60,7 @@ class RecaptchaV3ProxylessTestCase(TestCase):
     # Anticaptcha responds is not fully reliable.
     @retry(tries=3)
     def test_process(self):
-        from examples import recaptcha3_request
+        from examples import sync_recaptcha3_request as recaptcha3_request
 
         self.assertTrue(recaptcha3_request.process()["success"])
 
@@ -84,7 +84,7 @@ class RecaptchaSeleniumtTestCase(TestCase):
     def test_process(self):
         from selenium.webdriver.chrome.options import Options
 
-        from examples import recaptcha_selenium
+        from examples import sync_recaptcha_selenium as recaptcha_selenium
 
         options = Options()
         options.headless = True
@@ -100,7 +100,7 @@ class RecaptchaSeleniumtTestCase(TestCase):
 @missing_key
 class TextTestCase(TestCase):
     def test_process(self):
-        from examples import text
+        from examples import sync_text as text
 
         self.assertEqual(text.process(text.IMAGE).lower(), text.EXPECTED_RESULT.lower())
 
@@ -111,7 +111,7 @@ class TextTestCase(TestCase):
 class HCaptchaTaskProxylessTestCase(TestCase):
     @retry(tries=3)
     def test_process(self):
-        from examples import hcaptcha_request
+        from examples import sync_hcaptcha_request as hcaptcha_request
 
         self.assertIn(hcaptcha_request.EXPECTED_RESULT, hcaptcha_request.process())
 
@@ -122,7 +122,7 @@ class HCaptchaTaskProxylessTestCase(TestCase):
 class HCaptchaTaskTestCase(TestCase):
     @retry(tries=3)
     def test_process(self):
-        from examples import hcaptcha_request_proxy
+        from examples import sync_hcaptcha_request_proxy as hcaptcha_request_proxy
 
         self.assertIn(
             "Your request have submitted successfully.",
