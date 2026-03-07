@@ -105,6 +105,16 @@ class AnticaptchaClient:
         )
         self.session = requests.Session()
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.session.close()
+        return False
+
+    def close(self):
+        self.session.close()
+
     @property
     def client_ip(self) -> str:
         if not hasattr(self, "_client_ip"):
