@@ -19,7 +19,7 @@ setup(
     long_description_content_type="text/x-rst",
     url="https://github.com/ad-m/python-anticaptcha",
     author="Adam Dobrawy",
-    author_email="anticaptcha@jawnosc.tk",
+    author_email="naczelnik@jawne.info.pl",
     license="MIT",
     python_requires=">=3.9",
     classifiers=[
