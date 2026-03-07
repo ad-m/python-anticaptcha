@@ -6,9 +6,17 @@
 Welcome to python-anticaptcha's documentation!
 ==============================================
 
-.. include:: ../README.rst
-  :start-after: introduction-start
-  :end-before: introduction-end
+Client library for solve captchas with `Anticaptcha.com support`_.
+The library requires Python >= 3.9.
+
+The library is cyclically and automatically tested for proper operation. We are constantly making the best efforts for its effective operation.
+
+In case of any problems with integration - `read the documentation`_, `create an issue`_, use `Gitter`_ or contact privately.
+
+.. _read the documentation: http://python-anticaptcha.readthedocs.io/en/latest/
+.. _Anticaptcha.com support: http://getcaptchasolution.com/i1hvnzdymd
+.. _create an issue: https://github.com/ad-m/python-anticaptcha/issues/new
+.. _Gitter: https://gitter.im/python-anticaptcha/Lobby
 
 .. toctree::
    :maxdepth: 2
