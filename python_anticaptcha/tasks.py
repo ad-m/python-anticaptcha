@@ -49,8 +49,6 @@ class ProxyMixin(BaseTask):
         if self.proxyLogin:
             data["proxyLogin"] = self.proxyLogin
             data["proxyPassword"] = self.proxyPassword
-        if self.cookies:
-            data["cookies"] = self.cookies
         return data
 
 
