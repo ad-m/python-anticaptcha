@@ -1,3 +1,8 @@
+[project]
+name = "python-anticaptcha"
+requires-python = ">=3.9"
+dynamic = ["version", "description", "readme", "dependencies", "optional-dependencies"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 markers = [

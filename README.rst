@@ -19,7 +19,7 @@ python-anticaptcha
 .. introduction-start
 
 Client library for solve captchas with `Anticaptcha.com support`_.
-The library supports both Python 2.7 and Python 3.
+The library requires Python >= 3.9.
 
 The library is cyclically and automatically tested for proper operation. We are constantly making the best efforts for its effective operation.
 
@@ -67,9 +67,9 @@ Example snippet for Recaptcha:
 
     client = AnticaptchaClient(api_key)
     task = NoCaptchaTaskProxylessTask(url, site_key)
-    job = client.createTask(task)
+    job = client.create_task(task)
     job.join()
-    print job.get_solution_response()
+    print(job.get_solution_response())
 
 The full integration example is available in file ``examples/recaptcha.py``.
 
@@ -89,9 +89,9 @@ measures for automated training and analysis. For provide that pass
 
     client = AnticaptchaClient(api_key)
     task = NoCaptchaTaskProxylessTask(url, site_key, is_invisible=True)
-    job = client.createTask(task)
+    job = client.create_task(task)
     job.join()
-    print job.get_solution_response()
+    print(job.get_solution_response())
 
 
 Solve text captcha
@@ -107,9 +107,9 @@ Example snippet for text captcha:
     captcha_fp = open('examples/captcha_ms.jpeg', 'rb')
     client = AnticaptchaClient(api_key)
     task = ImageToTextTask(captcha_fp)
-    job = client.createTask(task)
+    job = client.create_task(task)
     job.join()
-    print job.get_captcha_text()
+    print(job.get_captcha_text())
 
 Solve funcaptcha
 ################
@@ -125,13 +125,13 @@ Example snippet for funcaptcha:
     api_key = '174faff8fbc769e94a5862391ecfd010'
     site_key = 'DE0B0BB7-1EE4-4D70-1853-31B835D4506B'  # grab from site
     url = 'https://www.google.com/recaptcha/api2/demo'
-    proxy = Proxy.parse_url("socks5://login:password@123.123.123.123")
+    proxy = Proxy.parse_url("socks5://login:password@123.123.123.123:1080")
 
     client = AnticaptchaClient(api_key)
-    task = FunCaptchaTask(url, site_key, proxy=proxy, user_agent=user_agent)
-    job = client.createTask(task)
+    task = FunCaptchaTask(url, site_key, user_agent=UA, **proxy.to_kwargs())
+    job = client.create_task(task)
     job.join()
-    print job.get_token_response()
+    print(job.get_token_response())
 
 Report incorrect image
 ######################
@@ -146,10 +146,10 @@ Example snippet for reporting an incorrect image task:
     captcha_fp = open('examples/captcha_ms.jpeg', 'rb')
     client = AnticaptchaClient(api_key)
     task = ImageToTextTask(captcha_fp)
-    job = client.createTask(task)
+    job = client.create_task(task)
     job.join()
-    print job.get_captcha_text()
-    job.report_incorrect()
+    print(job.get_captcha_text())
+    job.report_incorrect_image()
 
 Setup proxy
 ###########
@@ -181,19 +181,23 @@ We recommend entering IP-based access control for incoming addresses to proxy. I
 Error handling
 ##############
 
-In the event of an application error, the AnticaptchaException exception is thrown. To handle the exception, do the following:
+In the event of an application error, the ``AnticaptchaException`` exception is thrown. To handle the exception, do the following:
 
 .. code:: python
 
-    from python_anticaptcha import AnticatpchaException, ImageToTextTask
+    from python_anticaptcha import AnticaptchaException, ImageToTextTask
 
     try:
         # any actions
-    except AnticatpchaException as e:
+    except AnticaptchaException as e:
         if e.error_code == 'ERROR_ZERO_BALANCE':
             notify_about_no_funds(e.error_id, e.error_code, e.error_description)
         else:
             raise
+
+.. note::
+
+    The legacy misspelled ``AnticatpchaException`` alias is still available for backward compatibility.
 
 .. usage-end
 

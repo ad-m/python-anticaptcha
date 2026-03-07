@@ -292,8 +292,7 @@ class TestGeeTestTask:
             **USER_AGENT_KWARGS,
             **PROXY_KWARGS,
         )
-        # GeeTestTask doesn't set type explicitly, inherits from GeeTestTaskProxyless
-        assert task.serialize()["type"] == "GeeTestTaskProxyless"
+        assert task.serialize()["type"] == "GeeTestTask"
 
 
 class TestAntiGateTaskProxyless:
