@@ -1,35 +1,70 @@
-name: Publish Python 🐍 package
+name: Publish Python package
 
-on: [push]
+on:
+  push:
+    tags:
+      - '*'
 
 jobs:
-  build-n-publish:
+  build:
+    name: Build distribution
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v4
 
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v1
+    - name: Set up Python
+      uses: actions/setup-python@v5
       with:
-        python-version: "3.7"
+        python-version: "3.12"
 
-    - name: Install setup dependencies
-      run: pip install setuptools_scm wheel
+    - name: Install build dependencies
+      run: pip install setuptools setuptools_scm wheel build
 
     - name: Build distribution
-      run: make build
+      run: python -m build
 
-    - name: Publish distribution 📦 to PyPI
-      if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-      uses: pypa/gh-action-pypi-publish@master
+    - name: Store distribution packages
+      uses: actions/upload-artifact@v4
       with:
-        user: __token__
-        password: ${{ secrets.pypi_password }}
+        name: python-package-distributions
+        path: dist/
 
-    - name: Publish distribution 📦 to Test PyPI
-      if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-      uses: pypa/gh-action-pypi-publish@master
+  publish-to-pypi:
+    name: Publish to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/python-anticaptcha
+    permissions:
+      id-token: write
+    steps:
+    - name: Download distribution packages
+      uses: actions/download-artifact@v4
       with:
-        user: __token__
-        password: ${{ secrets.test_pypi_password }}
-        repository_url: https://test.pypi.org/legacy/
+        name: python-package-distributions
+        path: dist/
+
+    - name: Publish to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+
+  publish-to-testpypi:
+    name: Publish to TestPyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/python-anticaptcha
+    permissions:
+      id-token: write
+    steps:
+    - name: Download distribution packages
+      uses: actions/download-artifact@v4
+      with:
+        name: python-package-distributions
+        path: dist/
+
+    - name: Publish to TestPyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        repository-url: https://test.pypi.org/legacy/
