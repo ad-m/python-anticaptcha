@@ -1,8 +1,8 @@
+import gzip
+import os
 import re
 import time
-import os
 from os import environ
-import gzip
 
 from python_anticaptcha import AnticaptchaClient, NoCaptchaTaskProxylessTask
 
@@ -37,9 +37,9 @@ def process(driver):
 
 def form_submit(driver, token):
     driver.execute_script(
-        "document.getElementById('g-recaptcha-response').innerHTML='{}';".format(token)
+        f"document.getElementById('g-recaptcha-response').innerHTML='{token}';"
     )
-    driver.execute_script("grecaptcha.recaptchaCallback[0]('{}')".format(token))
+    driver.execute_script(f"grecaptcha.recaptchaCallback[0]('{token}')")
     time.sleep(1)
 
 
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     from seleniumwire import webdriver  # Import from seleniumwire
 
     def custom(req, req_body, res, res_body):
-        if not req.path or not "recaptcha" in req.path:
+        if not req.path or "recaptcha" not in req.path:
             return
         if not res.headers.get("Content-Type", None) == "text/javascript":
             return

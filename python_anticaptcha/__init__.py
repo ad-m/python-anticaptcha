@@ -1,34 +1,32 @@
-from importlib.metadata import version, PackageNotFoundError
+import contextlib
+from importlib.metadata import PackageNotFoundError, version
 
 from .base import AnticaptchaClient, Job
+from .exceptions import AnticaptchaException
 from .proxy import Proxy
 from .tasks import (
-    NoCaptchaTaskProxylessTask,
-    RecaptchaV2TaskProxyless,
-    NoCaptchaTask,
-    RecaptchaV2Task,
+    AntiGateTask,
+    AntiGateTaskProxyless,
     FunCaptchaProxylessTask,
     FunCaptchaTask,
-    ImageToTextTask,
-    RecaptchaV3TaskProxyless,
-    HCaptchaTaskProxyless,
-    HCaptchaTask,
-    RecaptchaV2EnterpriseTaskProxyless,
-    RecaptchaV2EnterpriseTask,
-    GeeTestTaskProxyless,
     GeeTestTask,
-    AntiGateTaskProxyless,
-    AntiGateTask,
+    GeeTestTaskProxyless,
+    HCaptchaTask,
+    HCaptchaTaskProxyless,
+    ImageToTextTask,
+    NoCaptchaTask,
+    NoCaptchaTaskProxylessTask,
+    RecaptchaV2EnterpriseTask,
+    RecaptchaV2EnterpriseTaskProxyless,
+    RecaptchaV2Task,
+    RecaptchaV2TaskProxyless,
+    RecaptchaV3TaskProxyless,
 )
-from .exceptions import AnticaptchaException
 
 AnticatpchaException = AnticaptchaException
 
-try:
+with contextlib.suppress(PackageNotFoundError):
     __version__ = version(__name__)
-except PackageNotFoundError:
-    # package is not installed
-    pass
 
 __all__ = [
     "AnticaptchaClient",

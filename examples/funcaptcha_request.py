@@ -1,7 +1,8 @@
-from six.moves.urllib import parse
-import requests
-from os import environ
 import re
+from os import environ
+
+import requests
+from six.moves.urllib import parse
 
 from python_anticaptcha import AnticaptchaClient, FunCaptchaTask
 
@@ -50,7 +51,7 @@ def get_token(form_html):
 
 def form_submit(token):
     return requests.post(
-        url="{}/verify".format(url),
+        url=f"{url}/verify",
         data={"name": "xx", "fc-token": token},
         proxies={
             "http": proxy_url,

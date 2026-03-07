@@ -1,25 +1,20 @@
-# -*- coding: utf-8 -*-
-from unittest import TestCase, skipIf
-from retry import retry
-
 import os
-import pytest
-
-from python_anticaptcha import AnticatpchaException
 from contextlib import contextmanager
+from unittest import TestCase, skipIf
+
+import pytest
+from retry import retry
 
 
 def missing_key(*args, **kwargs):
     return skipIf(
         "KEY" not in os.environ,
-        "Missing KEY environment variable. " "Unable to connect Anti-captcha.com",
+        "Missing KEY environment variable. Unable to connect Anti-captcha.com",
     )(*args, **kwargs)
 
 
 def missing_proxy(*args, **kwargs):
-    return skipIf(
-        "PROXY_URL" not in os.environ, "Missing PROXY_URL environment variable"
-    )(*args, **kwargs)
+    return skipIf("PROXY_URL" not in os.environ, "Missing PROXY_URL environment variable")(*args, **kwargs)
 
 
 @pytest.mark.e2e
@@ -87,19 +82,18 @@ class RecaptchaSeleniumtTestCase(TestCase):
     # Anticaptcha responds is not fully reliable.
     @retry(tries=6)
     def test_process(self):
-        from examples import recaptcha_selenium
         from selenium.webdriver.chrome.options import Options
+
+        from examples import recaptcha_selenium
 
         options = Options()
         options.headless = True
-        options.add_experimental_option('prefs', {'intl.accept_languages': 'en_US'})
-    
+        options.add_experimental_option("prefs", {"intl.accept_languages": "en_US"})
+
         with open_driver(
             options=options,
         ) as driver:
-            self.assertIn(
-                recaptcha_selenium.EXPECTED_RESULT, recaptcha_selenium.process(driver)
-            )
+            self.assertIn(recaptcha_selenium.EXPECTED_RESULT, recaptcha_selenium.process(driver))
 
 
 @pytest.mark.e2e

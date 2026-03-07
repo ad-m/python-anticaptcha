@@ -1,7 +1,8 @@
 from os import environ
 from pprint import pprint
-from python_anticaptcha import AnticaptchaClient, ImageToTextTask
 from sys import argv
+
+from python_anticaptcha import AnticaptchaClient
 
 api_key = environ["KEY"]
 

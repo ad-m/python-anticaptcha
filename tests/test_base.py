@@ -1,8 +1,8 @@
-from unittest.mock import patch, MagicMock
-import os
+from unittest.mock import MagicMock, patch
+
 import pytest
 
-from python_anticaptcha.base import AnticaptchaClient, Job, SLEEP_EVERY_CHECK_FINISHED
+from python_anticaptcha.base import SLEEP_EVERY_CHECK_FINISHED, AnticaptchaClient, Job
 from python_anticaptcha.exceptions import AnticaptchaException
 
 
@@ -66,9 +66,7 @@ class TestCheckResponse:
             "errorCode": "ERROR_IP_NOT_ALLOWED",
             "errorDescription": "IP not allowed",
         }
-        with patch.object(
-            type(self.client), "client_ip", new_callable=lambda: property(lambda self: "5.6.7.8")
-        ):
+        with patch.object(type(self.client), "client_ip", new_callable=lambda: property(lambda self: "5.6.7.8")):
             with pytest.raises(AnticaptchaException) as exc_info:
                 self.client._check_response(response)
             assert "5.6.7.8" in exc_info.value.error_description
