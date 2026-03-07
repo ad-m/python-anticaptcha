@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 import requests
 import time
 import json
@@ -11,16 +10,16 @@ from typing import Any
 from urllib.parse import urljoin
 from .exceptions import AnticaptchaException
 from .tasks import BaseTask
+from ._common import (
+    _BaseClientMixin,
+    _BaseJobMixin,
+    SOFT_ID,
+    SLEEP_EVERY_CHECK_FINISHED,
+    MAXIMUM_JOIN_TIME,
+)
 
-SLEEP_EVERY_CHECK_FINISHED = 3
-MAXIMUM_JOIN_TIME = 60 * 5
 
-
-class Job:
-    client = None
-    task_id = None
-    _last_result = None
-
+class Job(_BaseJobMixin):
     def __init__(self, client: AnticaptchaClient, task_id: int) -> None:
         self.client = client
         self.task_id = task_id
@@ -31,24 +30,6 @@ class Job:
     def check_is_ready(self) -> bool:
         self._update()
         return self._last_result["status"] == "ready"
-
-    def get_solution_response(self) -> str:  # Recaptcha
-        return self._last_result["solution"]["gRecaptchaResponse"]
-
-    def get_solution(self) -> dict[str, Any]:
-        return self._last_result["solution"]
-
-    def get_token_response(self) -> str:  # Funcaptcha
-        return self._last_result["solution"]["token"]
-
-    def get_answers(self) -> dict[str, str]:
-        return self._last_result["solution"]["answers"]
-
-    def get_captcha_text(self) -> str:  # Image
-        return self._last_result["solution"]["text"]
-
-    def get_cells_numbers(self) -> list[int]:
-        return self._last_result["solution"]["cellNumbers"]
 
     def report_incorrect(self) -> bool:
         warnings.warn(
@@ -64,10 +45,7 @@ class Job:
         return self.client.reportIncorrectRecaptcha(self.task_id)
 
     def __repr__(self) -> str:
-        status = self._last_result.get("status") if self._last_result else None
-        if status:
-            return f"<Job task_id={self.task_id} status={status!r}>"
-        return f"<Job task_id={self.task_id}>"
+        return self._repr_job("Job")
 
     def join(self, maximum_time: int | None = None, on_check=None) -> None:
         """Poll for task completion, blocking until ready or timeout.
@@ -96,32 +74,13 @@ class Job:
                 )
 
 
-class AnticaptchaClient:
+class AnticaptchaClient(_BaseClientMixin):
     client_key = None
-    CREATE_TASK_URL = "/createTask"
-    TASK_RESULT_URL = "/getTaskResult"
-    BALANCE_URL = "/getBalance"
-    REPORT_IMAGE_URL = "/reportIncorrectImageCaptcha"
-    REPORT_RECAPTCHA_URL = "/reportIncorrectRecaptcha"
-    APP_STAT_URL = "/getAppStats"
-    SOFT_ID = 847
-    language_pool = "en"
-    response_timeout = 5
 
     def __init__(
         self, client_key: str | None = None, language_pool: str = "en", host: str = "api.anti-captcha.com", use_ssl: bool = True,
     ) -> None:
-        self.client_key = client_key or os.environ.get("ANTICAPTCHA_API_KEY")
-        if not self.client_key:
-            raise AnticaptchaException(
-                None,
-                "CONFIG_ERROR",
-                "API key required. Pass client_key or set ANTICAPTCHA_API_KEY env var.",
-            )
-        self.language_pool = language_pool
-        self.base_url = "{proto}://{host}/".format(
-            proto="https" if use_ssl else "http", host=host
-        )
+        self._init_client(client_key, language_pool, host, use_ssl)
         self.session = requests.Session()
 
     def __enter__(self) -> AnticaptchaClient:
@@ -140,9 +99,7 @@ class AnticaptchaClient:
         self.session.close()
 
     def __repr__(self) -> str:
-        from urllib.parse import urlparse
-        host = urlparse(self.base_url).hostname or self.base_url
-        return f"<AnticaptchaClient host={host!r}>"
+        return self._repr_client("AnticaptchaClient")
 
     @property
     def client_ip(self) -> str:
@@ -165,12 +122,7 @@ class AnticaptchaClient:
             )
 
     def createTask(self, task: BaseTask) -> Job:
-        request = {
-            "clientKey": self.client_key,
-            "task": task.serialize(),
-            "softId": self.SOFT_ID,
-            "languagePool": self.language_pool,
-        }
+        request = self._build_create_task_request(task)
         response = self.session.post(
             urljoin(self.base_url, self.CREATE_TASK_URL),
             json=request,
@@ -222,7 +174,7 @@ class AnticaptchaClient:
             return job
 
     def getTaskResult(self, task_id: int) -> dict[str, Any]:
-        request = {"clientKey": self.client_key, "taskId": task_id}
+        request = self._build_key_request(taskId=task_id)
         response = self.session.post(
             urljoin(self.base_url, self.TASK_RESULT_URL), json=request
         ).json()
@@ -230,10 +182,7 @@ class AnticaptchaClient:
         return response
 
     def getBalance(self) -> float:
-        request = {
-            "clientKey": self.client_key,
-            "softId": self.SOFT_ID,
-        }
+        request = self._build_key_request(softId=self.SOFT_ID)
         response = self.session.post(
             urljoin(self.base_url, self.BALANCE_URL), json=request
         ).json()
@@ -241,7 +190,7 @@ class AnticaptchaClient:
         return response["balance"]
 
     def getAppStats(self, soft_id: int, mode: str) -> dict[str, Any]:
-        request = {"clientKey": self.client_key, "softId": soft_id, "mode": mode}
+        request = self._build_key_request(softId=soft_id, mode=mode)
         response = self.session.post(
             urljoin(self.base_url, self.APP_STAT_URL), json=request
         ).json()
@@ -249,7 +198,7 @@ class AnticaptchaClient:
         return response
 
     def reportIncorrectImage(self, task_id: int) -> bool:
-        request = {"clientKey": self.client_key, "taskId": task_id}
+        request = self._build_key_request(taskId=task_id)
         response = self.session.post(
             urljoin(self.base_url, self.REPORT_IMAGE_URL), json=request
         ).json()
@@ -257,7 +206,7 @@ class AnticaptchaClient:
         return response.get("status", False) != False
 
     def reportIncorrectRecaptcha(self, task_id: int) -> bool:
-        request = {"clientKey": self.client_key, "taskId": task_id}
+        request = self._build_key_request(taskId=task_id)
         response = self.session.post(
             urljoin(self.base_url, self.REPORT_RECAPTCHA_URL), json=request
         ).json()

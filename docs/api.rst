@@ -8,6 +8,13 @@ Base
    :members:
    :undoc-members:
 
+Async Client
+------------
+
+ .. automodule:: python_anticaptcha.async_client
+   :members:
+   :undoc-members:
+
 Exceptions
 ----------
 

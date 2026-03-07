@@ -20,6 +20,12 @@ Install as standard Python package using:
 pip install python-anticaptcha
 ```
 
+For async support (FastAPI, aiohttp, Starlette, etc.):
+
+```
+pip install python-anticaptcha[async]
+```
+
 ## Usage
 
 To use this library you need [Anticaptcha.com](http://getcaptchasolution.com/p9bwplkicx) API key.
@@ -41,6 +47,27 @@ with AnticaptchaClient(api_key) as client:
     job = client.create_task(task)
     job.join()
 ```
+
+### Async Usage
+
+For async frameworks, use `AsyncAnticaptchaClient` — the API mirrors the sync
+client but all methods are awaitable:
+
+```python
+from python_anticaptcha import AsyncAnticaptchaClient, NoCaptchaTaskProxylessTask
+
+api_key = '174faff8fbc769e94a5862391ecfd010'
+site_key = '6Le-wvkSAAAAAPBMRTvw0Q4Muexq9bi0DJwx_mJ-'
+url = 'https://www.google.com/recaptcha/api2/demo'
+
+async with AsyncAnticaptchaClient(api_key) as client:
+    task = NoCaptchaTaskProxylessTask(url, site_key)
+    job = await client.create_task(task)
+    await job.join()
+    print(job.get_solution_response())
+```
+
+The full integration example is available in file `examples/async_recaptcha_request.py`.
 
 ### Solve recaptcha
 
