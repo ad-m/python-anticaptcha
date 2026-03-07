@@ -67,12 +67,14 @@ class Job:
             return f"<Job task_id={self.task_id} status={status!r}>"
         return f"<Job task_id={self.task_id}>"
 
-    def join(self, maximum_time: int | None = None) -> None:
+    def join(self, maximum_time: int | None = None, on_check=None) -> None:
         elapsed_time = 0
         maximum_time = maximum_time or MAXIMUM_JOIN_TIME
         while not self.check_is_ready():
             time.sleep(SLEEP_EVERY_CHECK_FINISHED)
             elapsed_time += SLEEP_EVERY_CHECK_FINISHED
+            if on_check is not None:
+                on_check(elapsed_time, self._last_result.get("status"))
             if elapsed_time > maximum_time:
                 raise AnticaptchaException(
                     None,
