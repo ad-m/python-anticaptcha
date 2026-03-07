@@ -30,6 +30,17 @@ except PackageNotFoundError:
     # package is not installed
     pass
 
+
+def __getattr__(name: str):
+    if name in ("AsyncAnticaptchaClient", "AsyncJob"):
+        from .async_client import AsyncAnticaptchaClient, AsyncJob
+
+        globals()["AsyncAnticaptchaClient"] = AsyncAnticaptchaClient
+        globals()["AsyncJob"] = AsyncJob
+        return globals()[name]
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
+
 __all__ = [
     "AnticaptchaClient",
     "Job",
@@ -52,4 +63,6 @@ __all__ = [
     "AntiGateTask",
     "AnticaptchaException",
     "AnticatpchaException",
+    "AsyncAnticaptchaClient",
+    "AsyncJob",
 ]
