@@ -52,6 +52,16 @@ Usage
 
 To use this library do you need `Anticaptcha.com`_ API key.
 
+You can pass the key explicitly or set the ``ANTICAPTCHA_API_KEY`` environment variable:
+
+.. code:: python
+
+    # Explicit key
+    client = AnticaptchaClient("my-api-key")
+
+    # Or set ANTICAPTCHA_API_KEY environment variable
+    client = AnticaptchaClient()
+
 Solve recaptcha
 ###############
 

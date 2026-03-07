@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import requests
 import time
 import json
@@ -89,9 +90,15 @@ class AnticaptchaClient:
     response_timeout = 5
 
     def __init__(
-        self, client_key: str, language_pool: str = "en", host: str = "api.anti-captcha.com", use_ssl: bool = True,
+        self, client_key: str | None = None, language_pool: str = "en", host: str = "api.anti-captcha.com", use_ssl: bool = True,
     ) -> None:
-        self.client_key = client_key
+        self.client_key = client_key or os.environ.get("ANTICAPTCHA_API_KEY")
+        if not self.client_key:
+            raise AnticaptchaException(
+                None,
+                "CONFIG_ERROR",
+                "API key required. Pass client_key or set ANTICAPTCHA_API_KEY env var.",
+            )
         self.language_pool = language_pool
         self.base_url = "{proto}://{host}/".format(
             proto="https" if use_ssl else "http", host=host

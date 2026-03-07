@@ -1,4 +1,5 @@
 from unittest.mock import patch, MagicMock
+import os
 import pytest
 
 from python_anticaptcha.base import AnticaptchaClient, Job, SLEEP_EVERY_CHECK_FINISHED
@@ -22,6 +23,22 @@ class TestAnticaptchaClientInit:
     def test_language_pool(self):
         client = AnticaptchaClient("key123", language_pool="rn")
         assert client.language_pool == "rn"
+
+    def test_env_var_fallback(self, monkeypatch):
+        monkeypatch.setenv("ANTICAPTCHA_API_KEY", "env-key-456")
+        client = AnticaptchaClient()
+        assert client.client_key == "env-key-456"
+
+    def test_explicit_key_over_env(self, monkeypatch):
+        monkeypatch.setenv("ANTICAPTCHA_API_KEY", "env-key-456")
+        client = AnticaptchaClient("explicit-key-789")
+        assert client.client_key == "explicit-key-789"
+
+    def test_no_key_raises(self, monkeypatch):
+        monkeypatch.delenv("ANTICAPTCHA_API_KEY", raising=False)
+        with pytest.raises(AnticaptchaException) as exc_info:
+            AnticaptchaClient()
+        assert exc_info.value.error_code == "CONFIG_ERROR"
 
 
 class TestCheckResponse:
