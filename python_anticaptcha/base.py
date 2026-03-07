@@ -82,6 +82,7 @@ class Job:
         self,
         maximum_time: int | None = None,
         on_check: Callable[[int, str | None], None] | None = None,
+        backoff: bool = False,
     ) -> None:
         """Poll for task completion, blocking until ready or timeout.
 
@@ -90,13 +91,19 @@ class Job:
             ``(elapsed_time, status)`` where *elapsed_time* is the total seconds
             waited so far and *status* is the last task status string
             (e.g. ``"processing"``).
+        :param backoff: When ``True``, use exponential backoff for polling
+            intervals starting at 1 second and doubling up to a 10-second cap.
+            Default ``False`` preserves the fixed 3-second interval.
         :raises AnticaptchaException: If *maximum_time* is exceeded.
         """
         elapsed_time = 0
         maximum_time = maximum_time or MAXIMUM_JOIN_TIME
+        sleep_time = 1 if backoff else SLEEP_EVERY_CHECK_FINISHED
         while not self.check_is_ready():
-            time.sleep(SLEEP_EVERY_CHECK_FINISHED)
-            elapsed_time += SLEEP_EVERY_CHECK_FINISHED
+            time.sleep(sleep_time)
+            elapsed_time += sleep_time
+            if backoff:
+                sleep_time = min(sleep_time * 2, 10)
             if on_check is not None and self._last_result is not None:
                 on_check(elapsed_time, self._last_result.get("status"))
             if elapsed_time > maximum_time:
