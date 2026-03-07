@@ -34,6 +34,14 @@ client = AnticaptchaClient("my-api-key")
 client = AnticaptchaClient()
 ```
 
+The client can be used as a context manager to ensure the underlying session is closed:
+
+```python
+with AnticaptchaClient(api_key) as client:
+    job = client.create_task(task)
+    job.join()
+```
+
 ### Solve recaptcha
 
 Example snippet for Recaptcha:
@@ -81,9 +89,17 @@ Example snippet for text captcha:
 from python_anticaptcha import AnticaptchaClient, ImageToTextTask
 
 api_key = '174faff8fbc769e94a5862391ecfd010'
-captcha_fp = open('examples/captcha_ms.jpeg', 'rb')
 client = AnticaptchaClient(api_key)
-task = ImageToTextTask(captcha_fp)
+
+# From a file path:
+task = ImageToTextTask('examples/captcha_ms.jpeg')
+
+# Or from raw bytes:
+# task = ImageToTextTask(open('examples/captcha_ms.jpeg', 'rb').read())
+
+# Or from a file object:
+# task = ImageToTextTask(open('examples/captcha_ms.jpeg', 'rb'))
+
 job = client.create_task(task)
 job.join()
 print(job.get_captcha_text())
@@ -108,6 +124,18 @@ task = FunCaptchaTask(url, site_key, user_agent=UA, **proxy.to_kwargs())
 job = client.create_task(task)
 job.join()
 print(job.get_token_response())
+```
+
+### Monitor solve progress
+
+You can pass an `on_check` callback to `job.join()` to monitor progress:
+
+```python
+def progress(elapsed, status):
+    print(f"Elapsed: {elapsed}s, status: {status}")
+
+job = client.create_task(task)
+job.join(on_check=progress)
 ```
 
 ### Report incorrect image
