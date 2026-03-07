@@ -215,21 +215,21 @@ class AnticaptchaClient:
             stream=True,
             timeout=(self.response_timeout, timeout),
         )
-        response = self.session.post(
+        create_response = self.session.post(
             url=urljoin(self.base_url, self.CREATE_TASK_URL),
             json=request,
             timeout=self.response_timeout,
         ).json()
-        self._check_response(response)
+        self._check_response(create_response)
         for line in r.iter_lines():
             content = line.decode("utf-8")
             if '"host":"smee.io"' not in content:
                 continue
             payload = json.loads(content.split(":", maxsplit=1)[1].strip())
-            if "taskId" not in payload["body"] or str(payload["body"]["taskId"]) != str(response["taskId"]):
+            if "taskId" not in payload["body"] or str(payload["body"]["taskId"]) != str(create_response["taskId"]):
                 continue
             r.close()
-            job = Job(client=self, task_id=response["taskId"])
+            job = Job(client=self, task_id=create_response["taskId"])
             job._last_result = payload["body"]
             return job
         raise AnticaptchaException(None, 250, "No matching task response received from smee.io")
