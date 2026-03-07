@@ -166,6 +166,42 @@ class TestJobJoinTimeout:
         assert "exceeded" in str(exc_info.value).lower()
 
 
+class TestJobJoinOnCheck:
+    @patch("python_anticaptcha.base.time.sleep")
+    def test_on_check_called_each_iteration(self, mock_sleep):
+        client = MagicMock()
+        # Return processing twice, then ready
+        client.getTaskResult.side_effect = [
+            {"status": "processing"},
+            {"status": "processing"},
+            {"status": "ready", "solution": {}},
+        ]
+        job = Job(client, task_id=1)
+        callback = MagicMock()
+        job.join(on_check=callback)
+        assert callback.call_count == 2
+        # Verify elapsed time and status passed correctly
+        callback.assert_any_call(SLEEP_EVERY_CHECK_FINISHED, "processing")
+        callback.assert_any_call(SLEEP_EVERY_CHECK_FINISHED * 2, "processing")
+
+    @patch("python_anticaptcha.base.time.sleep")
+    def test_on_check_none_by_default(self, mock_sleep):
+        client = MagicMock()
+        client.getTaskResult.return_value = {"status": "ready", "solution": {}}
+        job = Job(client, task_id=1)
+        # Should not raise when on_check is not provided
+        job.join()
+
+    @patch("python_anticaptcha.base.time.sleep")
+    def test_on_check_not_called_when_immediately_ready(self, mock_sleep):
+        client = MagicMock()
+        client.getTaskResult.return_value = {"status": "ready", "solution": {}}
+        job = Job(client, task_id=1)
+        callback = MagicMock()
+        job.join(on_check=callback)
+        callback.assert_not_called()
+
+
 class TestContextManager:
     def test_enter_returns_self(self):
         client = AnticaptchaClient("key123")
