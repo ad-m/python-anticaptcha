@@ -7,6 +7,9 @@ Unreleased
 Added
 #####
 
+- Add ``AsyncAnticaptchaClient`` and ``AsyncJob`` for async/await usage with ``httpx`` (``pip install python-anticaptcha[async]``)
+- Rename ``base.py`` → ``sync_client.py`` for symmetry with ``async_client.py``; backward-compatible ``base.py`` shim preserved
+- Rename sync example files with ``sync_`` prefix to match ``async_`` examples
 - Add context manager support to ``AnticaptchaClient`` (``__enter__``, ``__exit__``, ``close``)
 - Add ``ANTICAPTCHA_API_KEY`` environment variable fallback for ``AnticaptchaClient``
 - Add ``Proxy`` frozen dataclass with ``parse_url()`` and ``to_kwargs()`` methods

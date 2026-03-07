@@ -10,7 +10,7 @@ license = "MIT"
 requires-python = ">=3.9"
 dependencies = ["requests"]
 dynamic = ["version"]
-keywords = ["recaptcha", "captcha", "development"]
+keywords = ["recaptcha", "captcha", "development", "asyncio", "async", "httpx"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -21,6 +21,8 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
+    "Framework :: AsyncIO",
+    "Topic :: Internet :: WWW/HTTP",
 ]
 
 [project.urls]
@@ -28,7 +30,7 @@ Homepage = "https://github.com/ad-m/python-anticaptcha"
 
 [project.optional-dependencies]
 async = ["httpx>=0.24"]
-tests = ["pytest", "retry", "selenium"]
+tests = ["pytest", "pytest-asyncio", "httpx>=0.24", "retry", "selenium", "six"]
 docs = ["sphinx", "sphinx-rtd-theme"]
 
 [tool.setuptools.package-data]

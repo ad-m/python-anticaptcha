@@ -1,10 +1,17 @@
 API
 ===
 
-Base
-----
+Sync Client
+-----------
 
- .. automodule:: python_anticaptcha.base
+ .. automodule:: python_anticaptcha.sync_client
+   :members:
+   :undoc-members:
+
+Async Client
+------------
+
+ .. automodule:: python_anticaptcha.async_client
    :members:
    :undoc-members:
 
