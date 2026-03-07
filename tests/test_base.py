@@ -149,6 +149,38 @@ class TestJobJoinTimeout:
         assert "exceeded" in str(exc_info.value).lower()
 
 
+class TestContextManager:
+    def test_enter_returns_self(self):
+        client = AnticaptchaClient("key123")
+        assert client.__enter__() is client
+
+    def test_exit_closes_session(self):
+        client = AnticaptchaClient("key123")
+        with patch.object(client.session, "close") as mock_close:
+            client.__exit__(None, None, None)
+        mock_close.assert_called_once()
+
+    def test_close_closes_session(self):
+        client = AnticaptchaClient("key123")
+        with patch.object(client.session, "close") as mock_close:
+            client.close()
+        mock_close.assert_called_once()
+
+    def test_with_statement(self):
+        with AnticaptchaClient("key123") as client:
+            assert isinstance(client, AnticaptchaClient)
+            session = client.session
+        with patch.object(session, "close") as mock_close:
+            # Session was already closed by __exit__, verify it's callable
+            session.close()
+        mock_close.assert_called_once()
+
+    def test_exit_returns_false(self):
+        client = AnticaptchaClient("key123")
+        result = client.__exit__(None, None, None)
+        assert result is False
+
+
 class TestSnakeCaseAliases:
     def test_create_task_alias(self):
         assert AnticaptchaClient.create_task is AnticaptchaClient.createTask
