@@ -1,11 +1,8 @@
 from setuptools import setup
-from codecs import open
-from os import path, system
-import sys
+from os import path
 
 here = path.abspath(path.dirname(__file__))
 
-# Get the long description from the README file
 with open(path.join(here, "README.rst"), encoding="utf-8") as f:
     long_description = f.read()
 
@@ -15,34 +12,33 @@ tests_deps = ["retry", "nose2", "selenium"]
 extras = {"tests": tests_deps, "docs": "sphinx"}
 
 setup(
-    test_suite='nose2.collector.collector',
+    test_suite="nose2.collector.collector",
     name="python-anticaptcha",
     description="Client library for solve captchas with Anticaptcha.com support.",
     long_description=long_description,
+    long_description_content_type="text/x-rst",
     url="https://github.com/ad-m/python-anticaptcha",
     author="Adam Dobrawy",
     author_email="anticaptcha@jawnosc.tk",
     license="MIT",
+    python_requires=">=3.9",
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
     ],
     use_scm_version=True,
     setup_requires=["setuptools_scm", "wheel"],
     keywords="recaptcha captcha development",
     packages=["python_anticaptcha"],
-    install_requires=["requests", "six"],
+    install_requires=["requests"],
     tests_require=tests_deps,
     extras_require=extras,
 )
