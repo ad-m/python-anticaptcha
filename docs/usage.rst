@@ -1,7 +1,7 @@
 Usage
 =====
 
-To use this library do you need `Anticaptcha.com`_ API key.
+To use this library you need `Anticaptcha.com`_ API key.
 
 You can pass the key explicitly or set the ``ANTICAPTCHA_API_KEY`` environment variable:
 
@@ -12,6 +12,14 @@ You can pass the key explicitly or set the ``ANTICAPTCHA_API_KEY`` environment v
 
     # Or set ANTICAPTCHA_API_KEY environment variable
     client = AnticaptchaClient()
+
+The client can be used as a context manager to ensure the underlying session is closed:
+
+.. code:: python
+
+    with AnticaptchaClient(api_key) as client:
+        job = client.create_task(task)
+        job.join()
 
 Solve recaptcha
 ###############
@@ -32,12 +40,11 @@ Example snippet for Recaptcha:
     job.join()
     print(job.get_solution_response())
 
-The full integration example is available in file ``examples/recaptcha.py``.
+The full integration example is available in file ``examples/recaptcha_request.py``.
 
-If you only process few page many times to increase reliability, you can specify
-whether the captcha is visible or not. This parameter is not required, as is the
-system detects invisible sitekeys automatically, and needs several recursive
-measures for automated training and analysis. For provide that pass
+If you process the same page many times, to increase reliability you can specify
+whether the captcha is visible or not. This parameter is not required, as the
+system detects invisible sitekeys automatically. To provide that, pass
 ``is_invisible`` parameter to ``NoCaptchaTaskProxylessTask`` or ``NoCaptchaTask`` eg.:
 
 .. code:: python
@@ -65,9 +72,17 @@ Example snippet for text captcha:
     from python_anticaptcha import AnticaptchaClient, ImageToTextTask
 
     api_key = '174faff8fbc769e94a5862391ecfd010'
-    captcha_fp = open('examples/captcha_ms.jpeg', 'rb')
     client = AnticaptchaClient(api_key)
-    task = ImageToTextTask(captcha_fp)
+
+    # From a file path:
+    task = ImageToTextTask('examples/captcha_ms.jpeg')
+
+    # Or from raw bytes:
+    # task = ImageToTextTask(open('examples/captcha_ms.jpeg', 'rb').read())
+
+    # Or from a file object:
+    # task = ImageToTextTask(open('examples/captcha_ms.jpeg', 'rb'))
+
     job = client.create_task(task)
     job.join()
     print(job.get_captcha_text())
@@ -93,6 +108,19 @@ Example snippet for funcaptcha:
     job = client.create_task(task)
     job.join()
     print(job.get_token_response())
+
+Monitor solve progress
+######################
+
+You can pass an ``on_check`` callback to ``job.join()`` to monitor progress:
+
+.. code:: python
+
+    def progress(elapsed, status):
+        print(f"Elapsed: {elapsed}s, status: {status}")
+
+    job = client.create_task(task)
+    job.join(on_check=progress)
 
 Report incorrect image
 ######################
@@ -123,7 +151,7 @@ the possibility of simply launching such a server by:
     pip install mitmproxy
     mitmweb -p 9190 -b 0.0.0.0 --ignore '.' --socks
 
-Next to in your application use something like:
+Then in your application use something like:
 
 .. code:: python
 

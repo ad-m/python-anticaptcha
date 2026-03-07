@@ -6,7 +6,7 @@
 Welcome to python-anticaptcha's documentation!
 ==============================================
 
-Client library for solve captchas with `Anticaptcha.com support`_.
+Client library for solving captchas with `Anticaptcha.com support`_.
 The library requires Python >= 3.9.
 
 The library is cyclically and automatically tested for proper operation. We are constantly making the best efforts for its effective operation.

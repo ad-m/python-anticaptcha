@@ -3,9 +3,9 @@
 [![Build Status](https://github.com/ad-m/python-anticaptcha/workflows/Python%20package/badge.svg)](https://github.com/ad-m/python-anticaptcha/actions?workflow=Python+package)
 [![PyPI](https://img.shields.io/pypi/v/python-anticaptcha.svg)](https://pypi.org/project/python-anticaptcha/)
 [![Chat](https://badges.gitter.im/python-anticaptcha/Lobby.svg)](https://gitter.im/python-anticaptcha/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
-[![Python compatibility](https://img.shields.io/pypi/pyversions/python-anticaptcha.svg)](https://github.com/ad-m/python-anticaptcha/blob/master/setup.py)
+[![Python compatibility](https://img.shields.io/pypi/pyversions/python-anticaptcha.svg)](https://github.com/ad-m/python-anticaptcha/blob/master/pyproject.toml)
 
-Client library for solve captchas with [Anticaptcha.com support](http://getcaptchasolution.com/i1hvnzdymd).
+Client library for solving captchas with [Anticaptcha.com support](http://getcaptchasolution.com/i1hvnzdymd).
 The library requires Python >= 3.9.
 
 The library is cyclically and automatically tested for proper operation. We are constantly making the best efforts for its effective operation.
@@ -22,7 +22,7 @@ pip install python-anticaptcha
 
 ## Usage
 
-To use this library do you need [Anticaptcha.com](http://getcaptchasolution.com/p9bwplkicx) API key.
+To use this library you need [Anticaptcha.com](http://getcaptchasolution.com/p9bwplkicx) API key.
 
 You can pass the key explicitly or set the `ANTICAPTCHA_API_KEY` environment variable:
 
@@ -32,6 +32,14 @@ client = AnticaptchaClient("my-api-key")
 
 # Or set ANTICAPTCHA_API_KEY environment variable
 client = AnticaptchaClient()
+```
+
+The client can be used as a context manager to ensure the underlying session is closed:
+
+```python
+with AnticaptchaClient(api_key) as client:
+    job = client.create_task(task)
+    job.join()
 ```
 
 ### Solve recaptcha
@@ -52,12 +60,11 @@ job.join()
 print(job.get_solution_response())
 ```
 
-The full integration example is available in file `examples/recaptcha.py`.
+The full integration example is available in file `examples/recaptcha_request.py`.
 
-If you only process few page many times to increase reliability, you can specify
-whether the captcha is visible or not. This parameter is not required, as is the
-system detects invisible sitekeys automatically, and needs several recursive
-measures for automated training and analysis. For provide that pass
+If you process the same page many times, to increase reliability you can specify
+whether the captcha is visible or not. This parameter is not required, as the
+system detects invisible sitekeys automatically. To provide that, pass
 `is_invisible` parameter to `NoCaptchaTaskProxylessTask` or `NoCaptchaTask` eg.:
 
 ```python
@@ -82,9 +89,17 @@ Example snippet for text captcha:
 from python_anticaptcha import AnticaptchaClient, ImageToTextTask
 
 api_key = '174faff8fbc769e94a5862391ecfd010'
-captcha_fp = open('examples/captcha_ms.jpeg', 'rb')
 client = AnticaptchaClient(api_key)
-task = ImageToTextTask(captcha_fp)
+
+# From a file path:
+task = ImageToTextTask('examples/captcha_ms.jpeg')
+
+# Or from raw bytes:
+# task = ImageToTextTask(open('examples/captcha_ms.jpeg', 'rb').read())
+
+# Or from a file object:
+# task = ImageToTextTask(open('examples/captcha_ms.jpeg', 'rb'))
+
 job = client.create_task(task)
 job.join()
 print(job.get_captcha_text())
@@ -109,6 +124,18 @@ task = FunCaptchaTask(url, site_key, user_agent=UA, **proxy.to_kwargs())
 job = client.create_task(task)
 job.join()
 print(job.get_token_response())
+```
+
+### Monitor solve progress
+
+You can pass an `on_check` callback to `job.join()` to monitor progress:
+
+```python
+def progress(elapsed, status):
+    print(f"Elapsed: {elapsed}s, status: {status}")
+
+job = client.create_task(task)
+job.join(on_check=progress)
 ```
 
 ### Report incorrect image
@@ -138,7 +165,7 @@ pip install mitmproxy
 mitmweb -p 9190 -b 0.0.0.0 --ignore '.' --socks
 ```
 
-Next to in your application use something like:
+Then in your application use something like:
 
 ```python
 proxy = Proxy.parse_url("socks5://123.123.123.123:9190")

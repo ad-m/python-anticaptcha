@@ -1,6 +1,44 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+Added
+#####
+
+- Add context manager support to ``AnticaptchaClient`` (``__enter__``, ``__exit__``, ``close``)
+- Add ``ANTICAPTCHA_API_KEY`` environment variable fallback for ``AnticaptchaClient``
+- Add ``Proxy`` frozen dataclass with ``parse_url()`` and ``to_kwargs()`` methods
+- Add snake_case aliases: ``create_task``, ``create_task_smee``, ``get_balance``, ``get_app_stats``
+- Add ``py.typed`` marker and complete type annotations (`#124 <https://github.com/ad-m/python-anticaptcha/pull/124>`_)
+- Add ``__repr__`` to ``Job``, ``AnticaptchaClient``, and ``BaseTask`` (`#123 <https://github.com/ad-m/python-anticaptcha/pull/123>`_)
+- Add optional ``on_check`` callback to ``Job.join()`` (`#125 <https://github.com/ad-m/python-anticaptcha/pull/125>`_)
+- ``ImageToTextTask`` now accepts file paths (``str``/``Path``), raw bytes, or file-like objects
+
+Changed
+#######
+
+- **Breaking:** Minimum Python version increased from 2.7+ to 3.9+
+- Migrate from ``setup.py`` / ``setup.cfg`` to ``pyproject.toml`` (PEP 621) (`#122 <https://github.com/ad-m/python-anticaptcha/pull/122>`_)
+- Switch README from RST to Markdown (`#126 <https://github.com/ad-m/python-anticaptcha/pull/126>`_)
+- Switch test runner from nose2 to pytest
+- Switch PyPI publishing to trusted publishing via GitHub Actions (`#114 <https://github.com/ad-m/python-anticaptcha/pull/114>`_)
+- Fix ``RecaptchaV2EnterpriseTask`` missing proxyless base class inheritance
+- Fix ``ImageToTextTask.serialize()`` sending ``None`` values
+- Fix ``GeeTestTask`` incorrect inheritance
+- Fix ``AntiGateTaskProxyless`` super() call
+- Remove redundant cookies serialization in ``ProxyMixin``
+- Use Python 3 ``super()`` without arguments throughout codebase
+
+Removed
+#######
+
+- Drop Python 2.7 and Python 3.4-3.8 support
+- Remove ``six`` dependency (replaced with stdlib ``urllib.parse``)
+- Remove ``compat.py`` module
+- Remove legacy ``setup.py`` and ``setup.cfg``
+
 1.0.0 - 2022-03-28
 ------------------
 
