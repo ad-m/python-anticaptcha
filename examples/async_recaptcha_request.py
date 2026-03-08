@@ -6,7 +6,7 @@ import httpx
 
 from python_anticaptcha import AsyncAnticaptchaClient, NoCaptchaTaskProxylessTask
 
-api_key = environ["KEY"]
+api_key = environ["ANTICAPTCHA_API_KEY"]
 site_key_pattern = 'data-sitekey="(.+?)"'
 url = "https://www.google.com/recaptcha/api2/demo?invisible=false"
 EXPECTED_RESULT = "Verification Success... Hooray!"

@@ -6,7 +6,7 @@ from os import environ
 
 from python_anticaptcha import AnticaptchaClient, NoCaptchaTaskProxylessTask
 
-api_key = environ["KEY"]
+api_key = environ["ANTICAPTCHA_API_KEY"]
 site_key_pattern = "'sitekey': '(.+?)'"
 url = "http://hcaptcha.jawne.info.pl/recaptcha.php"
 EXPECTED_RESULT = '"success": true,'

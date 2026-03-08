@@ -9,7 +9,7 @@ from six.moves.urllib.parse import quote
 
 from python_anticaptcha import AnticaptchaClient, FunCaptchaProxylessTask
 
-api_key = environ["KEY"]
+api_key = environ["ANTICAPTCHA_API_KEY"]
 site_key_pattern = 'public_key: "(.+?)",'
 url = "https://client-demo.arkoselabs.com/solo-animals"
 EXPECTED_RESULT = "Solved!"

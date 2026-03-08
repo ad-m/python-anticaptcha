@@ -6,7 +6,7 @@ from six.moves.urllib import parse
 
 from python_anticaptcha import AnticaptchaClient, HCaptchaTask
 
-api_key = environ["KEY"]
+api_key = environ["ANTICAPTCHA_API_KEY"]
 proxy_url = environ["PROXY_URL"]  # eg. socks5://user:password/123.123.123.123:8888/
 site_key_pattern = 'data-sitekey="(.+?)"'
 url = "http://hcaptcha.jawne.info.pl/"

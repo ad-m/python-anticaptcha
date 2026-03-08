@@ -8,7 +8,7 @@ from six.moves.urllib.parse import quote
 
 from python_anticaptcha import AnticaptchaClient, FunCaptchaTask
 
-api_key = environ["KEY"]
+api_key = environ["ANTICAPTCHA_API_KEY"]
 site_key_pattern = 'public_key: "(.+?)",'
 url = "https://client-demo.arkoselabs.com/solo-animals"
 client = AnticaptchaClient(api_key)

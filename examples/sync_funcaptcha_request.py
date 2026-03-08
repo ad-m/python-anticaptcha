@@ -6,7 +6,7 @@ from six.moves.urllib import parse
 
 from python_anticaptcha import AnticaptchaClient, FunCaptchaTask
 
-api_key = environ["KEY"]
+api_key = environ["ANTICAPTCHA_API_KEY"]
 site_key_pattern = 'public_key: "(.+?)",'
 site_key_pattern = 'public_key: "(.+?)",'
 surl_pattern = 'surl: "(.+?)",'
