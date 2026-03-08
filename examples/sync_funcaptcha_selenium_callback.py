@@ -5,7 +5,7 @@ import time
 from os import environ
 
 from selenium.webdriver.common.by import By
-from six.moves.urllib.parse import quote
+from urllib.parse import quote
 
 from python_anticaptcha import AnticaptchaClient, FunCaptchaProxylessTask
 
