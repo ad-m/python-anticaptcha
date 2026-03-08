@@ -7,6 +7,7 @@ Unreleased
 Added
 #####
 
+- Add ``TurnstileTaskProxyless`` and ``TurnstileTask`` for solving Cloudflare Turnstile captchas (with optional ``action``, ``cdata``, and ``chl_page_data`` parameters)
 - Add ``AsyncAnticaptchaClient`` and ``AsyncJob`` for async/await usage with ``httpx`` (``pip install python-anticaptcha[async]``)
 - Rename ``base.py`` → ``sync_client.py`` for symmetry with ``async_client.py``; backward-compatible ``base.py`` shim preserved
 - Rename sync example files with ``sync_`` prefix to match ``async_`` examples

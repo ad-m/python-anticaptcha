@@ -17,6 +17,8 @@ from python_anticaptcha.tasks import (
     RecaptchaV2Task,
     RecaptchaV2TaskProxyless,
     RecaptchaV3TaskProxyless,
+    TurnstileTask,
+    TurnstileTaskProxyless,
 )
 
 PROXY_KWARGS = dict(
@@ -351,6 +353,63 @@ class TestProxyMixin:
         assert data["proxyType"] == "http"
         assert data["proxyAddress"] == "1.2.3.4"
         assert data["proxyPort"] == 8080
+
+
+class TestTurnstileTaskProxyless:
+    def test_required_fields(self):
+        task = TurnstileTaskProxyless(website_url="https://example.com", website_key="tkey")
+        data = task.serialize()
+        assert data["type"] == "TurnstileTaskProxyless"
+        assert data["websiteURL"] == "https://example.com"
+        assert data["websiteKey"] == "tkey"
+
+    def test_optional_fields_omitted(self):
+        task = TurnstileTaskProxyless(website_url="https://example.com", website_key="tkey")
+        data = task.serialize()
+        assert "action" not in data
+        assert "cData" not in data
+        assert "chlPageData" not in data
+
+    def test_optional_fields_included(self):
+        task = TurnstileTaskProxyless(
+            website_url="https://example.com",
+            website_key="tkey",
+            action="managed",
+            cdata="cdata_token",
+            chl_page_data="chl_token",
+        )
+        data = task.serialize()
+        assert data["action"] == "managed"
+        assert data["cData"] == "cdata_token"
+        assert data["chlPageData"] == "chl_token"
+
+
+class TestTurnstileTask:
+    def test_type_and_proxy(self):
+        task = TurnstileTask(
+            website_url="https://example.com",
+            website_key="tkey",
+            **USER_AGENT_KWARGS,
+            **PROXY_KWARGS,
+        )
+        data = task.serialize()
+        assert data["type"] == "TurnstileTask"
+        assert data["proxyType"] == "http"
+        assert data["proxyAddress"] == "1.2.3.4"
+        assert data["proxyPort"] == 8080
+        assert data["userAgent"] == "Mozilla/5.0"
+
+    def test_optional_fields_with_proxy(self):
+        task = TurnstileTask(
+            website_url="https://example.com",
+            website_key="tkey",
+            action="managed",
+            **USER_AGENT_KWARGS,
+            **PROXY_KWARGS,
+        )
+        data = task.serialize()
+        assert data["type"] == "TurnstileTask"
+        assert data["action"] == "managed"
 
 
 class TestCookieMixin:
