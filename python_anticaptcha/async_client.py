@@ -19,6 +19,19 @@ MAXIMUM_JOIN_TIME = 60 * 5
 
 
 class AsyncJob:
+    """An async handle to a submitted captcha-solving task.
+
+    Returned by :meth:`AsyncAnticaptchaClient.create_task`. Use :meth:`join`
+    to wait for completion, then call one of the ``get_*`` methods to
+    retrieve the solution.
+
+    Example::
+
+        job = await client.create_task(task)
+        await job.join()
+        print(job.get_solution_response())  # for ReCAPTCHA / hCaptcha
+    """
+
     client: AsyncAnticaptchaClient
     task_id: int
     _last_result: dict[str, Any] | None = None
@@ -31,38 +44,80 @@ class AsyncJob:
         self._last_result = await self.client.getTaskResult(self.task_id)
 
     async def check_is_ready(self) -> bool:
+        """Poll the API once and return whether the task is complete.
+
+        :returns: ``True`` if the solution is ready, ``False`` otherwise.
+        """
         await self._update()
         assert self._last_result is not None
         return self._last_result["status"] == "ready"
 
-    def get_solution_response(self) -> str:  # Recaptcha
+    def get_solution_response(self) -> str:
+        """Return the ``gRecaptchaResponse`` token.
+
+        Use after solving ReCAPTCHA v2, ReCAPTCHA v3, or hCaptcha tasks.
+        Call this only after :meth:`join` has returned.
+        """
         assert self._last_result is not None
         return self._last_result["solution"]["gRecaptchaResponse"]
 
     def get_solution(self) -> dict[str, Any]:
+        """Return the full solution dictionary from the API response.
+
+        Useful for task types where the solution has multiple fields
+        (e.g. GeeTest returns ``challenge``, ``validate``, ``seccode``).
+        Call this only after :meth:`join` has returned.
+        """
         assert self._last_result is not None
         return self._last_result["solution"]
 
-    def get_token_response(self) -> str:  # Funcaptcha
+    def get_token_response(self) -> str:
+        """Return the ``token`` string from the solution.
+
+        Use after solving FunCaptcha tasks.
+        Call this only after :meth:`join` has returned.
+        """
         assert self._last_result is not None
         return self._last_result["solution"]["token"]
 
     def get_answers(self) -> dict[str, str]:
+        """Return the ``answers`` dictionary from the solution.
+
+        Use after solving AntiGate tasks.
+        Call this only after :meth:`join` has returned.
+        """
         assert self._last_result is not None
         return self._last_result["solution"]["answers"]
 
-    def get_captcha_text(self) -> str:  # Image
+    def get_captcha_text(self) -> str:
+        """Return the recognized text from an image captcha.
+
+        Use after solving :class:`ImageToTextTask` tasks.
+        Call this only after :meth:`join` has returned.
+        """
         assert self._last_result is not None
         return self._last_result["solution"]["text"]
 
     def get_cells_numbers(self) -> list[int]:
+        """Return the list of selected cell numbers from a grid captcha.
+
+        Call this only after :meth:`join` has returned.
+        """
         assert self._last_result is not None
         return self._last_result["solution"]["cellNumbers"]
 
     async def report_incorrect_image(self) -> bool:
+        """Report that an image captcha was solved incorrectly.
+
+        :returns: ``True`` if the report was accepted.
+        """
         return await self.client.reportIncorrectImage(self.task_id)
 
     async def report_incorrect_recaptcha(self) -> bool:
+        """Report that a ReCAPTCHA was solved incorrectly.
+
+        :returns: ``True`` if the report was accepted.
+        """
         return await self.client.reportIncorrectRecaptcha(self.task_id)
 
     def __repr__(self) -> str:
@@ -109,6 +164,28 @@ class AsyncJob:
 
 
 class AsyncAnticaptchaClient:
+    """Asynchronous client for the Anticaptcha.com API.
+
+    Mirrors :class:`AnticaptchaClient` but all network methods are coroutines.
+    Requires the ``httpx`` package — install with
+    ``pip install python-anticaptcha[async]``.
+
+    Can be used as an async context manager::
+
+        async with AsyncAnticaptchaClient("my-api-key") as client:
+            job = await client.create_task(task)
+            await job.join()
+
+    :param client_key: Your Anticaptcha API key. If omitted, the
+        ``ANTICAPTCHA_API_KEY`` environment variable is used.
+    :param language_pool: Language pool for workers — ``"en"`` (default)
+        or ``"rn"`` (Russian).
+    :param host: API hostname (default: ``"api.anti-captcha.com"``).
+    :param use_ssl: Use HTTPS (default: ``True``).
+    :raises ImportError: If ``httpx`` is not installed.
+    :raises AnticaptchaException: If no API key is provided.
+    """
+
     client_key = None
     CREATE_TASK_URL = "/createTask"
     TASK_RESULT_URL = "/getTaskResult"
@@ -155,6 +232,10 @@ class AsyncAnticaptchaClient:
         return False
 
     async def close(self) -> None:
+        """Close the underlying HTTP session.
+
+        Called automatically when using the client as an async context manager.
+        """
         await self.session.aclose()
 
     def __repr__(self) -> str:
@@ -179,6 +260,12 @@ class AsyncAnticaptchaClient:
             raise AnticaptchaException(response["errorId"], response["errorCode"], response["errorDescription"])
 
     async def createTask(self, task: BaseTask) -> AsyncJob:
+        """Submit a captcha task and return an :class:`AsyncJob` handle.
+
+        :param task: A task instance (e.g. :class:`NoCaptchaTaskProxylessTask`).
+        :returns: An :class:`AsyncJob` that can be polled with :meth:`AsyncJob.join`.
+        :raises AnticaptchaException: If the API returns an error.
+        """
         request = {
             "clientKey": self.client_key,
             "task": task.serialize(),
@@ -196,12 +283,23 @@ class AsyncAnticaptchaClient:
         return AsyncJob(self, response["taskId"])
 
     async def getTaskResult(self, task_id: int) -> dict[str, Any]:
+        """Fetch the current result/status of a task.
+
+        :param task_id: The task ID returned when the task was created.
+        :returns: Raw API response dictionary with ``status`` and ``solution`` keys.
+        :raises AnticaptchaException: If the API returns an error.
+        """
         request = {"clientKey": self.client_key, "taskId": task_id}
         response = (await self.session.post(urljoin(self.base_url, self.TASK_RESULT_URL), json=request)).json()
         await self._check_response(response)
         return response
 
     async def getBalance(self) -> float:
+        """Return the current account balance in USD.
+
+        :returns: Account balance as a float (e.g. ``3.50``).
+        :raises AnticaptchaException: If the API returns an error.
+        """
         request = {
             "clientKey": self.client_key,
             "softId": self.SOFT_ID,
@@ -211,27 +309,56 @@ class AsyncAnticaptchaClient:
         return response["balance"]
 
     async def getAppStats(self, soft_id: int, mode: str) -> dict[str, Any]:
+        """Retrieve application statistics.
+
+        :param soft_id: Application ID.
+        :param mode: Statistics mode (e.g. ``"errors"``, ``"views"``, ``"downloads"``).
+        :returns: Raw API response dictionary with statistics data.
+        :raises AnticaptchaException: If the API returns an error.
+        """
         request = {"clientKey": self.client_key, "softId": soft_id, "mode": mode}
         response = (await self.session.post(urljoin(self.base_url, self.APP_STAT_URL), json=request)).json()
         await self._check_response(response)
         return response
 
     async def reportIncorrectImage(self, task_id: int) -> bool:
+        """Report that an image captcha was solved incorrectly.
+
+        Use this to get a refund and improve solver accuracy.
+
+        :param task_id: The task ID of the incorrectly solved task.
+        :returns: ``True`` if the report was accepted.
+        :raises AnticaptchaException: If the API returns an error.
+        """
         request = {"clientKey": self.client_key, "taskId": task_id}
         response = (await self.session.post(urljoin(self.base_url, self.REPORT_IMAGE_URL), json=request)).json()
         await self._check_response(response)
         return bool(response.get("status", False))
 
     async def reportIncorrectRecaptcha(self, task_id: int) -> bool:
+        """Report that a ReCAPTCHA was solved incorrectly.
+
+        Use this to get a refund and improve solver accuracy.
+
+        :param task_id: The task ID of the incorrectly solved task.
+        :returns: ``True`` if the report was accepted.
+        :raises AnticaptchaException: If the API returns an error.
+        """
         request = {"clientKey": self.client_key, "taskId": task_id}
         response = (await self.session.post(urljoin(self.base_url, self.REPORT_RECAPTCHA_URL), json=request)).json()
         await self._check_response(response)
         return response["status"] == "success"
 
     # Snake_case aliases
+    #: Alias for :meth:`createTask`.
     create_task = createTask
+    #: Alias for :meth:`getTaskResult`.
     get_task_result = getTaskResult
+    #: Alias for :meth:`getBalance`.
     get_balance = getBalance
+    #: Alias for :meth:`getAppStats`.
     get_app_stats = getAppStats
+    #: Alias for :meth:`reportIncorrectImage`.
     report_incorrect_image = reportIncorrectImage
+    #: Alias for :meth:`reportIncorrectRecaptcha`.
     report_incorrect_recaptcha = reportIncorrectRecaptcha

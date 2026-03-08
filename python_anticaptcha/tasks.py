@@ -6,9 +6,22 @@ from typing import Any, BinaryIO
 
 
 class BaseTask:
+    """Base class for all Anticaptcha task types.
+
+    Each subclass represents a specific captcha type (ReCAPTCHA, hCaptcha, etc.)
+    and serializes its parameters into the format expected by the Anticaptcha API.
+
+    You do not use this class directly — instead, instantiate one of the concrete
+    task classes and pass it to :meth:`AnticaptchaClient.create_task`.
+    """
+
     type: str | None = None
 
     def serialize(self, **result: Any) -> dict[str, Any]:
+        """Serialize the task into a dictionary for the Anticaptcha API request.
+
+        :returns: Dictionary with task parameters including the ``type`` field.
+        """
         result["type"] = self.type
         return result
 
@@ -19,6 +32,14 @@ class BaseTask:
 
 
 class UserAgentMixin(BaseTask):
+    """Mixin that adds a ``user_agent`` parameter to a task.
+
+    Required by proxy-enabled task variants so the captcha solver can
+    emulate the same browser.
+
+    :param user_agent: Browser User-Agent string to use when solving.
+    """
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         self.userAgent: str = kwargs.pop("user_agent")
         super().__init__(*args, **kwargs)
@@ -30,6 +51,14 @@ class UserAgentMixin(BaseTask):
 
 
 class CookieMixin(BaseTask):
+    """Mixin that adds an optional ``cookies`` parameter to a task.
+
+    Pass cookies when the target page requires them for the captcha to render
+    correctly.
+
+    :param cookies: Cookie string to include with the request (optional).
+    """
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         self.cookies: str = kwargs.pop("cookies", "")
         super().__init__(*args, **kwargs)
@@ -42,6 +71,19 @@ class CookieMixin(BaseTask):
 
 
 class ProxyMixin(BaseTask):
+    """Mixin that adds proxy parameters to a task.
+
+    Use this (via proxy-enabled task variants like :class:`NoCaptchaTask`) when
+    the captcha must be solved through a specific proxy. You can build the
+    keyword arguments conveniently with :meth:`Proxy.to_kwargs`.
+
+    :param proxy_type: Proxy protocol — ``"http"``, ``"socks4"``, or ``"socks5"``.
+    :param proxy_address: Proxy server hostname or IP address.
+    :param proxy_port: Proxy server port.
+    :param proxy_login: Username for proxy authentication (empty string if none).
+    :param proxy_password: Password for proxy authentication (empty string if none).
+    """
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         self.proxyType: str = kwargs.pop("proxy_type")
         self.proxyAddress: str = kwargs.pop("proxy_address")
@@ -62,6 +104,29 @@ class ProxyMixin(BaseTask):
 
 
 class NoCaptchaTaskProxylessTask(BaseTask):
+    """Solve a Google ReCAPTCHA v2 challenge without a proxy.
+
+    This is the most common task type. The solver will access the target page
+    directly from Anticaptcha's servers.
+
+    After the job completes, retrieve the token with
+    :meth:`Job.get_solution_response`.
+
+    :param website_url: Full URL of the page where the captcha appears.
+    :param website_key: The ``data-sitekey`` value from the ReCAPTCHA element.
+    :param website_s_token: Optional ``data-s`` token for Google Search captchas.
+    :param is_invisible: Set to ``True`` for invisible ReCAPTCHA. The system
+        auto-detects this, so the parameter is optional.
+    :param recaptcha_data_s_value: Value of the ``data-s`` parameter if present.
+
+    Example::
+
+        task = NoCaptchaTaskProxylessTask(
+            website_url="https://example.com",
+            website_key="6Le-wvkSAAAAAPBMRTvw0Q4Muexq9bi0DJwx_mJ-",
+        )
+    """
+
     type = "NoCaptchaTaskProxyless"
     websiteURL = None
     websiteKey = None
@@ -99,18 +164,61 @@ class NoCaptchaTaskProxylessTask(BaseTask):
 
 
 class RecaptchaV2TaskProxyless(NoCaptchaTaskProxylessTask):
+    """Solve a Google ReCAPTCHA v2 challenge without a proxy (newer API type name).
+
+    Identical to :class:`NoCaptchaTaskProxylessTask` but uses the updated
+    ``RecaptchaV2TaskProxyless`` type identifier.
+    """
+
     type = "RecaptchaV2TaskProxyless"
 
 
 class NoCaptchaTask(ProxyMixin, UserAgentMixin, CookieMixin, NoCaptchaTaskProxylessTask):
+    """Solve a Google ReCAPTCHA v2 challenge through a proxy.
+
+    Same as :class:`NoCaptchaTaskProxylessTask` but additionally requires
+    proxy and user-agent parameters. Use :class:`Proxy` to build the proxy
+    keyword arguments conveniently::
+
+        proxy = Proxy.parse_url("socks5://user:pass@host:port")
+        task = NoCaptchaTask(url, site_key, user_agent=UA, **proxy.to_kwargs())
+
+    :param user_agent: Browser User-Agent string.
+    :param cookies: Optional cookie string (default: ``""``).
+    :param proxy_type: Proxy protocol (``"http"``, ``"socks4"``, ``"socks5"``).
+    :param proxy_address: Proxy server hostname or IP.
+    :param proxy_port: Proxy server port.
+    :param proxy_login: Proxy username (empty string if none).
+    :param proxy_password: Proxy password (empty string if none).
+    """
+
     type = "NoCaptchaTask"
 
 
 class RecaptchaV2Task(NoCaptchaTask):
+    """Solve a Google ReCAPTCHA v2 challenge through a proxy (newer API type name).
+
+    Identical to :class:`NoCaptchaTask` but uses the updated
+    ``RecaptchaV2Task`` type identifier.
+    """
+
     type = "RecaptchaV2Task"
 
 
 class FunCaptchaProxylessTask(BaseTask):
+    """Solve an Arkose Labs FunCaptcha challenge without a proxy.
+
+    After the job completes, retrieve the token with
+    :meth:`Job.get_token_response`.
+
+    :param website_url: Full URL of the page where the captcha appears.
+    :param website_key: The FunCaptcha public key (e.g.
+        ``"DE0B0BB7-1EE4-4D70-1853-31B835D4506B"``).
+    :param subdomain: Custom FunCaptcha API subdomain, if the site uses one
+        (e.g. ``"mysite-api.arkoselabs.com"``).
+    :param data: Additional data blob required by some FunCaptcha implementations.
+    """
+
     type = "FunCaptchaTaskProxyless"
     websiteURL = None
     websiteKey = None
@@ -144,10 +252,43 @@ class FunCaptchaProxylessTask(BaseTask):
 
 
 class FunCaptchaTask(ProxyMixin, UserAgentMixin, CookieMixin, FunCaptchaProxylessTask):
+    """Solve an Arkose Labs FunCaptcha challenge through a proxy.
+
+    Same as :class:`FunCaptchaProxylessTask` but additionally requires
+    proxy, user-agent, and optional cookie parameters.
+    """
+
     type = "FunCaptchaTask"
 
 
 class ImageToTextTask(BaseTask):
+    """Solve a classic image-based captcha by extracting text from an image.
+
+    The image is automatically base64-encoded. You can pass a file path,
+    raw ``bytes``, or an open binary file object.
+
+    After the job completes, retrieve the text with
+    :meth:`Job.get_captcha_text`.
+
+    :param image: Captcha image as a file path (``str`` or ``Path``), raw
+        ``bytes``, or a binary file-like object.
+    :param phrase: ``True`` if the answer contains multiple words.
+    :param case: ``True`` if the answer is case-sensitive.
+    :param numeric: ``0`` — no requirements, ``1`` — numbers only,
+        ``2`` — letters only.
+    :param math: ``True`` if the captcha is a math expression to solve.
+    :param min_length: Minimum number of characters in the answer.
+    :param max_length: Maximum number of characters in the answer.
+    :param comment: Hint text shown to the worker (e.g. ``"Enter red letters"``).
+    :param website_url: URL of the page where the captcha was found (optional,
+        used for context).
+
+    Example::
+
+        task = ImageToTextTask("captcha.png")
+        task = ImageToTextTask(open("captcha.png", "rb").read())
+    """
+
     type = "ImageToTextTask"
     _body = None
     phrase = None
@@ -213,6 +354,22 @@ class ImageToTextTask(BaseTask):
 
 
 class RecaptchaV3TaskProxyless(BaseTask):
+    """Solve a Google ReCAPTCHA v3 challenge (score-based, proxyless only).
+
+    ReCAPTCHA v3 returns a score (0.0–1.0) rather than a visual challenge.
+    You must specify the minimum acceptable score and the page action.
+
+    After the job completes, retrieve the token with
+    :meth:`Job.get_solution_response`.
+
+    :param website_url: Full URL of the page where the captcha appears.
+    :param website_key: The ``data-sitekey`` value from the ReCAPTCHA element.
+    :param min_score: Minimum score threshold (e.g. ``0.3``, ``0.7``, ``0.9``).
+    :param page_action: The action value from ``grecaptcha.execute(key, {action: ...})``.
+    :param is_enterprise: Set to ``True`` if the site uses the Enterprise version
+        of ReCAPTCHA v3.
+    """
+
     type = "RecaptchaV3TaskProxyless"
     websiteURL = None
     websiteKey = None
@@ -248,6 +405,15 @@ class RecaptchaV3TaskProxyless(BaseTask):
 
 
 class HCaptchaTaskProxyless(BaseTask):
+    """Solve an hCaptcha challenge without a proxy.
+
+    After the job completes, retrieve the token with
+    :meth:`Job.get_solution_response`.
+
+    :param website_url: Full URL of the page where the captcha appears.
+    :param website_key: The ``data-sitekey`` value from the hCaptcha element.
+    """
+
     type = "HCaptchaTaskProxyless"
     websiteURL = None
     websiteKey = None
@@ -265,10 +431,31 @@ class HCaptchaTaskProxyless(BaseTask):
 
 
 class HCaptchaTask(ProxyMixin, UserAgentMixin, CookieMixin, HCaptchaTaskProxyless):
+    """Solve an hCaptcha challenge through a proxy.
+
+    Same as :class:`HCaptchaTaskProxyless` but additionally requires
+    proxy, user-agent, and optional cookie parameters.
+    """
+
     type = "HCaptchaTask"
 
 
 class RecaptchaV2EnterpriseTaskProxyless(BaseTask):
+    """Solve a Google ReCAPTCHA v2 Enterprise challenge without a proxy.
+
+    Use this for sites that use the Enterprise version of ReCAPTCHA v2.
+
+    After the job completes, retrieve the token with
+    :meth:`Job.get_solution_response`.
+
+    :param website_url: Full URL of the page where the captcha appears.
+    :param website_key: The ``data-sitekey`` value from the ReCAPTCHA element.
+    :param enterprise_payload: Optional dictionary with Enterprise-specific
+        parameters (e.g. ``{"s": "...", "action": "..."}``) or ``None``.
+    :param api_domain: Custom API domain if the site uses a non-standard
+        ReCAPTCHA endpoint (e.g. ``"recaptcha.net"``) or ``None``.
+    """
+
     type = "RecaptchaV2EnterpriseTaskProxyless"
     websiteURL = None
     websiteKey = None
@@ -302,10 +489,28 @@ class RecaptchaV2EnterpriseTaskProxyless(BaseTask):
 
 
 class RecaptchaV2EnterpriseTask(ProxyMixin, UserAgentMixin, CookieMixin, RecaptchaV2EnterpriseTaskProxyless):
+    """Solve a Google ReCAPTCHA v2 Enterprise challenge through a proxy.
+
+    Same as :class:`RecaptchaV2EnterpriseTaskProxyless` but additionally requires
+    proxy, user-agent, and optional cookie parameters.
+    """
+
     type = "RecaptchaV2EnterpriseTask"
 
 
 class GeeTestTaskProxyless(BaseTask):
+    """Solve a GeeTest (slide / click) captcha without a proxy.
+
+    After the job completes, use :meth:`Job.get_solution` to get the full
+    solution dictionary containing ``challenge``, ``validate``, and ``seccode``.
+
+    :param website_url: Full URL of the page where the captcha appears.
+    :param gt: The ``gt`` parameter value from the GeeTest script.
+    :param challenge: The ``challenge`` token obtained from the GeeTest API.
+    :param subdomain: Custom GeeTest API subdomain, if the site uses one.
+    :param lib: Custom ``getLib`` parameter value, if required.
+    """
+
     type = "GeeTestTaskProxyless"
     websiteURL = None
     gt = None
@@ -343,10 +548,31 @@ class GeeTestTaskProxyless(BaseTask):
 
 
 class GeeTestTask(ProxyMixin, UserAgentMixin, GeeTestTaskProxyless):
+    """Solve a GeeTest captcha through a proxy.
+
+    Same as :class:`GeeTestTaskProxyless` but additionally requires
+    proxy and user-agent parameters.
+    """
+
     type = "GeeTestTask"
 
 
 class AntiGateTaskProxyless(BaseTask):
+    """Solve a custom AntiGate task using a predefined template.
+
+    AntiGate tasks use templates to automate complex browser-based actions.
+    Browse available templates at https://anti-captcha.com/antigate.
+
+    After the job completes, use :meth:`Job.get_solution` to get the full
+    solution dictionary.
+
+    :param website_url: Full URL of the page to process.
+    :param template_name: Name of the AntiGate template
+        (e.g. ``"Sign up on MailChimp"``).
+    :param variables: Dictionary of template variables (keys and values
+        depend on the template).
+    """
+
     type = "AntiGateTask"
     websiteURL = None
     templateName = None
@@ -374,4 +600,8 @@ class AntiGateTaskProxyless(BaseTask):
 
 
 class AntiGateTask(ProxyMixin, AntiGateTaskProxyless):
-    pass
+    """Solve a custom AntiGate task through a proxy.
+
+    Same as :class:`AntiGateTaskProxyless` but additionally requires
+    proxy parameters.
+    """
