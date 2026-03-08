@@ -8,8 +8,8 @@ from retry import retry
 
 def missing_key(*args, **kwargs):
     return skipIf(
-        "KEY" not in os.environ,
-        "Missing KEY environment variable. Unable to connect Anti-captcha.com",
+        "ANTICAPTCHA_API_KEY" not in os.environ,
+        "Missing ANTICAPTCHA_API_KEY environment variable. Unable to connect Anti-captcha.com",
     )(*args, **kwargs)
 
 

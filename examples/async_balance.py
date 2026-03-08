@@ -4,7 +4,7 @@ from pprint import pprint
 
 from python_anticaptcha import AsyncAnticaptchaClient
 
-api_key = environ["KEY"]
+api_key = environ["ANTICAPTCHA_API_KEY"]
 
 
 async def process():

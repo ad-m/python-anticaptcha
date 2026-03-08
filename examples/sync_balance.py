@@ -3,7 +3,7 @@ from pprint import pprint
 
 from python_anticaptcha import AnticaptchaClient
 
-api_key = environ["KEY"]
+api_key = environ["ANTICAPTCHA_API_KEY"]
 
 
 def process():

@@ -3,7 +3,7 @@ from os import environ
 
 from python_anticaptcha import AnticaptchaClient, NoCaptchaTaskProxylessTask
 
-api_key = environ["KEY"]
+api_key = environ["ANTICAPTCHA_API_KEY"]
 invisible_captcha = True
 url = f"https://www.google.com/recaptcha/api2/demo?invisible={str(invisible_captcha)}"
 EXPECTED_RESULT = "Verification Success... Hooray!"

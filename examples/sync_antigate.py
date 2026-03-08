@@ -4,7 +4,7 @@ from os import environ
 from python_anticaptcha import AnticaptchaClient
 from python_anticaptcha.tasks import AntiGateTaskProxyless
 
-api_key = environ["KEY"]
+api_key = environ["ANTICAPTCHA_API_KEY"]
 
 URL = "https://anti-captcha.com/tutorials/v2-textarea"
 

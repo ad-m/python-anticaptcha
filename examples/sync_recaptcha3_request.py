@@ -6,7 +6,7 @@ from urllib.parse import urljoin
 
 from python_anticaptcha import AnticaptchaClient, RecaptchaV3TaskProxyless
 
-api_key = environ["KEY"]
+api_key = environ["ANTICAPTCHA_API_KEY"]
 site_key_pattern = r"grecaptcha.execute\('(.+?)'"
 action_name_pattern = r"\{action: '(.+?)'\}"
 url = "https://recaptcha-demo.appspot.com/recaptcha-v3-request-scores.php"

@@ -4,7 +4,7 @@ from sys import argv
 
 from python_anticaptcha import AnticaptchaClient
 
-api_key = environ["KEY"]
+api_key = environ["ANTICAPTCHA_API_KEY"]
 
 soft_id = argv[1]
 mode = argv[2]

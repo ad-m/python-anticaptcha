@@ -5,7 +5,7 @@ import requests
 
 from python_anticaptcha import AnticaptchaClient, HCaptchaTaskProxyless
 
-api_key = environ["KEY"]
+api_key = environ["ANTICAPTCHA_API_KEY"]
 site_key_pattern = 'data-sitekey="(.+?)"'
 url = "http://hcaptcha.jawne.info.pl/"
 client = AnticaptchaClient(api_key)

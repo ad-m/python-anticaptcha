@@ -2,7 +2,7 @@ from os import environ
 
 from python_anticaptcha import AnticaptchaClient, ImageToTextTask
 
-api_key = environ["KEY"]
+api_key = environ["ANTICAPTCHA_API_KEY"]
 
 IMAGE = "examples/captcha_ms.jpeg"
 EXPECTED_RESULT = "56nn2"
