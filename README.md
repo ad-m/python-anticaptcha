@@ -134,6 +134,32 @@ job.join()
 print(job.get_captcha_text())
 ```
 
+### Solve Cloudflare Turnstile
+
+Example snippet for Cloudflare Turnstile captcha:
+
+```python
+from python_anticaptcha import AnticaptchaClient, TurnstileTaskProxyless
+
+api_key = '174faff8fbc769e94a5862391ecfd010'
+site_key = '0x4AAAAAAABS7vwvV6VFfMcD'  # grab from site
+url = 'https://example.com'
+
+client = AnticaptchaClient(api_key)
+task = TurnstileTaskProxyless(url, site_key)
+job = client.create_task(task)
+job.join()
+print(job.get_token_response())
+```
+
+The full integration example is available in file `examples/sync_turnstile_request.py`.
+
+For Turnstile with optional parameters (action, cData):
+
+```python
+task = TurnstileTaskProxyless(url, site_key, action="managed", cdata="token")
+```
+
 ### Solve funcaptcha
 
 Example snippet for funcaptcha:
