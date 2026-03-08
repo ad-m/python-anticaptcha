@@ -386,10 +386,17 @@ class AnticaptchaClient:
         return response["status"] == "success"
 
     # Snake_case aliases
+    #: Alias for :meth:`createTask`.
     create_task = createTask
+    #: Alias for :meth:`createTaskSmee`.
     create_task_smee = createTaskSmee
+    #: Alias for :meth:`getTaskResult`.
     get_task_result = getTaskResult
+    #: Alias for :meth:`getBalance`.
     get_balance = getBalance
+    #: Alias for :meth:`getAppStats`.
     get_app_stats = getAppStats
+    #: Alias for :meth:`reportIncorrectImage`.
     report_incorrect_image = reportIncorrectImage
+    #: Alias for :meth:`reportIncorrectRecaptcha`.
     report_incorrect_recaptcha = reportIncorrectRecaptcha
