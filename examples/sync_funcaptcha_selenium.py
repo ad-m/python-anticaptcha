@@ -3,8 +3,8 @@ from os import environ
 from random import choice
 
 from selenium.webdriver.common.by import By
-from six.moves.urllib import parse
-from six.moves.urllib.parse import quote
+from urllib import parse
+from urllib.parse import quote
 
 from python_anticaptcha import AnticaptchaClient, FunCaptchaTask
 

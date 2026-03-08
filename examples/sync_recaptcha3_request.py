@@ -2,7 +2,7 @@ import re
 from os import environ
 
 import requests
-from six.moves.urllib_parse import urljoin
+from urllib.parse import urljoin
 
 from python_anticaptcha import AnticaptchaClient, RecaptchaV3TaskProxyless
 

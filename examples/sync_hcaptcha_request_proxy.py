@@ -2,7 +2,7 @@ import re
 from os import environ
 
 import requests
-from six.moves.urllib import parse
+from urllib import parse
 
 from python_anticaptcha import AnticaptchaClient, HCaptchaTask
 
