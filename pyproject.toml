@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=64", "setuptools-scm>=8"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
 
 [project]
 name = "python-anticaptcha"
@@ -33,11 +33,12 @@ async = ["httpx>=0.24"]
 tests = ["pytest", "pytest-asyncio", "httpx>=0.24", "retry", "selenium"]
 docs = ["sphinx", "sphinx-rtd-theme"]
 
-[tool.setuptools.package-data]
-python_anticaptcha = ["py.typed"]
+[tool.hatch.version]
+source = "vcs"
+fallback-version = "0.0.0"
 
-[tool.setuptools-scm]
-fallback_version = "0.0.0"
+[tool.hatch.build.targets.wheel]
+packages = ["python_anticaptcha"]
 
 [tool.ruff]
 target-version = "py39"
