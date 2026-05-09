@@ -1,8 +1,8 @@
 Changelog
 =========
 
-Unreleased
-----------
+2.0.0 - 2025-05-09
+------------------
 
 Added
 #####
@@ -37,7 +37,7 @@ Changed
 Removed
 #######
 
-- Drop Python 2.7 and Python 3.4-3.8 support
+- **Breaking:** Drop Python 2.7 and Python 3.4-3.8 support
 - Remove ``six`` dependency (replaced with stdlib ``urllib.parse``)
 - Remove ``compat.py`` module
 - Remove legacy ``setup.py`` and ``setup.cfg``
