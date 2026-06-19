@@ -41,6 +41,8 @@ from .tasks import (
     RecaptchaV2Task,
     RecaptchaV2TaskProxyless,
     RecaptchaV3TaskProxyless,
+    TurnstileTask,
+    TurnstileTaskProxyless,
 )
 
 AnticatpchaException = AnticaptchaException
@@ -79,6 +81,8 @@ __all__ = [
     "GeeTestTask",
     "AntiGateTaskProxyless",
     "AntiGateTask",
+    "TurnstileTaskProxyless",
+    "TurnstileTask",
     "AnticaptchaException",
     "AnticatpchaException",
     "AsyncAnticaptchaClient",

@@ -599,6 +599,85 @@ class AntiGateTaskProxyless(BaseTask):
         return data
 
 
+class TurnstileTaskProxyless(BaseTask):
+    """Solve a Cloudflare Turnstile challenge without a proxy.
+
+    Turnstile is Cloudflare's CAPTCHA replacement used on millions of websites.
+    The service automatically detects all Turnstile subtypes (manual,
+    non-interactive, invisible).
+
+    After the job completes, retrieve the token with
+    :meth:`Job.get_token_response`.
+
+    :param website_url: Full URL of the page where the Turnstile widget appears.
+    :param website_key: The Turnstile ``sitekey`` from the page source.
+    :param action: Optional action parameter passed to the Turnstile widget.
+    :param cdata: Optional ``cData`` token for Cloudflare-protected pages.
+    :param chl_page_data: Optional ``chlPageData`` token for Cloudflare pages.
+
+    Example::
+
+        task = TurnstileTaskProxyless(
+            website_url="https://example.com",
+            website_key="0x4AAAAAAABS7vwvV6VFfMcD",
+        )
+    """
+
+    type = "TurnstileTaskProxyless"
+    websiteURL = None
+    websiteKey = None
+
+    def __init__(
+        self,
+        website_url: str,
+        website_key: str,
+        action: str | None = None,
+        cdata: str | None = None,
+        chl_page_data: str | None = None,
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
+        self.websiteURL = website_url
+        self.websiteKey = website_key
+        self.action = action
+        self.cData = cdata
+        self.chlPageData = chl_page_data
+        super().__init__(*args, **kwargs)
+
+    def serialize(self, **result: Any) -> dict[str, Any]:
+        data = super().serialize(**result)
+        data["websiteURL"] = self.websiteURL
+        data["websiteKey"] = self.websiteKey
+        if self.action is not None:
+            data["action"] = self.action
+        if self.cData is not None:
+            data["cData"] = self.cData
+        if self.chlPageData is not None:
+            data["chlPageData"] = self.chlPageData
+        return data
+
+
+class TurnstileTask(ProxyMixin, UserAgentMixin, CookieMixin, TurnstileTaskProxyless):
+    """Solve a Cloudflare Turnstile challenge through a proxy.
+
+    Same as :class:`TurnstileTaskProxyless` but additionally requires
+    proxy, user-agent, and optional cookie parameters.
+
+    Note that the proxy-based approach is slower and requires high-quality,
+    self-hosted proxies.
+
+    :param user_agent: Browser User-Agent string.
+    :param cookies: Optional cookie string (default: ``""``).
+    :param proxy_type: Proxy protocol (``"http"``, ``"socks4"``, ``"socks5"``).
+    :param proxy_address: Proxy server hostname or IP.
+    :param proxy_port: Proxy server port.
+    :param proxy_login: Proxy username (empty string if none).
+    :param proxy_password: Proxy password (empty string if none).
+    """
+
+    type = "TurnstileTask"
+
+
 class AntiGateTask(ProxyMixin, AntiGateTaskProxyless):
     """Solve a custom AntiGate task through a proxy.
 
